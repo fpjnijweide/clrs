@@ -14,27 +14,28 @@
 
 import jax.numpy as jnp
 from jax import nn
+import jax.random
 import collections
+import haiku as hk
 from ntm_utils import expand, learned_init, create_linear_initializer
 
 
-# TODO clip parameters
-# TODO freeze the gradient on M and such
-# TOOD init parameters
+# TODO init
+# TODO batch dimension?
+# TODO memory size?
 
 NTMControllerState = collections.namedtuple('NTMControllerState',
                                             ('controller_state', 'read_vector_list', 'w_list', 'M'))
 
 
-class NTM_memory():
-    def __init__(self, memory_size=20, read_head_num=1,
-                 write_head_num=1,
-                 addressing_mode='content_and_location', shift_range=1, clip_value=20,
-                 init_mode='constant'):
+class NTM_memory(hk.Module):
+    def __init__(self, memory_vector_dim, memory_size=20, read_head_num=1, write_head_num=1,
+                 addressing_mode='content_and_location', shift_range=1, clip_value=20, init_mode='constant'):
         # self.controller_layers = controller_layers
         # self.controller_units = controller_units
+        super().__init__()
         self.memory_size = memory_size
-        # self.memory_vector_dim = memory_vector_dim
+        self.memory_vector_dim = memory_vector_dim
         self.read_head_num = read_head_num
         self.write_head_num = write_head_num
         self.addressing_mode = addressing_mode
@@ -66,14 +67,13 @@ class NTM_memory():
         #                                       kernel_initializer=self.output_proj_initializer)
         self._get_init_state_vars()
 
-    def call(self, head_parameter_list, head_erase_add_list, prev_M,prev_w_list):
+    def call(self, head_parameter_list, erase_add_list, prev_M,prev_w_list):
         # prev_read_vector_list = prev_state[1]
         #
         # controller_input = jnp.concatenate([x] + prev_read_vector_list, axis=1)
         # controller_output, controller_state = self.controller(controller_input, prev_state[0])
         #
         # parameters = self.controller_proj(controller_output)
-        # parameters = jnp.clip(parameters, -self.clip_value, self.clip_value)
         # head_parameter_list = jnp.split(parameters[:, :self.num_parameters_per_head * self.num_heads], self.num_heads,
         #                                axis=1)
         # erase_add_list = jnp.split(parameters[:, self.num_parameters_per_head * self.num_heads:],
@@ -83,17 +83,15 @@ class NTM_memory():
         # prev_M = prev_state[3]
         w_list = []
         for i, head_parameter in enumerate(head_parameter_list):
-            k = jnp.tanh(head_parameter[0])
-            beta = nn.softplus(head_parameter[1])
-            g = nn.sigmoid(head_parameter[2])
+            k = jnp.tanh(head_parameter[:, 0:self.memory_vector_dim])
+            beta = nn.softplus(head_parameter[:, self.memory_vector_dim])
+            g = nn.sigmoid(head_parameter[:, self.memory_vector_dim + 1])
             s = nn.softmax(
-                head_parameter[3]
+                head_parameter[:, self.memory_vector_dim + 2:self.memory_vector_dim + 2 + (self.shift_range * 2 + 1)]
             )
-            gamma = nn.softplus(head_parameter[4]) + 1
+            gamma = nn.softplus(head_parameter[:, -1]) + 1
             w = self._addressing(k, beta, g, s, gamma, prev_M, prev_w_list[i])
             w_list.append(w)
-
-        # Reading (Sec 3.1)
 
         read_w_list = w_list[:self.read_head_num]
         read_vector_list = []
@@ -105,14 +103,15 @@ class NTM_memory():
 
         write_w_list = w_list[self.read_head_num:]
         M = prev_M
-        for i, er_add_list in enumerate(head_erase_add_list):
+        for i in range(self.write_head_num):
             w = jnp.expand_dims(write_w_list[i], axis=2)
-            erase_vector = jnp.expand_dims(nn.sigmoid(er_add_list[0]), axis=1)
-            add_vector = jnp.expand_dims(jnp.tanh(er_add_list[1]), axis=1)
+            erase_vector = jnp.expand_dims(nn.sigmoid(erase_add_list[i * 2]), axis=1)
+            add_vector = jnp.expand_dims(jnp.tanh(erase_add_list[i * 2 + 1]), axis=1)
             M = M * (jnp.ones(M.get_shape()) - jnp.matmul(w, erase_vector)) + jnp.matmul(w, add_vector)
 
         # NTM_output = self.output_proj(jnp.concatenate([controller_output] + read_vector_list, axis=1))
-        # NTM_output = jnp.clip(NTM_output, -self.clip_value, self.clip_value)
+        for i,read_vector in enumerate(read_vector_list):
+            read_vector_list[i] = jnp.clip(read_vector_list[i], -self.clip_value, self.clip_value)
 
         # self.step += 1
         return read_vector_list,M,w_list #, NTMControllerState(controller_state=controller_state, read_vector_list=read_vector_list, w_list=w_list, M=M)
@@ -156,23 +155,34 @@ class NTM_memory():
         return w
 
     def _get_init_state_vars(self):
-        self.read_vector_var_list = [self.add_variable('read_vector_{}'.format(i), [self.memory_vector_dim, ],
-                                                       initializer=keras.initializers.glorot_uniform()) for i in
-                                     range(self.read_head_num)]
-        self.w_var_list = [self.add_variable('w_{}'.format(i), [self.memory_size, ],
-                                             initializer=keras.initializers.glorot_uniform()) for i in
-                           range(self.read_head_num + self.write_head_num)]
+        self.read_vector_var_list = [nn.initializers.glorot_uniform()(jax.random.PRNGKey(42),[self.memory_vector_dim, ])
+                           for i in range(self.read_head_num) ]
+        # self.read_vector_var_list = [self.add_variable('read_vector_{}'.format(i), [self.memory_vector_dim, ],
+        #                                                initializer=keras.initializers.glorot_uniform()) for i in
+        #                              range(self.read_head_num)]
+
+        self.w_var_list = [nn.initializers.glorot_uniform()(jax.random.PRNGKey(42),[self.memory_size, ])
+                           for i in range(self.read_head_num + self.write_head_num) ]
+        # self.w_var_list = [self.add_variable('w_{}'.format(i), [self.memory_size, ],
+        #                                      initializer=keras.initializers.glorot_uniform()) for i in
+        #                    range(self.read_head_num + self.write_head_num)]
         if self.init_mode == 'learned':
-            pass
             # self.M_var = jnp.tanh(self.add_variable('Memory', [self.memory_size, self.memory_vector_dim, ],
             #                                        initializer=keras.initializers.glorot_uniform()))
+            self.M_var = nn.initializers.glorot_uniform()(jax.random.PRNGKey(42), [self.memory_size, self.memory_vector_dim])
         elif self.init_mode == 'random':
-            pass
             # self.M_var = jnp.tanh(self.add_variable('Memory', [self.memory_size, self.memory_vector_dim],
             #                                        initializer=jnp.random_normal_initializer(mean=0.0, stddev=0.5)))
+            self.M_var = nn.initializers.normal(stddev=0.5)(jax.random.PRNGKey(42),[self.memory_size, self.memory_vector_dim])
         elif self.init_mode == 'constant':
-            self.M_var = self.add_variable('Memory', [self.memory_size, self.memory_vector_dim],
-                                           initializer=jnp.constant_initializer(1e-6))
+            # self.M_var = self.add_variable('Memory', [self.memory_size, self.memory_vector_dim],
+            #                                initializer=jnp.constant_initializer(1e-6))
+            # M_var_init = nn.initializers.
+            # hk.initializers
+            self.M_var = jnp.full([self.memory_size, self.memory_vector_dim], 1e-6)
+            # self.M_var = M_var_init(jax.random.PRNGKey(42),self.memory_size, self.memory_vector_dim)
+            # TODO make float32?
+
 
     # def get_initial_state(self, inputs=None, batch_size=None, dtype=None):
     #     # with jnp.variable_scope('init', reuse=self.reuse):
