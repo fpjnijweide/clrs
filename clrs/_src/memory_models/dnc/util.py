@@ -21,34 +21,43 @@ from __future__ import print_function
 # import numpy as jnp
 # import tensorflow as jnp
 import jax.numpy as jnp
+import jax.lax
 
+def invert_permutation(p):
+    # Full credits for this function go to Ali, on stack overflow
+    # https://stackoverflow.com/a/25535723
+    # needed a quick workaround because the tf invert_permutation function is MASSIVE and hard to convert to jax
+    s = jnp.empty(p.size, p.dtype)
+    s[p] = jnp.arange(p.size)
+    return s
 
 def batch_invert_permutation(permutations):
     """Returns batched `jnp.invert_permutation` for every row in `permutations`."""
-    perm = jnp.cast(permutations, jnp.float32)
+    perm = jax.lax.convert_element_type(permutations, jnp.float32)
     dim = int(perm.get_shape()[-1])
-    size = jnp.cast(jnp.shape(perm)[0], jnp.float32)
-    delta = jnp.cast(jnp.shape(perm)[-1], jnp.float32)
-    rg = jnp.range(0, size * delta, delta, dtype=jnp.float32)
+    size = jax.lax.convert_element_type(jnp.shape(perm)[0], jnp.float32)
+    delta = jax.lax.convert_element_type(jnp.shape(perm)[-1], jnp.float32)
+    rg = jnp.arange(0, size * delta, delta, dtype=jnp.float32)
     rg = jnp.expand_dims(rg, 1)
     rg = jnp.tile(rg, [1, dim])
     perm = jnp.add(perm, rg)
     flat = jnp.reshape(perm, [-1])
-    perm = jnp.invert_permutation(jnp.cast(flat, jnp.int32))
+    perm = invert_permutation(jax.lax.convert_element_type(flat, jnp.int32))
     perm = jnp.reshape(perm, [-1, dim])
-    return jnp.subtract(perm, jnp.cast(rg, jnp.int32))
+    return jnp.subtract(perm, jax.lax.convert_element_type(rg, jnp.int32))
 
 
 def batch_gather(values, indices):
     """Returns batched `jnp.gather` for every row in the ijnput."""
     idx = jnp.expand_dims(indices, -1)
     size = jnp.shape(indices)[0]
-    rg = jnp.range(size, dtype=jnp.int32)
+    rg = jnp.arange(size, dtype=jnp.int32)
     rg = jnp.expand_dims(rg, -1)
     rg = jnp.tile(rg, [1, int(indices.get_shape()[-1])])
     rg = jnp.expand_dims(rg, -1)
-    gidx = jnp.concat([rg, idx], -1)
-    return jnp.gather_nd(values, gidx)
+    gidx = jnp.concatenate([rg, idx], -1)
+    return values[gidx]
+    # return jnp.gather_nd(values, gidx)
 
 
 def one_hot(length, index):
@@ -65,7 +74,8 @@ def reduce_prod(x, axis, name=None):
     """
     cp = jnp.cumprod(x, axis, reverse=True)
     size = jnp.shape(cp)[0]
-    idx1 = jnp.range(jnp.cast(size, jnp.float32), dtype=jnp.float32)
+    idx1 = jnp.arange(jax.lax.convert_element_type(size, jnp.float32), dtype=jnp.float32)
     idx2 = jnp.zeros([size], jnp.float32)
     indices = jnp.stack([idx1, idx2], 1)
-    return jnp.gather_nd(cp, jnp.cast(indices, jnp.int32))
+    return cp[jax.lax.convert_element_type(indices, jnp.int32)]
+    # return jnp.gather_nd(cp, jax.lax.convert_element_type(indices, jnp.int32))

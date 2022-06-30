@@ -142,7 +142,7 @@ class MemoryAccess(hk.RNNCore):
             reset_weights=inputs['erase_vectors'],
             values=inputs['write_vectors'])
 
-        linkage_state = self._linkage(write_weights, prev_state.linkage)
+        _ , linkage_state = self._linkage(write_weights, prev_state.linkage)
 
         # Read from memory.
         read_weights = self._read_weights(
@@ -295,23 +295,23 @@ class MemoryAccess(hk.RNNCore):
         content_mode = inputs['read_mode'][:, :, 2 * self._num_writes]
 
         read_weights = (
-                jnp.sum(content_mode, 2) * content_weights + jnp.reduce_sum(
+                jnp.sum(content_mode, 2) * content_weights + jnp.sum(
             jnp.expand_dims(forward_mode, 3) * forward_weights, 2) +
                 jnp.sum(jnp.expand_dims(backward_mode, 3) * backward_weights, 2))
 
         return read_weights
 
-    @property
-    def state_size(self):
-        """Returns a tuple of the shape of the state tensors."""
-        return AccessState(
-            memory=jnp.TensorShape([self._memory_size, self._word_size]),
-            read_weights=jnp.TensorShape([self._num_reads, self._memory_size]),
-            write_weights=jnp.TensorShape([self._num_writes, self._memory_size]),
-            linkage=self._linkage.state_size,
-            usage=self._freeness.state_size)
+    # @property
+    # def state_size(self):
+    #     """Returns a tuple of the shape of the state tensors."""
+    #     return AccessState(
+    #         memory=jnp.TensorShape([self._memory_size, self._word_size]),
+    #         read_weights=jnp.TensorShape([self._num_reads, self._memory_size]),
+    #         write_weights=jnp.TensorShape([self._num_writes, self._memory_size]),
+    #         linkage=self._linkage.state_size,
+    #         usage=self._freeness.state_size)
 
-    @property
-    def output_size(self):
-        """Returns the output shape."""
-        return jnp.TensorShape([self._num_reads, self._word_size])
+    # @property
+    # def output_size(self):
+    #     """Returns the output shape."""
+    #     return jnp.TensorShape([self._num_reads, self._word_size])

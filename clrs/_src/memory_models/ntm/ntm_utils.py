@@ -32,10 +32,10 @@ def expand(x, dim, N):
     return jnp.tile(jnp.expand_dims(x, dim), expand_idx)
 
 
-def learned_init(units):
-    return jnp.Variable(initial_value=keras.initializers.glorot_uniform()(shape=(units,)))
-
-
-def create_linear_initializer(input_size, dtype=jnp.float32):
-    stddev = 1.0 / jnp.sqrt(input_size)
-    return jnp.truncated_normal(stddev=stddev, dtype=dtype)
+# def learned_init(units):
+#     return jnp.Variable(initial_value=keras.initializers.glorot_uniform()(shape=(units,)))
+#
+#
+# def create_linear_initializer(input_size, dtype=jnp.float32):
+#     stddev = 1.0 / jnp.sqrt(input_size)
+#     return jnp.truncated_normal(stddev=stddev, dtype=dtype)

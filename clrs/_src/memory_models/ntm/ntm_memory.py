@@ -9,26 +9,29 @@
 # I take no credit for any of the ideas
 # - Frederik Nijweide, June 2022
 #-----------------------
-
-
+from typing import Optional, List, NamedTuple
 
 import jax.numpy as jnp
+from haiku._src.recurrent import add_batch
 from jax import nn
 import jax.random
 import collections
 import haiku as hk
-from ntm_utils import expand, learned_init, create_linear_initializer
 
 
-# TODO batch dimension?
-# TODO memory size?
 
-NTMControllerState = collections.namedtuple('NTMControllerState',
-                                            ('controller_state', 'read_vector_list', 'w_list', 'M'))
+# TODO how to make sure haiku init with dummy variable doesn't ruin M with worthless writes?
 
+# NTMControllerState = collections.namedtuple('NTMControllerState',
+#                                             ('controller_state', 'read_vector_list', 'w_list', 'M'))
 
-class NTM_memory(hk.Module):
-    def __init__(self, memory_vector_dim, memory_size=20, read_head_num=1, write_head_num=1,
+class NTMState(NamedTuple):
+  M: jnp.ndarray
+  w_list: List[jnp.ndarray]
+  read_vector_list: List[jnp.ndarray]
+
+class NTM_memory(hk.RNNCore):
+    def __init__(self, memory_vector_dim=None,memory_size=20, read_head_num=1, write_head_num=1,
                  addressing_mode='content_and_location', shift_range=1, clip_value=20, init_mode='constant'):
         # self.controller_layers = controller_layers
         # self.controller_units = controller_units
@@ -64,9 +67,47 @@ class NTM_memory(hk.Module):
         #                                           kernel_initializer=self.controller_proj_initializer)
         # self.output_proj = keras.layers.Dense(output_dim, activation=None,
         #                                       kernel_initializer=self.output_proj_initializer)
-        self._get_init_state_vars()
+        # self._get_init_state_vars()
 
-    def call(self, head_parameter_list, erase_add_list, prev_M,prev_w_list):
+    def initial_state(self,node_fts):
+        batch_size, n, h = node_fts.shape
+        self.memory_vector_dim = h
+
+        read_vector_list = []
+        for i in range(self.read_head_num):
+            new_read_vector = jnp.tanh(hk.get_parameter(f"NTM_read_vector_{i}", shape=[self.memory_vector_dim, ],
+                                          init=hk.initializers.VarianceScaling(1.0, "fan_avg", "uniform")))
+            read_vector_list.append(new_read_vector)
+
+        w_var_list = []
+        for i in range(self.read_head_num + self.write_head_num):
+            new_w_var = nn.softmax(hk.get_parameter(f"NTM_w_{i}", shape=[self.memory_size, ],
+                                          init=hk.initializers.VarianceScaling(1.0, "fan_avg", "uniform")))
+            w_var_list.append(new_w_var)
+
+        if self.init_mode == 'learned':
+            M = jnp.tanh(hk.get_parameter("NTM_M", shape=[self.memory_size, self.memory_vector_dim], init=hk.initializers.VarianceScaling(1.0, "fan_avg", "uniform")))
+        elif self.init_mode == 'random':
+            M = jnp.tanh(hk.initializers.RandomNormal(stddev=0.5)([self.memory_size, self.memory_vector_dim]))
+        elif self.init_mode == 'constant':
+            M = jnp.full([self.memory_size, self.memory_vector_dim], 1e-6)
+        else:
+            raise RuntimeError("invalid init mode")
+
+        state = NTMState(M,w_var_list,read_vector_list)
+        if batch_size is not None:
+            state = add_batch(state, batch_size)
+        return state
+
+
+    def __call__(self, inputs, prev_state: NTMState):
+        # head_parameter_list, erase_add_list, prev_M, prev_w_list
+
+        head_parameter_list,erase_add_list = inputs
+        prev_M = prev_state.M
+        prev_w_list = prev_state.w_list
+
+
         # prev_read_vector_list = prev_state[1]
         #
         # controller_input = jnp.concatenate([x] + prev_read_vector_list, axis=1)
@@ -113,7 +154,11 @@ class NTM_memory(hk.Module):
             read_vector_list[i] = jnp.clip(read_vector_list[i], -self.clip_value, self.clip_value)
 
         # self.step += 1
-        return read_vector_list,M,w_list #, NTMControllerState(controller_state=controller_state, read_vector_list=read_vector_list, w_list=w_list, M=M)
+
+        next_state = NTMState(M,w_list,read_vector_list)
+        output=read_vector_list
+
+        return output, next_state
 
     def _addressing(self, k, beta, g, s, gamma, prev_M, prev_w):
 
@@ -153,34 +198,6 @@ class NTM_memory(hk.Module):
 
         return w
 
-    def _get_init_state_vars(self):
-        self.read_vector_var_list = [nn.initializers.glorot_uniform()(jax.random.PRNGKey(42),[self.memory_vector_dim, ])
-                           for i in range(self.read_head_num) ]
-        # self.read_vector_var_list = [self.add_variable('read_vector_{}'.format(i), [self.memory_vector_dim, ],
-        #                                                initializer=keras.initializers.glorot_uniform()) for i in
-        #                              range(self.read_head_num)]
-
-        self.w_var_list = [nn.initializers.glorot_uniform()(jax.random.PRNGKey(42),[self.memory_size, ])
-                           for i in range(self.read_head_num + self.write_head_num) ]
-        # self.w_var_list = [self.add_variable('w_{}'.format(i), [self.memory_size, ],
-        #                                      initializer=keras.initializers.glorot_uniform()) for i in
-        #                    range(self.read_head_num + self.write_head_num)]
-        if self.init_mode == 'learned':
-            # self.M_var = jnp.tanh(self.add_variable('Memory', [self.memory_size, self.memory_vector_dim, ],
-            #                                        initializer=keras.initializers.glorot_uniform()))
-            self.M_var = nn.initializers.glorot_uniform()(jax.random.PRNGKey(42), [self.memory_size, self.memory_vector_dim])
-        elif self.init_mode == 'random':
-            # self.M_var = jnp.tanh(self.add_variable('Memory', [self.memory_size, self.memory_vector_dim],
-            #                                        initializer=jnp.random_normal_initializer(mean=0.0, stddev=0.5)))
-            self.M_var = nn.initializers.normal(stddev=0.5)(jax.random.PRNGKey(42),[self.memory_size, self.memory_vector_dim])
-        elif self.init_mode == 'constant':
-            # self.M_var = self.add_variable('Memory', [self.memory_size, self.memory_vector_dim],
-            #                                initializer=jnp.constant_initializer(1e-6))
-            # M_var_init = nn.initializers.
-            # hk.initializers
-            self.M_var = jnp.full([self.memory_size, self.memory_vector_dim], 1e-6)
-            # self.M_var = M_var_init(jax.random.PRNGKey(42),self.memory_size, self.memory_vector_dim)
-            # TODO make float32?
 
 
     # def get_initial_state(self, inputs=None, batch_size=None, dtype=None):
