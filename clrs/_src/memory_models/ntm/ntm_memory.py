@@ -20,7 +20,6 @@ import haiku as hk
 from ntm_utils import expand, learned_init, create_linear_initializer
 
 
-# TODO init
 # TODO batch dimension?
 # TODO memory size?
 
