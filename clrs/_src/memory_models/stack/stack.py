@@ -48,8 +48,7 @@ import jax.numpy as jnp
 # This is the interface between the RNN controller and the neural stack.
 from clrs._src.memory_models.stack import common_hparams
 
-# TODO fix red errors, yellow errors
-# todo get rid of "add_variable" stuff
+# TODO fix final errors
 
 NeuralStackControllerInterface = collections.namedtuple(
     "NeuralStackControllerInterface",
@@ -188,26 +187,26 @@ class NeuralStackCell(hk.RNNCore):
         else:
             raise ValueError("Write head index must be 0 for stack.")
 
-    def add_scalar_projection(self, name, size):
-        """A helper function for mapping scalar controller outputs.
-
-        Args:
-          name: A prefix for the variable names.
-          size: The desired number of scalar outputs.
-
-        Returns:
-          A tuple of (weights, bias) where weights has shape [num_units, size] and
-          bias has shape [size].
-        """
-        weights = self.add_variable(
-            name + "_projection_weights",
-            shape=[self._num_units, size],
-            dtype=self.dtype)
-        bias = self.add_variable(
-            name + "_projection_bias",
-            shape=[size],
-            initializer=jnp.zeros_initializer(dtype=self.dtype))
-        return weights, bias
+    # def add_scalar_projection(self, name, size):
+    #     """A helper function for mapping scalar controller outputs.
+    #
+    #     Args:
+    #       name: A prefix for the variable names.
+    #       size: The desired number of scalar outputs.
+    #
+    #     Returns:
+    #       A tuple of (weights, bias) where weights has shape [num_units, size] and
+    #       bias has shape [size].
+    #     """
+    #     weights = self.add_variable(
+    #         name + "_projection_weights",
+    #         shape=[self._num_units, size],
+    #         dtype=self.dtype)
+    #     bias = self.add_variable(
+    #         name + "_projection_bias",
+    #         shape=[size],
+    #         initializer=jnp.zeros_initializer(dtype=self.dtype))
+    #     return weights, bias
 
     # def add_vector_projection(self, name, size):
     #     """A helper function for mapping embedding controller outputs.
@@ -260,57 +259,83 @@ class NeuralStackCell(hk.RNNCore):
         # self.build_controller()
         self.built = True
 
-    def get_controller_shape(self, batch_size):
-        """Define the output shapes of the neural stack controller.
+    # def get_controller_shape(self, batch_size):
+    #     """Define the output shapes of the neural stack controller.
+    #
+    #     Making this a separate functions so that it can be used in unit tests.
+    #
+    #     Args:
+    #       batch_size: The size of the current batch of data.
+    #
+    #     Returns:
+    #       A tuple of shapes for each output returned from the controller.
+    #     """
+    #     return (
+    #         # push_strengths,
+    #         [batch_size, self._num_write_heads, 1, 1],
+    #         # pop_strengths
+    #         [batch_size, self._num_write_heads, 1, 1],
+    #         # write_values
+    #         [batch_size, self._num_write_heads, self._embedding_size],
+    #         # outputs
+    #         [batch_size, 1, self._embedding_size],
+    #         # state
+    #         [batch_size, self._num_units])
 
-        Making this a separate functions so that it can be used in unit tests.
+    # def call_controller(self, input_value, read_values, prev_state, batch_size):
+    #     """Make a call to the neural stack controller.
+    #
+    #     See Section 3.1 of Grefenstette et al., 2015.
+    #
+    #     Args:
+    #       input_value: The input to the neural stack cell should be a jnp.float32
+    #         tensor with shape [batch_size, 1, embedding_size]
+    #       read_values: The values of the read heads at the previous timestep.
+    #       prev_state: The hidden state from the previous time step.
+    #       batch_size: The size of the current batch of input values.
+    #
+    #     Returns:
+    #       A tuple of outputs and the new NeuralStackControllerInterface.
+    #     """
+    #     # concatenateenate the current input value with the read values from the
+    #     # previous timestep before feeding them into the controller.
+    #     controller_inputs = jnp.concatenate([
+    #         contrib.layers().flatten(input_value),
+    #         contrib.layers().flatten(read_values),
+    #     ],
+    #         axis=1)
+    #
+    #     rnn_input = jnp.tanh(jnp.add(jnp.matmul(
+    #         controller_inputs, self._input_proj), self._input_bias))
+    #
+    #     (rnn_output, state) = self.rnn(rnn_input, prev_state)
+    #
+    #     push_strengths = jax.nn.sigmoid(jnp.add(jnp.matmul(
+    #         rnn_output, self._push_proj), self._push_bias))
+    #
+    #     pop_strengths = jax.nn.sigmoid(jnp.add(jnp.matmul(
+    #         rnn_output, self._pop_proj), self._pop_bias))
+    #
+    #     write_values = jnp.tanh(jnp.add(jnp.matmul(
+    #         rnn_output, self._value_proj), self._value_bias))
+    #
+    #     outputs = jnp.tanh(jnp.add(jnp.matmul(
+    #         rnn_output, self._output_proj), self._output_bias))
+    #
+    #     # Reshape all the outputs according to the shapes specified by
+    #     # get_controller_shape()
+    #     projected_outputs = [push_strengths,
+    #                          pop_strengths,
+    #                          write_values,
+    #                          outputs,
+    #                          state]
+    #     next_state = [
+    #         jnp.reshape(output, shape=output_shape) for output, output_shape
+    #         in zip(projected_outputs, self.get_controller_shape(batch_size))]
+    #     return NeuralStackControllerInterface(*next_state)
 
-        Args:
-          batch_size: The size of the current batch of data.
-
-        Returns:
-          A tuple of shapes for each output returned from the controller.
-        """
-        return (
-            # push_strengths,
-            [batch_size, self._num_write_heads, 1, 1],
-            # pop_strengths
-            [batch_size, self._num_write_heads, 1, 1],
-            # write_values
-            [batch_size, self._num_write_heads, self._embedding_size],
-            # outputs
-            [batch_size, 1, self._embedding_size],
-            # state
-            [batch_size, self._num_units])
-
-    def call_controller(self, input_value, read_values, prev_state, batch_size):
-        """Make a call to the neural stack controller.
-
-        See Section 3.1 of Grefenstette et al., 2015.
-
-        Args:
-          input_value: The input to the neural stack cell should be a jnp.float32
-            tensor with shape [batch_size, 1, embedding_size]
-          read_values: The values of the read heads at the previous timestep.
-          prev_state: The hidden state from the previous time step.
-          batch_size: The size of the current batch of input values.
-
-        Returns:
-          A tuple of outputs and the new NeuralStackControllerInterface.
-        """
-        # concatenateenate the current input value with the read values from the
-        # previous timestep before feeding them into the controller.
-        controller_inputs = jnp.concatenate([
-            contrib.layers().flatten(input_value),
-            contrib.layers().flatten(read_values),
-        ],
-            axis=1)
-
-        rnn_input = jnp.tanh(jnp.add(jnp.matmul(
-            controller_inputs, self._input_proj), self._input_bias))
-
-        (rnn_output, state) = self.rnn(rnn_input, prev_state)
-
+    def convert_inputs(self, rnn_output, state):
+        # TODO simply get push strengths, pop strengths from index
         push_strengths = jax.nn.sigmoid(jnp.add(jnp.matmul(
             rnn_output, self._push_proj), self._push_bias))
 
@@ -330,10 +355,10 @@ class NeuralStackCell(hk.RNNCore):
                              write_values,
                              outputs,
                              state]
-        next_state = [
-            jnp.reshape(output, shape=output_shape) for output, output_shape
-            in zip(projected_outputs, self.get_controller_shape(batch_size))]
-        return NeuralStackControllerInterface(*next_state)
+        # next_state = [
+        #     jnp.reshape(output, shape=output_shape) for output, output_shape
+        #     in zip(projected_outputs, self.get_controller_shape(batch_size))]
+        return NeuralStackControllerInterface(*projected_outputs)
 
     def call(self, inputs, prev_state):
         """Evaluates one timestep of the current neural stack cell.
@@ -351,10 +376,11 @@ class NeuralStackCell(hk.RNNCore):
         batch_size = jnp.shape(inputs)[0]
 
         # Call the controller and get controller interface values.
-        with jnp.control_dependencies([prev_state.read_strengths]):
-            controller_output = self.call_controller(
-                inputs, prev_state.read_values, prev_state.controller_state,
-                batch_size)
+        # with jnp.control_dependencies([prev_state.read_strengths]):
+        #     controller_output = self.call_controller(
+        #         inputs, prev_state.read_values, prev_state.controller_state,
+        #         batch_size)
+        controller_output = self.convert_inputs(inputs, prev_state)
 
         # Always write input values to memory regardless of push strength.
         # See Equation-1 in Grefenstette et al., 2015.
@@ -368,10 +394,18 @@ class NeuralStackCell(hk.RNNCore):
         # See Equation-2 in Grefenstette et al., 2015.
         new_read_strengths = prev_state.read_strengths
         for h in range(self._num_read_heads - 1, -1, -1):
+            # import tensorflow as tf
+            # '''
+            #   Note that `tf.Tensor.__getitem__` is typically a more pythonic way to
+            # perform slices, as it allows you to write `foo[3:7, :-2]` instead of
+            # `tf.slice(foo, [3, 0], [4, foo.get_shape()[1]-2])`.
+            # '''
             new_read_strengths = jax.nn.relu(new_read_strengths - jax.nn.relu(
-                jnp.slice(controller_output.pop_strengths,
-                          [0, h, 0, 0],
-                          [-1, 1, -1, -1]) -
+                controller_output.pop_strengths[:,h:h+1,:,:] -
+                # tf.slice(controller_output.pop_strengths,
+                #           [0, h, 0, 0],
+                #           [-1, 1, -1, -1])
+                #                              -
                 jnp.expand_dims(
                     jnp.sum(new_read_strengths * self.get_read_mask(h), axis=2),
                     axis=3)))

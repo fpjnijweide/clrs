@@ -97,7 +97,6 @@ def basic_params1():
         # then we specify decay scheme here.  Warmup is always exponential,
         # except with "noam" learning rate decay scheme.
         # see optimize.legacy_learning_rate_schedule()
-        # TODO(noam): migrate everyone away from this.
         learning_rate_decay_scheme="none",
         # decay_steps and decay_staircase for learning_rate_decay_scheme=="exp"
         learning_rate_decay_steps=5000,
@@ -128,7 +127,6 @@ def basic_params1():
         # The special string "none" is used instead of the empty string
         # to indicate no pre/postprocessing, since the empty string causes
         # trouble for hyperparameter tuning.
-        # TODO(noam): The current settings ("", "dan") are the published version
         # of the transformer.  ("n", "da") seems better for harder-to-learn
         # models, so it should probably be the default.
         layer_preprocess_sequence="none",
@@ -168,7 +166,6 @@ def basic_params1():
         # sequences.  Due to some (hopefully) temporary hacks in the
         # data reading and batching code, setting this flag too low
         # results in a very long batch-shuffling queue.
-        # TODO(noam): change this once the Datasets API changes.
         min_length_bucket=8,
         # This flag controls the number of length buckets in the data
         # reader.  The buckets have maximum lengths from
@@ -194,7 +191,6 @@ def basic_params1():
         # specified, T2TModel applies a default transformation according to the
         # feature's modality. Bottom is applicable to all features; loss, top, and
         # weights_fn are only applicable to target features.
-        # TODO(trandustin): `name` is an optional hparam for legacy reasons,
         # defining variable scope names. Remove this hparam in the future.
         bottom={},
         loss={},
