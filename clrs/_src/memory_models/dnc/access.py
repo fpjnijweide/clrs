@@ -20,14 +20,14 @@ from __future__ import print_function
 
 import collections
 
-from clrs._src.memory_models.dnc import addressing
-from clrs._src.memory_models.dnc import util
-
 # import sonnet as hk
 # import tensorflow as tf
 import haiku as hk
 import jax.numpy as jnp
 from jax import nn
+
+from clrs._src.memory_models.dnc import addressing
+from clrs._src.memory_models.dnc import util
 
 AccessState = collections.namedtuple('AccessState', (
     'memory', 'read_weights', 'write_weights', 'linkage', 'usage'))
@@ -142,7 +142,7 @@ class MemoryAccess(hk.RNNCore):
             reset_weights=inputs['erase_vectors'],
             values=inputs['write_vectors'])
 
-        _ , linkage_state = self._linkage(write_weights, prev_state.linkage)
+        _, linkage_state = self._linkage(write_weights, prev_state.linkage)
 
         # Read from memory.
         read_weights = self._read_weights(

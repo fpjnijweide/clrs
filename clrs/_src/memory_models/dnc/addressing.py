@@ -20,21 +20,22 @@ from __future__ import print_function
 
 import collections
 
+import haiku as hk
 # Ensure values are greater than epsilon to avoid numerical instability.
 import jax
+import jax.numpy as jnp
+from jax import nn
+
 from clrs._src.memory_models.dnc import util
 
 # import sonnet as hk
 # import tensorflow as tf
 
-import haiku as hk
-import jax.numpy as jnp
-from jax import nn
-
 _EPSILON = 1e-6
 
 TemporalLinkageState = collections.namedtuple('TemporalLinkageState',
                                               ('link', 'precedence_weights'))
+
 
 # def fill_diagonal_own_implementation(matrix,arr):
 #     arr_as_matrix = jnp.diag(arr)
@@ -141,7 +142,6 @@ class CosineWeights(hk.Module):
         return weighted_softmax(similarity, strengths, self._strength_op)
 
 
-
 class TemporalLinkage(hk.RNNCore):
     """Keeps track of write order for forward and backward addressing.
 
@@ -216,8 +216,6 @@ class TemporalLinkage(hk.RNNCore):
         # Swap dimensions 1, 2 so order is [batch, reads, writes, memory]:
         return jnp.transpose(result, perm=[0, 2, 1, 3])
 
-
-
     def _link(self, prev_link, prev_precedence_weights, write_weights):
         """Calculates the new link graphs.
 
@@ -246,10 +244,11 @@ class TemporalLinkage(hk.RNNCore):
         prev_link_scale = 1 - write_weights_i - write_weights_j
         new_link = write_weights_i * prev_precedence_weights_j
         link = prev_link_scale * prev_link + new_link
-        link = link*1
+        link = link * 1
         # Return the link with the diagonal set to zero, to remove self-looping
         # edges.
-        link[jnp.diag_indices_from[link]] = jnp.zeros([batch_size, self._num_writes, self._memory_size],dtype=link.dtype)
+        link[jnp.diag_indices_from[link]] = jnp.zeros([batch_size, self._num_writes, self._memory_size],
+                                                      dtype=link.dtype)
         # return fill_diagonal(
         #     link,
         #     jnp.zeros(

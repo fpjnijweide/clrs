@@ -8,16 +8,13 @@
 # all I did was port this code to JAX/haiku and remove the RNN/LSTM parts
 # I take no credit for any of the ideas
 # - Frederik Nijweide, June 2022
-#-----------------------
-from typing import Optional, List, NamedTuple
+# -----------------------
+from typing import List, NamedTuple
 
+import haiku as hk
 import jax.numpy as jnp
 from haiku._src.recurrent import add_batch
 from jax import nn
-import jax.random
-import collections
-import haiku as hk
-
 
 
 # TODO how to make sure haiku init with dummy variable doesn't ruin M with worthless writes?
@@ -26,12 +23,13 @@ import haiku as hk
 #                                             ('controller_state', 'read_vector_list', 'w_list', 'M'))
 
 class NTMState(NamedTuple):
-  M: jnp.ndarray
-  w_list: List[jnp.ndarray]
-  read_vector_list: List[jnp.ndarray]
+    M: jnp.ndarray
+    w_list: List[jnp.ndarray]
+    read_vector_list: List[jnp.ndarray]
+
 
 class NTM_memory(hk.RNNCore):
-    def __init__(self, memory_vector_dim=None,memory_size=20, read_head_num=1, write_head_num=1,
+    def __init__(self, memory_vector_dim=None, memory_size=20, read_head_num=1, write_head_num=1,
                  addressing_mode='content_and_location', shift_range=1, clip_value=20, init_mode='constant'):
         # self.controller_layers = controller_layers
         # self.controller_units = controller_units
@@ -69,44 +67,44 @@ class NTM_memory(hk.RNNCore):
         #                                       kernel_initializer=self.output_proj_initializer)
         # self._get_init_state_vars()
 
-    def initial_state(self,node_fts):
+    def initial_state(self, node_fts):
         batch_size, n, h = node_fts.shape
         self.memory_vector_dim = h
 
         read_vector_list = []
         for i in range(self.read_head_num):
             new_read_vector = jnp.tanh(hk.get_parameter(f"NTM_read_vector_{i}", shape=[self.memory_vector_dim, ],
-                                          init=hk.initializers.VarianceScaling(1.0, "fan_avg", "uniform")))
+                                                        init=hk.initializers.VarianceScaling(1.0, "fan_avg",
+                                                                                             "uniform")))
             read_vector_list.append(new_read_vector)
 
         w_var_list = []
         for i in range(self.read_head_num + self.write_head_num):
             new_w_var = nn.softmax(hk.get_parameter(f"NTM_w_{i}", shape=[self.memory_size, ],
-                                          init=hk.initializers.VarianceScaling(1.0, "fan_avg", "uniform")))
+                                                    init=hk.initializers.VarianceScaling(1.0, "fan_avg", "uniform")))
             w_var_list.append(new_w_var)
 
         if self.init_mode == 'learned':
-            M = jnp.tanh(hk.get_parameter("NTM_M", shape=[self.memory_size, self.memory_vector_dim], init=hk.initializers.VarianceScaling(1.0, "fan_avg", "uniform")))
+            M = jnp.tanh(hk.get_parameter("NTM_M", shape=[self.memory_size, self.memory_vector_dim],
+                                          init=hk.initializers.VarianceScaling(1.0, "fan_avg", "uniform")))
         elif self.init_mode == 'random':
-            M = jnp.tanh(hk.initializers.RandomNormal(stddev=0.5)([self.memory_size, self.memory_vector_dim]))
+            M = jnp.tanh(hk.initializers.RandomNormal(stddev=0.5)([self.memory_size, self.memory_vector_dim],dtype=jnp.float32) )
         elif self.init_mode == 'constant':
             M = jnp.full([self.memory_size, self.memory_vector_dim], 1e-6)
         else:
             raise RuntimeError("invalid init mode")
 
-        state = NTMState(M,w_var_list,read_vector_list)
+        state = NTMState(M, w_var_list, read_vector_list)
         if batch_size is not None:
             state = add_batch(state, batch_size)
         return state
 
-
     def __call__(self, inputs, prev_state: NTMState):
         # head_parameter_list, erase_add_list, prev_M, prev_w_list
 
-        head_parameter_list,erase_add_list = inputs
+        head_parameter_list, erase_add_list = inputs
         prev_M = prev_state.M
         prev_w_list = prev_state.w_list
-
 
         # prev_read_vector_list = prev_state[1]
         #
@@ -150,13 +148,13 @@ class NTM_memory(hk.RNNCore):
             M = M * (jnp.ones(M.get_shape()) - jnp.matmul(w, erase_vector)) + jnp.matmul(w, add_vector)
 
         # NTM_output = self.output_proj(jnp.concatenate([controller_output] + read_vector_list, axis=1))
-        for i,read_vector in enumerate(read_vector_list):
+        for i, read_vector in enumerate(read_vector_list):
             read_vector_list[i] = jnp.clip(read_vector_list[i], -self.clip_value, self.clip_value)
 
         # self.step += 1
 
-        next_state = NTMState(M,w_list,read_vector_list)
-        output=read_vector_list
+        next_state = NTMState(M, w_list, read_vector_list)
+        output = read_vector_list
 
         return output, next_state
 
@@ -187,8 +185,8 @@ class NTM_memory(hk.RNNCore):
         w_g = g * w_c + (1 - g) * prev_w  # eq (7)
 
         s = jnp.concatenate([s[:, :self.shift_range + 1],
-                       jnp.zeros([s.get_shape()[0], self.memory_size - (self.shift_range * 2 + 1)]),
-                       s[:, -self.shift_range:]], axis=1)
+                             jnp.zeros([s.get_shape()[0], self.memory_size - (self.shift_range * 2 + 1)]),
+                             s[:, -self.shift_range:]], axis=1)
         t = jnp.concatenate([jnp.flip(s, axis=1), jnp.flip(s, axis=1)], axis=1)
         s_matrix = jnp.stack(
             [t[:, self.memory_size - i - 1:self.memory_size * 2 - i - 1] for i in range(self.memory_size)], axis=1)
@@ -197,8 +195,6 @@ class NTM_memory(hk.RNNCore):
         w = w_sharpen / jnp.sum(w_sharpen, axis=1, keepdims=True)  # eq (9)
 
         return w
-
-
 
     # def get_initial_state(self, inputs=None, batch_size=None, dtype=None):
     #     # with jnp.variable_scope('init', reuse=self.reuse):
@@ -223,4 +219,3 @@ class NTM_memory(hk.RNNCore):
     #         read_vector_list=[self.memory_vector_dim for _ in range(self.read_head_num)],
     #         w_list=[self.memory_size for _ in range(self.read_head_num + self.write_head_num)],
     #         M=jnp.TensorShape([self.memory_size, self.memory_vector_dim]))
-

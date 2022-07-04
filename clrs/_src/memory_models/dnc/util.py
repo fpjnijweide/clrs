@@ -18,10 +18,11 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import jax.lax
 # import numpy as jnp
 # import tensorflow as jnp
 import jax.numpy as jnp
-import jax.lax
+
 
 def invert_permutation(p):
     # Full credits for this function go to Ali, on stack overflow
@@ -30,6 +31,7 @@ def invert_permutation(p):
     s = jnp.empty(p.size, p.dtype)
     s[p] = jnp.arange(p.size)
     return s
+
 
 def batch_invert_permutation(permutations):
     """Returns batched `jnp.invert_permutation` for every row in `permutations`."""

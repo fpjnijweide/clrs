@@ -1,10 +1,10 @@
 from typing import Optional
 
-import haiku as hk
 import jax
+
 from clrs._src.memory_models.ntm.ntm_memory import NTM_memory
-from clrs._src.processors import Processor, _Fn, _Array, GATv2
-from jax import numpy as jnp
+from clrs._src.processors import _Fn, _Array, GATv2
+
 
 class Gatv2_NTM(GATv2):
     """Graph Attention Network v2 (Brody et al., ICLR 2022)."""
@@ -19,7 +19,7 @@ class Gatv2_NTM(GATv2):
             use_ln: bool = False,
             name: str = 'gatv2_aggr',
     ):
-        super().__init__(out_size,nb_heads,mid_size,activation,residual,use_ln,name)
+        super().__init__(out_size, nb_heads, mid_size, activation, residual, use_ln, name)
         self.memory = NTM_memory()
         self.ntm_state = None
 
@@ -40,14 +40,12 @@ class Gatv2_NTM(GATv2):
         # TODO probably have to use get and set state. saving as field here will lead to issues
         # because it will already have written to memory after init
 
-
         # TODO add read/wrrite nodes here
         #
         # TODO ensure its adjacency matrix has 0s for read/write node?
         # TODO ensure there is no dense layer for itself?
         # TODO end of read/write node adding
         # TODO set the adj mat here
-
 
         # call the parent network
         ret = super().__call__(node_fts, edge_fts, graph_fts, adj_mat, hidden, **unused_kwargs)
