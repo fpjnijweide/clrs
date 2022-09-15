@@ -23,10 +23,11 @@ class Gatv2_NTM(GATv2):
             name: str = 'gatv2_ntm',
     ):
         super().__init__(out_size, nb_heads, mid_size, activation, residual, use_ln, name)
+        self.use_lstm=True
         self.beta_g_y_t_dense_layer = hk.Linear(output_size=3)
         self.memory_type = NTMMemory()
         self.s_t_dense_layer = hk.Linear(output_size=self.memory_type.memory_size)
-        self.memory_state = None
+        self.lstm_state = None
 
         self.write_node_fts = None
         self.read_node_fts = None
@@ -56,8 +57,8 @@ class Gatv2_NTM(GATv2):
         """GATv2 inference step."""
         b, n, _ = node_fts.shape
 
-        if not self.memory_state:
-            self.memory_state = self.memory_type.initial_state(node_fts)
+        if not self.lstm_state:
+            self.lstm_state = self.memory_type.initial_state(node_fts)
         # else:
         #     if not self.init_reset:
         #         self.memory_state = self.memory_type.initial_state(node_fts)
@@ -72,7 +73,7 @@ class Gatv2_NTM(GATv2):
         self.write_node_fts = self.write_node_fts_layer(shape=write_node_fts_shape, dtype=jnp.float32)
         self.write_node_fts = jnp.repeat(self.write_node_fts, b, axis=0)
 
-        if not self.read_node_fts:
+        if self.read_node_fts is None:
             read_node_fts_shape = jnp.array(node_fts.shape)
             read_node_fts_shape = read_node_fts_shape.at[0].set(1)
             read_node_fts_shape = read_node_fts_shape.at[1].set(self.read_nodes_amount)
@@ -164,15 +165,21 @@ class Gatv2_NTM(GATv2):
 
         final_tuple = (w_params_for_batch, e_a_params_for_batch)
 
-        NTM_read_vector_lists, self.memory_state = self.memory_type(final_tuple,
-                                                                  self.memory_state)
+        NTM_read_vector_lists, self.lstm_state = self.memory_type(final_tuple,
+                                                                  self.lstm_state)
         self.read_node_fts = jnp.stack(NTM_read_vector_lists,axis=1)
 
+        # TODO "lstm" state
         # TODO how to refresh memory, read node fts for each new example set? the network will be called multiple times until done
         # TODO ensure there is no dense layer for itself?
 
-        # TODO do for all network types
-        # TODO do for all memory types
+        # TODO do for MPNN
+        # TODO do for PGN before bed
+        # TODO do for deque by 12
+        # TODO do for own architecture 18
+        # TODO do for DNC by 24
+
+
 
         # TODO experiment with memory size
 
