@@ -21,6 +21,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import chex
 
+import clrs._src.processor_factory
 from clrs._src import decoders
 from clrs._src import encoders
 from clrs._src import probing
@@ -82,7 +83,7 @@ class Net(hk.Module):
       encode_hints: bool,
       decode_hints: bool,
       decode_diffs: bool,
-      processor_factory: processors.ProcessorFactory,
+      processor_factory: clrs._src.processor_factory.ProcessorFactory,
       use_lstm: bool,
       dropout_prob: float,
       hint_teacher_forcing_noise: float,

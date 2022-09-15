@@ -98,8 +98,8 @@ class NTMMemory(hk.RNNCore):
             raise RuntimeError("invalid init mode")
 
         state = NTMState(M, w_var_list, read_vector_list)
-        # if batch_size is not None:
-        #     state = add_batch(state, batch_size)
+        if batch_size is not None:
+            state = add_batch(state, batch_size)
         return state
 
     def __call__(self, inputs, prev_state: NTMState):
@@ -143,7 +143,7 @@ class NTMMemory(hk.RNNCore):
             erase_vector = jnp.expand_dims(nn.sigmoid(e_t), axis=1)
             add_vector = jnp.expand_dims(nn.tanh(a_t), axis=1)
             w = jnp.expand_dims(write_w_list[i], axis=2)
-            M = M * (jnp.ones(M.get_shape()) - jnp.matmul(w, erase_vector)) + jnp.matmul(w, add_vector)
+            M = M * (jnp.ones(M.shape) - jnp.matmul(w, erase_vector)) + jnp.matmul(w, add_vector)
 
         # NTM_output = self.output_proj(jnp.concatenate([controller_output] + read_vector_list, axis=1))
         for i, read_vector in enumerate(read_vector_list):
@@ -171,7 +171,7 @@ class NTMMemory(hk.RNNCore):
 
         # Calculating w^c
 
-        K_amplified = jnp.exp(jnp.expand_dims(beta, axis=1) * K)
+        K_amplified = jnp.exp(beta * K)
         w_c = K_amplified / jnp.sum(K_amplified, axis=1, keepdims=True)  # eq (5)
 
         if self.addressing_mode == 'content':  # Only focus on content
@@ -179,17 +179,44 @@ class NTMMemory(hk.RNNCore):
 
         # Sec 3.3.2 Focusing by Location
 
-        g = jnp.expand_dims(g, axis=1)
+        # g = jnp.expand_dims(g, axis=1)
+
+
+
+
+        # # k = jnp.expand_dims(k, axis=1)
+        # inner_product = jnp.matmul(prev_M, k)
+        # k_norm = jnp.sqrt(jnp.sum(jnp.square(k), keepdims=True))
+        # M_norm = jnp.sqrt(jnp.sum(jnp.square(prev_M), axis=1, keepdims=True))
+        # norm_product = M_norm * k_norm
+        # K = jnp.squeeze(inner_product / (jnp.squeeze(norm_product) + 1e-8))  # eq (6)
+        #
+        # # Calculating w^c
+        #
+        # K_amplified = jnp.exp(beta * K)
+        # w_c = K_amplified / jnp.sum(K_amplified)  # eq (5)
+        #
+        # if self.addressing_mode == 'content':  # Only focus on content
+        #     return w_c
+        #
+        # # Sec 3.3.2 Focusing by Location
+        #
+        # # g = jnp.expand_dims(g, axis=1)
+
+
+
+
+
         w_g = g * w_c + (1 - g) * prev_w  # eq (7)
 
         s = jnp.concatenate([s[:, :self.shift_range + 1],
-                             jnp.zeros([s.get_shape()[0], self.memory_size - (self.shift_range * 2 + 1)]),
+                             jnp.zeros([s.shape[0], self.memory_size - (self.shift_range * 2 + 1)]),
                              s[:, -self.shift_range:]], axis=1)
         t = jnp.concatenate([jnp.flip(s, axis=1), jnp.flip(s, axis=1)], axis=1)
         s_matrix = jnp.stack(
             [t[:, self.memory_size - i - 1:self.memory_size * 2 - i - 1] for i in range(self.memory_size)], axis=1)
         w_ = jnp.sum(jnp.expand_dims(w_g, axis=1) * s_matrix, axis=2)  # eq (8)
-        w_sharpen = jnp.power(w_, jnp.expand_dims(gamma, axis=1))
+        w_sharpen = jnp.power(w_, gamma)
         w = w_sharpen / jnp.sum(w_sharpen, axis=1, keepdims=True)  # eq (9)
 
         return w
@@ -217,6 +244,4 @@ class NTMMemory(hk.RNNCore):
     #         read_vector_list=[self.memory_vector_dim for _ in range(self.read_head_num)],
     #         w_list=[self.memory_size for _ in range(self.read_head_num + self.write_head_num)],
     #         M=jnp.TensorShape([self.memory_size, self.memory_vector_dim]))
-
-if __name__=='__main__':
 

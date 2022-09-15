@@ -28,6 +28,7 @@ import jax.numpy as jnp
 import requests
 import tensorflow as tf
 
+import clrs._src.processor_factory
 
 flags.DEFINE_string('algorithm', 'bfs', 'Which algorithm to run.')
 flags.DEFINE_integer('seed', 42, 'Random seed to set')
@@ -242,9 +243,9 @@ def main(unused_argv):
         **common_args, split='test')
     test_sampler = test_sampler.as_numpy_iterator()
 
-  processor_factory = clrs.get_processor_factory(FLAGS.processor_type,
-                                                 use_ln=FLAGS.use_ln,
-                                                 nb_heads=FLAGS.nb_heads)
+  processor_factory = clrs._src.processor_factory.get_processor_factory(FLAGS.processor_type,
+                                                                        use_ln=FLAGS.use_ln,
+                                                                        nb_heads=FLAGS.nb_heads)
   model_params = dict(
       processor_factory=processor_factory,
       hidden_dim=FLAGS.hidden_size,

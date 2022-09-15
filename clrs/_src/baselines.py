@@ -23,6 +23,7 @@ from typing import Dict, List, Optional, Tuple, Union
 
 import chex
 
+import clrs._src.processor_factory
 from clrs._src import decoders
 from clrs._src import losses
 from clrs._src import model
@@ -59,7 +60,7 @@ class BaselineModel(model.Model):
       self,
       spec: Union[_Spec, List[_Spec]],
       dummy_trajectory: Union[List[_Feedback], _Feedback],
-      processor_factory: processors.ProcessorFactory,
+      processor_factory: clrs._src.processor_factory.ProcessorFactory,
       hidden_dim: int = 32,
       encode_hints: bool = False,
       decode_hints: bool = True,
