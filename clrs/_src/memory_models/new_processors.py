@@ -32,13 +32,17 @@ class Gatv2_NTM(GATv2):
 
         self.init_reset = False
         self.write_node_fts_layer = hk.initializers.RandomNormal(stddev=0.5)
+        self.read_node_fts_layer = hk.initializers.RandomNormal(stddev=0.5)
         self.write_edge_fts_layer = hk.initializers.RandomNormal()
         self.read_edge_fts_layer = hk.initializers.RandomNormal()
 
 
 
-        self.read_nodes_amount = 1
-        self.write_nodes_amount = 5
+        self.read_nodes_amount = self.memory_type.read_head_num
+        self.total_heads = self.memory_type.write_head_num+self.memory_type.read_head_num
+        self.w_nodes_amount = 3*self.total_heads
+        self.erase_add_nodes_amount =  2*(self.memory_type.write_head_num)
+        self.write_nodes_amount = self.w_nodes_amount+self.erase_add_nodes_amount
         self.write_split_list = jnp.arange(1,self.write_nodes_amount+1)
 
     def __call__(
@@ -54,8 +58,8 @@ class Gatv2_NTM(GATv2):
         b, n, _ = node_fts.shape
 
 
-        if not self.memory_state or len(self.memory_state) != b:
-            self.memory_state = self.memory_type.initial_state(node_fts)
+        if not self.memory_state:
+            self.memory_state = [self.memory_type.initial_state(node_fts) for _ in b]
         # else:
         #     if not self.init_reset:
         #         self.memory_state = self.memory_type.initial_state(node_fts)
@@ -64,15 +68,21 @@ class Gatv2_NTM(GATv2):
         #       As the first bit was merely encountered during the haiku init
 
 
-        extra_node_fts_shape = jnp.array(node_fts.shape)
-        extra_node_fts_shape[0] = 1
-        extra_node_fts_shape[1] = self.write_nodes_amount
 
-        self.write_node_fts = self.write_node_fts_layer(shape=extra_node_fts_shape,dtype=jnp.float32)
+        write_node_fts_shape = jnp.array(node_fts.shape)
+        write_node_fts_shape[0] = 1
+        write_node_fts_shape[1] = self.write_nodes_amount
+
+        self.write_node_fts = self.write_node_fts_layer(shape=write_node_fts_shape,dtype=jnp.float32)
         self.write_node_fts = jnp.repeat(self.write_node_fts,b,axis=0)
 
         if not self.read_node_fts:
-            self.read_node_fts = jnp.average(node_fts,axis=1)
+            read_node_fts_shape = jnp.array(node_fts.shape)
+            read_node_fts_shape[0] = 1
+            read_node_fts_shape[1] = self.read_nodes_amount
+
+            self.read_node_fts = self.write_node_fts_layer(shape=read_node_fts_shape, dtype=jnp.float32)
+            self.read_node_fts = jnp.repeat(self.read_node_fts, b, axis=0)
 
         # Setting the new node fts
 
@@ -115,71 +125,72 @@ class Gatv2_NTM(GATv2):
 
 
 
-        # TODO what is hidden?
 
         ################################################
         # Network is called here
         concatenated_ret = super().__call__(node_fts_new, new_edge_fts, graph_fts, adj_mat_new, hidden, **unused_kwargs)
         ################################################
 
-        real_ret,read_ret,write_ret = jnp.split(concatenated_ret,[n,n+self.read_nodes_amount],axis=1)
-
-        s_t_pre_dense,beta_g_y_t,k_t,a_t,e_t = jnp.split(write_ret,self.write_nodes_amount,axis=1)
+        real_ret,_,write_ret = jnp.split(concatenated_ret,[n,n+self.read_nodes_amount],axis=1)
 
 
+        w_nodes,a_e_nodes = jnp.split(write_ret,[self.w_nodes_amount],axis=1)
+        list_of_params_for_each_w = jnp.split(w_nodes,self.total_heads,axis=1)
+        list_of_params_for_each_write = jnp.split(a_e_nodes,self.memory_type.write_head_num,axis=1)
 
-        s_t = self.s_t_dense_layer(s_t_pre_dense.squeeze())
-        beta_g_y_t_post_dense = self.beta_g_y_t_dense_layer(beta_g_y_t.squeeze())
+        batch_params = []
+        for batch_no in range(b):
 
-        beta_t,g_t,gamma_t = jnp.split(beta_g_y_t_post_dense,3,axis=1)
-        k = jnp.tanh(k_t.squeeze())
-        beta = nn.softplus(beta_t)
-        g = nn.sigmoid(g_t)
-        s = nn.softmax(
-            s_t
-        )
-        gamma = nn.softplus(gamma_t) + 1
+            w_params_for_batch = []
+            for i,params in enumerate(list_of_params_for_each_w):
+                s_t_pre_dense, beta_g_y_t, k_t = jnp.split(params,3,axis=1)
+                s_t = self.s_t_dense_layer(s_t_pre_dense.squeeze())
+                beta_g_y_t_post_dense = self.beta_g_y_t_dense_layer(beta_g_y_t.squeeze())
+
+                beta_t, g_t, gamma_t = jnp.split(beta_g_y_t_post_dense, 3, axis=1)
+                k = jnp.tanh(k_t.squeeze())
+                beta = nn.softplus(beta_t)
+                g = nn.sigmoid(g_t)
+                s = nn.softmax(
+                    s_t
+                )
+                gamma = nn.softplus(gamma_t) + 1
+                head_parameters = (k, beta, g, s, gamma)
+                w_params_for_batch.append(head_parameters)
+
+            e_a_params_for_batch = []
+            for i, params in enumerate(list_of_params_for_each_write):
+                e_t, a_t = jnp.split(params, 2, axis=1)
+                e_t = e_t.squeeze()
+                a_t = a_t.squeeze()
+                e_a_final = (e_t,a_t)
+                e_a_params_for_batch.append(e_a_final)
+
+            # concatenated_inputs = jnp.concatenate(k,beta,g,s,gamma,e_t,a_t,axis=1)
+
+            final_tuple=(w_params_for_batch,e_a_params_for_batch)
+            batch_params.append(final_tuple)
 
 
-        e_t = e_t.squeeze()
-        a_t = a_t.squeeze()
-        # head_parameter_list is a list for each read/write head
+        # TODO use concatenated inputs instead, remove for loops
 
-        memory_inputs_list = []
-        # TODO use concatenated inputs instead
-        # TODO memory state already has batch dimensions! also check inner function for this
-        concatenated_inputs = jnp.concatenate(k,beta,g,s,gamma,e_t,a_t,axis=1)
-        for i in range(b):
+        # TODO check if use of stack is correct
 
-            head_parameters = (k[i],beta[i],g[i],s[i],gamma[i])
-            erase_add_tuple = (e_t[i],a_t[i])
-
-            head_parameter_list = [head_parameters] # TODO adapt for multiple heads
-            erase_add_list = [erase_add_tuple] # TODO adapt for multiple heads
-            final_inputs = (head_parameter_list, erase_add_list)
-            memory_inputs_list.append(final_inputs)
-
-        NTM_read_vector_lists = []
-        next_states = []
+        read_node_fts_per_batch = []
+        states_per_batch=[]
+        for batch_no in range(b):
+            NTM_read_vector_lists, next_state_here = self.memory_type(batch_params[batch_no],self.memory_state[batch_no])
+            read_node_fts_per_batch.append(jnp.stack(NTM_read_vector_lists))
+            states_per_batch.append(next_state_here)
         ################################################
-        # Memory is called here
-        for i in range(b):
-            memory_state=self.memory_state[i]
-            memory_inputs=memory_inputs_list[i]
-            NTM_read_vector_list_here, next_state_here = self.memory_type(memory_inputs,memory_state)
-            NTM_read_vector_lists.append(NTM_read_vector_list_here[0]) # TODO adapt for multiple heads
-            next_states.append(next_state_here)
-
-        ################################################
 
 
-        self.read_node_fts = jnp.concatenate(NTM_read_vector_lists,axis=0)
-        self.memory_state = next_states
+        self.read_node_fts = jnp.stack(read_node_fts_per_batch)
+        self.memory_state = states_per_batch
 
 
 
-        # TODO remove for loops
-        # TODO how to refresh memory for each new example set? the network will be called multiple times until done
+        # TODO how to refresh memory, read node fts for each new example set? the network will be called multiple times until done
         # TODO ensure there is no dense layer for itself?
 
 

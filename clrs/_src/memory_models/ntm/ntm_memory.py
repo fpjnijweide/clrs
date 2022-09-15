@@ -98,8 +98,8 @@ class NTMMemory(hk.RNNCore):
             raise RuntimeError("invalid init mode")
 
         state = NTMState(M, w_var_list, read_vector_list)
-        if batch_size is not None:
-            state = add_batch(state, batch_size)
+        # if batch_size is not None:
+        #     state = add_batch(state, batch_size)
         return state
 
     def __call__(self, inputs, prev_state: NTMState):
@@ -217,3 +217,6 @@ class NTMMemory(hk.RNNCore):
     #         read_vector_list=[self.memory_vector_dim for _ in range(self.read_head_num)],
     #         w_list=[self.memory_size for _ in range(self.read_head_num + self.write_head_num)],
     #         M=jnp.TensorShape([self.memory_size, self.memory_vector_dim]))
+
+if __name__=='__main__':
+
