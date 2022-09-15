@@ -13,6 +13,7 @@ from typing import List, NamedTuple
 
 import haiku as hk
 import jax.numpy as jnp
+# noinspection PyProtectedMember
 from haiku._src.recurrent import add_batch
 from jax import nn
 
@@ -28,7 +29,7 @@ class NTMState(NamedTuple):
     read_vector_list: List[jnp.ndarray]
 
 
-class NTM_memory(hk.RNNCore):
+class NTMMemory(hk.RNNCore):
     def __init__(self, memory_vector_dim=None, memory_size=20, read_head_num=1, write_head_num=1,
                  addressing_mode='content_and_location', shift_range=1, clip_value=20, init_mode='constant'):
         # self.controller_layers = controller_layers
@@ -56,7 +57,8 @@ class NTM_memory(hk.RNNCore):
         self.shift_range = shift_range
         # self.num_parameters_per_head = self.memory_vector_dim + 1 + 1 + (self.shift_range * 2 + 1) + 1
         # self.num_heads = self.read_head_num + self.write_head_num
-        # self.total_parameter_num = self.num_parameters_per_head * self.num_heads + self.memory_vector_dim * 2 * self.write_head_num
+        # self.total_parameter_num = self.num_parameters_per_head * self.num_heads +\
+        # self.memory_vector_dim * 2 * self.write_head_num
 
         # self.controller_proj_initializer = create_linear_initializer(self.controller_units)
         # self.output_proj_initializer = create_linear_initializer(
@@ -88,7 +90,8 @@ class NTM_memory(hk.RNNCore):
             M = jnp.tanh(hk.get_parameter("NTM_M", shape=[self.memory_size, self.memory_vector_dim],
                                           init=hk.initializers.VarianceScaling(1.0, "fan_avg", "uniform")))
         elif self.init_mode == 'random':
-            M = jnp.tanh(hk.initializers.RandomNormal(stddev=0.5)([self.memory_size, self.memory_vector_dim],dtype=jnp.float32) )
+            M = jnp.tanh(
+                hk.initializers.RandomNormal(stddev=0.5)([self.memory_size, self.memory_vector_dim], dtype=jnp.float32))
         elif self.init_mode == 'constant':
             M = jnp.full([self.memory_size, self.memory_vector_dim], 1e-6)
         else:
@@ -121,13 +124,7 @@ class NTM_memory(hk.RNNCore):
         # prev_M = prev_state[3]
         w_list = []
         for i, head_parameter in enumerate(head_parameter_list):
-            k = jnp.tanh(head_parameter[:, 0:self.memory_vector_dim])
-            beta = nn.softplus(head_parameter[:, self.memory_vector_dim])
-            g = nn.sigmoid(head_parameter[:, self.memory_vector_dim + 1])
-            s = nn.softmax(
-                head_parameter[:, self.memory_vector_dim + 2:self.memory_vector_dim + 2 + (self.shift_range * 2 + 1)]
-            )
-            gamma = nn.softplus(head_parameter[:, -1]) + 1
+            k, beta, g, s, gamma = head_parameter
             w = self._addressing(k, beta, g, s, gamma, prev_M, prev_w_list[i])
             w_list.append(w)
 
@@ -142,9 +139,10 @@ class NTM_memory(hk.RNNCore):
         write_w_list = w_list[self.read_head_num:]
         M = prev_M
         for i in range(self.write_head_num):
+            e_t,a_t = erase_add_list[i]
+            erase_vector = jnp.expand_dims(nn.sigmoid(e_t), axis=1)
+            add_vector = jnp.expand_dims(nn.tanh(a_t), axis=1)
             w = jnp.expand_dims(write_w_list[i], axis=2)
-            erase_vector = jnp.expand_dims(nn.sigmoid(erase_add_list[i * 2]), axis=1)
-            add_vector = jnp.expand_dims(jnp.tanh(erase_add_list[i * 2 + 1]), axis=1)
             M = M * (jnp.ones(M.get_shape()) - jnp.matmul(w, erase_vector)) + jnp.matmul(w, add_vector)
 
         # NTM_output = self.output_proj(jnp.concatenate([controller_output] + read_vector_list, axis=1))

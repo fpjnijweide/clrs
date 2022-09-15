@@ -27,8 +27,7 @@ https://arxiv.org/abs/1506.02516, 2015
 
 """
 
-
-from typing import NamedTuple, Any
+from typing import NamedTuple, Any, Optional
 
 import haiku as hk
 import jax.nn
@@ -36,12 +35,14 @@ import jax.numpy as jnp
 
 from clrs._src.memory_models.stack import common_hparams
 
+
 class NeuralStackControllerInterface(NamedTuple):
     push_strengths: jnp.ndarray
     pop_strengths: jnp.ndarray
     write_values: jnp.ndarray
     outputs: jnp.ndarray
     state: jnp.ndarray
+
 
 class NeuralStackState(NamedTuple):
     controller_state: Any
@@ -112,18 +113,18 @@ class NeuralStackCell(hk.RNNCore):
             jax.nn.one_hot([[0] * self._num_write_heads] * batch_size,
                            num_classes=self._memory_size, dtype=jnp.float32), axis=3)
 
-    def zero_state(self, batch_size, dtype):
+    def initial_state(self, batch_size: Optional[int]) -> NeuralStackState:
+
         """Initialize the tuple of state values to zeros except write strengths.
 
         Args:
           batch_size: The size of the current batch.
-          dtype: The default datatype to initialize to.
 
         Returns:
           A new NeuralStackState tuple.
         """
-        parent_state = NeuralStackState(*super(NeuralStackCell, self).zero_state(
-            batch_size, dtype))
+        parent_state = NeuralStackState(*super(NeuralStackCell, self).initial_state(
+            batch_size))
         return NeuralStackState(
             controller_state=parent_state.controller_state,
             read_values=parent_state.read_values,
@@ -235,12 +236,6 @@ class NeuralStackCell(hk.RNNCore):
     #     self._output_proj, self._output_bias = self.add_vector_projection(
     #         "output", 1)
 
-    def build(self, _):
-        """Build the controller.
-        """
-        # self.build_controller()
-        self.built = True
-
     # def get_controller_shape(self, batch_size):
     #     """Define the output shapes of the neural stack controller.
     #
@@ -342,7 +337,7 @@ class NeuralStackCell(hk.RNNCore):
         #     in zip(projected_outputs, self.get_controller_shape(batch_size))]
         return NeuralStackControllerInterface(*projected_outputs)
 
-    def call(self, inputs, prev_state):
+    def __call__(self, inputs, prev_state):
         """Evaluates one timestep of the current neural stack cell.
 
         See section 3.4 of Grefenstette et al., 2015.
@@ -383,7 +378,7 @@ class NeuralStackCell(hk.RNNCore):
             # `tf.slice(foo, [3, 0], [4, foo.get_shape()[1]-2])`.
             # '''
             new_read_strengths = jax.nn.relu(new_read_strengths - jax.nn.relu(
-                controller_output.pop_strengths[:,h:h+1,:,:] -
+                controller_output.pop_strengths[:, h:h + 1, :, :] -
                 # tf.slice(controller_output.pop_strengths,
                 #           [0, h, 0, 0],
                 #           [-1, 1, -1, -1])
@@ -433,12 +428,12 @@ class NeuralStackCell(hk.RNNCore):
             read_strengths=new_read_strengths,
             write_strengths=new_write_strengths))
 
+
 class NeuralStackModel(hk.Module):
     """An encoder-decoder T2TModel that uses NeuralStackCells.
     """
 
     def __init__(self):
-
         super().__init__()
         self._hparams = neural_stack()
 
@@ -512,6 +507,7 @@ class NeuralStackModel(hk.Module):
     #         initial_state=final_encoder_state)
     #     return decoder_outputs
 
+
 # class NeuralQueueCell(NeuralStackCell):
 #     """An subclass of the NeuralStackCell which reads from the opposite direction.
 #
@@ -535,7 +531,7 @@ class NeuralStackModel(hk.Module):
 #             raise ValueError("Read head index must be 0 for queue.")
 
 def mask_pos_lt(source_length, target_length):
-  """A mask with 1.0 wherever source_pos < target_pos and 0.0 elsewhere.
+    """A mask with 1.0 wherever source_pos < target_pos and 0.0 elsewhere.
 
   Args:
     source_length: an integer
@@ -543,14 +539,14 @@ def mask_pos_lt(source_length, target_length):
   Returns:
     a Tensor with shape [1, target_length, source_length]
   """
-  return jnp.expand_dims(
-      jax.lax.convert_element_type(jnp.less(jnp.expand_dims(jnp.arange(target_length), axis=0),
-                      jnp.expand_dims(jnp.arange(source_length), axis=1)),
-              new_dtype=jnp.float32), axis=0)
+    return jnp.expand_dims(
+        jax.lax.convert_element_type(jnp.less(jnp.expand_dims(jnp.arange(target_length), axis=0),
+                                              jnp.expand_dims(jnp.arange(source_length), axis=1)),
+                                     new_dtype=jnp.float32), axis=0)
 
 
 def mask_pos_gt(source_length, target_length):
-  """A mask with 1.0 wherever source_pos > target_pos and 0.0 elsewhere.
+    """A mask with 1.0 wherever source_pos > target_pos and 0.0 elsewhere.
 
   Args:
     source_length: an integer
@@ -558,10 +554,11 @@ def mask_pos_gt(source_length, target_length):
   Returns:
     a Tensor with shape [1, target_length, source_length]
   """
-  return jnp.expand_dims(
-      jax.lax.convert_element_type(jnp.greater(jnp.expand_dims(jnp.arange(target_length), axis=0),
-                         jnp.expand_dims(jnp.arange(source_length), axis=1)),
-              new_dtype=jnp.float32), axis=0)
+    return jnp.expand_dims(
+        jax.lax.convert_element_type(jnp.greater(jnp.expand_dims(jnp.arange(target_length), axis=0),
+                                                 jnp.expand_dims(jnp.arange(source_length), axis=1)),
+                                     new_dtype=jnp.float32), axis=0)
+
 
 class NeuralDequeCell(NeuralStackCell):
     """An subclass of the NeuralStackCell which reads/writes in both directions.
@@ -629,8 +626,6 @@ class NeuralDequeCell(NeuralStackCell):
             ], axis=1), axis=3)
 
 
-
-
 class NeuralDequeModel(NeuralStackModel):
     """Subclass of NeuralStackModel which implements a double-ended queue.
     """
@@ -652,6 +647,7 @@ class NeuralDequeModel(NeuralStackModel):
                                self._hparams.memory_size,
                                self._hparams.embedding_size)
 
+
 # class NeuralQueueModel(NeuralStackModel):
 #     """Subcalss of NeuralStackModel which implements a queue.
 #     """
@@ -668,9 +664,6 @@ class NeuralDequeModel(NeuralStackModel):
 #         return NeuralQueueCell(hidden_size,
 #                                self._hparams.memory_size,
 #                                self._hparams.embedding_size)
-
-
-
 
 
 # def lstm_transduction():
