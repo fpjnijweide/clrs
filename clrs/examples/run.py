@@ -344,7 +344,7 @@ def main(unused_argv):
             if score > best_score:
                 logging.info('Saving new checkpoint...')
                 best_score = score
-                train_model.save_model('best.pkl')
+                train_model.save_model(f"{FLAGS.algorithm}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}.pkl")
             next_eval += FLAGS.eval_every
             if score==1.0:
                 break
@@ -352,7 +352,7 @@ def main(unused_argv):
 
     # Training complete, evaluate on test set.
     logging.info('Restoring best model from checkpoint...')
-    eval_model.restore_model('best.pkl', only_load_processor=False)
+    eval_model.restore_model(f"{FLAGS.algorithm}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}.pkl", only_load_processor=False)
 
     rng_key, new_rng_key = jax.random.split(rng_key)
     test_stats = collect_and_eval(
@@ -365,7 +365,6 @@ def main(unused_argv):
     rng_key = new_rng_key
     logging.info('(test) step %d: %s', step, test_stats)
 
-    train_model.save_model(f"{FLAGS.algorithm}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}.pkl")
     with open("results.txt", "a+") as myfile:
         myfile.write(
             f"{FLAGS.algorithm}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}.pkl: (test) step {step}: {test_stats}\n")
