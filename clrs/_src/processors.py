@@ -640,6 +640,7 @@ class MemoryAugmentedProcessor(Processor):
         self.memory = memory_type()
 
         self.memory_state = None
+
         self.read_node_fts = None
 
         self.write_node_fts_layer = hk.initializers.RandomNormal(stddev=0.5)

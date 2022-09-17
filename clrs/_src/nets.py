@@ -29,6 +29,7 @@ from clrs._src import probing
 from clrs._src import samplers
 from clrs._src import processors
 from clrs._src import specs
+from clrs._src.memory_models import extend_features
 from clrs._src.memory_models.ntm.ntm_memory import NTM
 
 _Array = chex.Array
@@ -250,7 +251,12 @@ class Net(hk.Module):
                     hidden_size=self.hidden_dim,
                     name='processor_lstm')
             elif self.use_memory == "NTM":
-                self.memory = NTM('processor_NTM')
+                self.memory = NTM(name='processor_NTM')
+                self.read_node_fts = None
+                self.write_node_fts_layer = hk.initializers.RandomNormal(stddev=0.5)
+                self.read_node_fts_layer = hk.initializers.RandomNormal(stddev=0.5)
+                self.write_edge_fts_layer = hk.initializers.RandomNormal()
+                self.read_edge_fts_layer = hk.initializers.RandomNormal()
             else:
                 raise NotImplementedError(f"Memory type {self.use_memory} does not exist")
             memory_init = self.memory.initial_state
@@ -274,9 +280,8 @@ class Net(hk.Module):
                     lambda x, b=batch_size, n=nb_nodes: jnp.reshape(x, [b, n, -1]),
                     memory_state)
             elif self.use_memory == "NTM":
-                self.memory_state = memory_init(hiddens)
-                # TODO change network used in some way
-                memory_state = None
+                memory_state = memory_init(hiddens)
+                # TODO tree map?
             else:
                 memory_state = None
 
@@ -414,16 +419,30 @@ class Net(hk.Module):
 
         # PROCESS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        # TODO add stuff here
-        nxt_hidden = self.processor(
-            node_fts,
-            edge_fts,
-            graph_fts,
-            adj_mat,
-            hidden,
-            batch_size=batch_size,
-            nb_nodes=nb_nodes,
-        )
+        if self.use_memory=="NTM":
+            adj_mat_new, hidden_new, new_edge_fts, node_fts_new = extend_features(adj_mat, edge_fts, hidden, node_fts,
+                                                                                  self.memory.read_nodes_amount,
+                                                                                  self.memory.write_nodes_amount,
+                                                                                  self.write_node_fts_layer,
+                                                                                  self.write_edge_fts_layer,
+                                                                                  self.read_node_fts,
+                                                                                  self.read_edge_fts_layer,
+                                                                                  self.read_node_fts_layer)
+
+            nxt_hidden = self.processor(node_fts_new, new_edge_fts, graph_fts, adj_mat_new, hidden_new, batch_size=batch_size,
+                nb_nodes=nb_nodes)
+            memory_input, nxt_hidden = self.memory.prepare_memory_input(nxt_hidden, nb_nodes)
+        else:
+            nxt_hidden = self.processor(
+                node_fts,
+                edge_fts,
+                graph_fts,
+                adj_mat,
+                hidden,
+                batch_size=batch_size,
+                nb_nodes=nb_nodes,
+            )
+
         nxt_hidden = hk.dropout(hk.next_rng_key(), self._dropout_prob, nxt_hidden)
 
         if self.use_memory == "LSTM":
@@ -431,10 +450,8 @@ class Net(hk.Module):
             # nodes), so we vmap over the (first) batch dimension.
             nxt_hidden, nxt_memory_state = jax.vmap(self.memory)(nxt_hidden, memory_state)
         elif self.use_memory=="NTM":
-            nxt_hidden, nxt_memory_state = jax.vmap(self.memory)(nxt_hidden, memory_state)
-            # TODO process properly
+            self.read_node_fts, nxt_memory_state = jax.vmap(self.memory)(memory_input, memory_state)
         else:
-            # TODO OTHER MEMORIES
             nxt_memory_state = None
 
         h_t = jnp.concatenate([node_fts, hidden, nxt_hidden], axis=-1)
