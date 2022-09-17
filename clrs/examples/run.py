@@ -349,16 +349,13 @@ def main(unused_argv):
                 train_model.save_model(
                     f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl")
                 this_is_first_time_we_see_this_score = True
-
-            if score == best_score:
-                logging.info('Saving new checkpoint (second time)...')
+            elif score == best_score:
+                logging.info('Saving new checkpoint (same score)...')
                 train_model.save_model(
                     f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_last.pkl")
                 this_is_first_time_we_see_this_score = False
 
             next_eval += FLAGS.eval_every
-            if score==1.0:
-                break
         step += 1
 
     # Training complete, evaluate on test set.
