@@ -346,7 +346,8 @@ def main(unused_argv):
                 best_score = score
                 train_model.save_model('best.pkl')
             next_eval += FLAGS.eval_every
-
+            if score==1.0:
+                break
         step += 1
 
     # Training complete, evaluate on test set.

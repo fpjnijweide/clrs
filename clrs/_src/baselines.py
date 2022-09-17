@@ -298,7 +298,7 @@ class BaselineModel(model.Model):
 
   def restore_model(self, file_name: str, only_load_processor: bool = False):
     """Restore model from `file_name`."""
-    path = os.path.join(self.checkpoint_path, file_name)
+    path = file_name
     with open(path, 'rb') as f:
       restored_state = pickle.load(f)
       if only_load_processor:
@@ -310,9 +310,9 @@ class BaselineModel(model.Model):
 
   def save_model(self, file_name: str):
     """Save model (processor weights only) to `file_name`."""
-    os.makedirs(self.checkpoint_path, exist_ok=True)
+    # os.makedirs(self.checkpoint_path, exist_ok=True)
     to_save = {'params': self.params, 'opt_state': self.opt_state}
-    path = os.path.join(self.checkpoint_path, file_name)
+    path = file_name
     with open(path, 'wb') as f:
       pickle.dump(to_save, f)
 

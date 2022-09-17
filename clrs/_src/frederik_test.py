@@ -158,6 +158,8 @@ class BaselinesTest(parameterized.TestCase):
             b_single.init(full_batches[0].features, seed=0)
             # b_multi.init([f.features for f in full_batches], seed=0)
 
+            b_single.save_model("test123.pkl")
+
             single_params = []
             single_losses = []
             # multi_params = []
