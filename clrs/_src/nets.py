@@ -24,6 +24,7 @@ import jax
 import jax.numpy as jnp
 
 import clrs._src.processor_factory
+import clrs._src.processors
 from clrs._src import decoders
 from clrs._src import encoders
 from clrs._src import probing
@@ -80,7 +81,7 @@ class Net(hk.Module):
             encode_hints: bool,
             decode_hints: bool,
             decode_diffs: bool,
-            processor_factory: clrs._src.processor_factory.ProcessorFactory,
+            processor_factory: clrs._src.processors.ProcessorFactory,
             use_memory: str,
             dropout_prob: float,
             hint_teacher_forcing_noise: float,
@@ -777,7 +778,7 @@ def _is_not_done_broadcast(lengths, i, tensor):
         is_not_done = jnp.expand_dims(is_not_done, -1)
     return is_not_done
 
-def extend_features(adj_mat, edge_fts, hidden, node_fts,read_nodes_amount,write_nodes_amount,write_node_fts_layer,write_edge_fts_layer,read_node_fts,read_edge_fts_layer):
+def extend_features(adj_mat, edge_fts, hidden, node_fts,read_nodes_amount,write_nodes_amount,write_node_fts_layer,write_edge_fts_layer,read_node_fts,read_edge_fts_layer,read_node_fts_layer):
     b, n, _ = node_fts.shape
     write_node_fts_shape = jnp.array(node_fts.shape)
     write_node_fts_shape = write_node_fts_shape.at[0].set(1)
@@ -789,7 +790,7 @@ def extend_features(adj_mat, edge_fts, hidden, node_fts,read_nodes_amount,write_
         read_node_fts_shape = read_node_fts_shape.at[0].set(1)
         read_node_fts_shape = read_node_fts_shape.at[1].set(read_nodes_amount)
 
-        read_node_fts = write_node_fts_layer(shape=read_node_fts_shape, dtype=jnp.float32)
+        read_node_fts = read_node_fts_layer(shape=read_node_fts_shape, dtype=jnp.float32)
         read_node_fts = jnp.repeat(read_node_fts, b, axis=0)
     # Setting the new node fts
     node_fts_new = jnp.concatenate([node_fts, read_node_fts, write_node_fts], axis=1)

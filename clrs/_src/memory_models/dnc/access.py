@@ -135,9 +135,9 @@ class MemoryAccess(hk.RNNCore):
             prev_usage=prev_state.usage)
 
         # Write to memory.
-        write_weights = self._write_weights(inputs, prev_state.memory_type, usage)
+        write_weights = self._write_weights(inputs, prev_state.memory, usage)
         memory = _erase_and_write(
-            prev_state.memory_type,
+            prev_state.memory,
             address=write_weights,
             reset_weights=inputs['erase_vectors'],
             values=inputs['write_vectors'])

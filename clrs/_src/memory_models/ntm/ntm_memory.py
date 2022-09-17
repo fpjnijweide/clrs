@@ -58,6 +58,13 @@ class NTMMemory(hk.RNNCore):
 
         self.beta_g_y_t_dense_layer = hk.Linear(output_size=3)
         self.s_t_dense_layer = hk.Linear(output_size=self.memory_size)
+
+        self.total_heads = self.memory.write_head_num + self.memory.read_head_num
+        self.w_nodes_amount = 3 * self.total_heads
+        self.erase_add_nodes_amount = 2 * (self.memory.write_head_num)
+
+        self.read_nodes_amount = self.memory.read_head_num
+        self.write_nodes_amount = self.w_nodes_amount + self.erase_add_nodes_amount
         # self.num_parameters_per_head = self.memory_vector_dim + 1 + 1 + (self.shift_range * 2 + 1) + 1
         # self.num_heads = self.read_head_num + self.write_head_num
         # self.total_parameter_num = self.num_parameters_per_head * self.num_heads +\
@@ -226,10 +233,9 @@ class NTMMemory(hk.RNNCore):
 
     def prepare_memory_input(self, concatenated_ret, n):
         # TODO reduce for loops?
-        w_nodes_amount = 3* (self.write_head_num + self.read_head_num)
 
         real_ret, _, write_ret = jnp.split(concatenated_ret, [n, n + self.read_head_num], axis=1)
-        w_nodes, a_e_nodes = jnp.split(write_ret, [w_nodes_amount], axis=1)
+        w_nodes, a_e_nodes = jnp.split(write_ret, [self.w_nodes_amount], axis=1)
         list_of_params_for_each_w = jnp.split(w_nodes, self.write_head_num+self.read_head_num, axis=1)
         list_of_params_for_each_write = jnp.split(a_e_nodes, self.write_head_num, axis=1)
         w_params_for_batch = []

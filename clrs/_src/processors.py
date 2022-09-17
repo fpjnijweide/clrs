@@ -16,7 +16,7 @@
 """JAX implementation of baseline processor networks."""
 
 import abc
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable, List, Optional, Type
 
 import chex
 import haiku as hk
@@ -24,6 +24,7 @@ import jax
 import jax.numpy as jnp
 import numpy as np
 # from clrs._src.memory import NTM
+from clrs._src.nets import extend_features
 
 _Array = chex.Array
 _Fn = Callable[..., Any]
@@ -622,3 +623,208 @@ def _position_encoding(sentence_size: int, embedding_size: int) -> np.ndarray:
   return np.transpose(encoding)
 
 
+class MemoryAugmentedProcessor(Processor):
+    """Graph Attention Network v2 (Brody et al., ICLR 2022)."""
+
+    def __init__(
+            self,
+            processor_type: Type[Processor],
+            memory_type: Type[hk.RNNCore],
+            name: str = 'ntm_network',
+            *args, **kwargs
+    ):
+
+        super().__init__(name=name)
+        self.processor = processor_type(*args, **kwargs)
+        self.memory = memory_type()
+
+        self.memory_state = None
+        self.read_node_fts = None
+
+        self.write_node_fts_layer = hk.initializers.RandomNormal(stddev=0.5)
+        self.read_node_fts_layer = hk.initializers.RandomNormal(stddev=0.5)
+        self.write_edge_fts_layer = hk.initializers.RandomNormal()
+        self.read_edge_fts_layer = hk.initializers.RandomNormal()
+
+
+
+    def __call__(
+            self,
+            node_fts: _Array,
+            edge_fts: _Array,
+            graph_fts: _Array,
+            adj_mat: _Array,
+            hidden: _Array,
+            **unused_kwargs,
+    ) -> _Array:
+        """inference step."""
+        b, n, _ = node_fts.shape
+
+        if not self.memory_state:
+            self.memory_state = self.memory.initial_state(node_fts)
+
+        adj_mat_new, hidden_new, new_edge_fts, node_fts_new = extend_features(adj_mat, edge_fts, hidden, node_fts,self.memory.read_nodes_amount,self.memory.write_nodes_amount,self.write_node_fts_layer,self.write_edge_fts_layer,self.read_node_fts,self.read_edge_fts_layer,self.read_node_fts_layer)
+
+        # Network is called here
+        ret = self.processor(node_fts_new, new_edge_fts, graph_fts, adj_mat_new, hidden_new, **unused_kwargs)
+
+        memory_input, ret = self.memory.prepare_memory_input(ret, n)
+
+        self.read_node_fts, self.memory_state = self.memory(memory_input,self.memory_state)
+
+
+        # TODO "lstm" state via baselines,etc
+        # TODO how to refresh memory, read node fts for each new example set? the network will be called multiple times until done
+
+        # TODO do for MPNN
+        # TODO do for PGN?
+        # TODO do for deque
+        # TODO do for own architecture
+        # TODO do for DNC
+
+
+
+        # TODO experiment with memory size
+
+        return ret
+
+
+    # def extend_features(self, adj_mat, edge_fts, hidden, node_fts):
+    #     b, n, _ = node_fts.shape
+    #     write_node_fts_shape = jnp.array(node_fts.shape)
+    #     write_node_fts_shape = write_node_fts_shape.at[0].set(1)
+    #     write_node_fts_shape = write_node_fts_shape.at[1].set(self.write_nodes_amount)
+    #     self.write_node_fts = self.write_node_fts_layer(shape=write_node_fts_shape, dtype=jnp.float32)
+    #     self.write_node_fts = jnp.repeat(self.write_node_fts, b, axis=0)
+    #     if self.read_node_fts is None:
+    #         read_node_fts_shape = jnp.array(node_fts.shape)
+    #         read_node_fts_shape = read_node_fts_shape.at[0].set(1)
+    #         read_node_fts_shape = read_node_fts_shape.at[1].set(self.read_nodes_amount)
+    #
+    #         self.read_node_fts = self.write_node_fts_layer(shape=read_node_fts_shape, dtype=jnp.float32)
+    #         self.read_node_fts = jnp.repeat(self.read_node_fts, b, axis=0)
+    #     # Setting the new node fts
+    #     node_fts_new = jnp.concatenate([node_fts, self.read_node_fts, self.write_node_fts], axis=1)
+    #     new_edge_feat_shape = jnp.array(edge_fts.shape)
+    #     edge_fts_embedding_size = new_edge_feat_shape[-1]
+    #     edge_fts_embedding_size_for_write = (self.write_nodes_amount, edge_fts_embedding_size)
+    #     new_edge_feat_shape = new_edge_feat_shape.at[1].set(n + self.write_nodes_amount + self.read_nodes_amount)
+    #     new_edge_feat_shape = new_edge_feat_shape.at[2].set(n + self.write_nodes_amount + self.read_nodes_amount)
+    #     new_edge_fts = jnp.zeros(new_edge_feat_shape)
+    #     new_edge_fts = new_edge_fts.at[:, :n, :n, :].set(edge_fts)
+    #     # The edge features to/from write/read nodes will be generated via a dense layer
+    #     write_edge_fts = self.write_edge_fts_layer(shape=edge_fts_embedding_size_for_write, dtype=jnp.float32)
+    #     read_edge_fts = self.read_edge_fts_layer(shape=(1, edge_fts_embedding_size), dtype=jnp.float32)
+    #     write_edge_fts_tiled = jnp.tile(write_edge_fts, [b, n, 1, 1])
+    #     read_edge_fts_tiled = jnp.tile(read_edge_fts, [b, self.read_nodes_amount, n, 1])
+    #     new_edge_fts = new_edge_fts.at[:, :n,
+    #                    n + self.read_nodes_amount:n + self.read_nodes_amount + self.write_nodes_amount, :].set(
+    #         write_edge_fts_tiled)  # From normal nodes to write nodes: edges
+    #     new_edge_fts = new_edge_fts.at[:, n:n + self.read_nodes_amount, :n, :].set(
+    #         read_edge_fts_tiled)  # From read nodes to normal nodes: edges
+    #     # Setting the ajdacency matrix
+    #     adj_mat_new = jnp.zeros([b, n + self.write_nodes_amount + self.read_nodes_amount,
+    #                              n + self.write_nodes_amount + self.read_nodes_amount])
+    #     adj_mat_new = adj_mat_new.at[:, :n, :n].set(adj_mat)
+    #     adj_mat_new = adj_mat_new.at[:, :n,
+    #                   n + self.read_nodes_amount:n + self.read_nodes_amount + self.write_nodes_amount].set(
+    #         1)  # From normal nodes to write nodes: edges
+    #     adj_mat_new = adj_mat_new.at[:, n:n + self.read_nodes_amount, :n].set(
+    #         1)  # From read nodes to normal nodes: edges
+    #     hidden_new_shape = jnp.array(hidden.shape)
+    #     hidden_new_shape = hidden_new_shape.at[1].set(
+    #         hidden_new_shape[1] + self.read_nodes_amount + self.write_nodes_amount)
+    #     hidden_new = jnp.zeros(hidden_new_shape, dtype=jnp.float32)
+    #     hidden_new = hidden_new.at[:, :n, :].set(hidden)  # TODO what to do about hidden
+    #     return adj_mat_new, hidden_new, new_edge_fts, node_fts_new
+
+
+ProcessorFactory = Callable[[int], Processor]
+
+
+def get_processor_factory(kind: str,
+                          use_ln: bool,
+                          nb_heads: Optional[int] = None) -> ProcessorFactory:
+  """Returns a processor factory.
+
+  Args:
+    kind: One of the available types of processor.
+    use_ln: Whether the processor passes the output through a layernorm layer.
+    nb_heads: Number of attention heads for GAT processors.
+  Returns:
+    A callable that takes an `out_size` parameter (equal to the hidden
+    dimension of the network) and returns a processor instance.
+  """
+  def _factory(out_size: int):
+    if kind == 'deepsets':
+      processor = DeepSets(
+          out_size=out_size,
+          msgs_mlp_sizes=[out_size, out_size],
+          use_ln=use_ln
+      )
+    elif kind == 'gat':
+      processor = GAT(
+          out_size=out_size,
+          nb_heads=nb_heads,
+          use_ln=use_ln
+      )
+    elif kind == 'gat_full':
+      processor = GATFull(
+          out_size=out_size,
+          nb_heads=nb_heads,
+          use_ln=use_ln
+      )
+    elif kind == 'gatv2':
+      processor = GATv2(
+          out_size=out_size,
+          nb_heads=nb_heads,
+          use_ln=use_ln
+      )
+    elif kind == 'gatv2_full':
+      processor = GATv2Full(
+          out_size=out_size,
+          nb_heads=nb_heads,
+          use_ln=use_ln
+      )
+    elif kind == 'gatv2_ntm':
+      processor = MemoryAugmentedProcessor(
+          out_size=out_size,
+          nb_heads=nb_heads,
+          use_ln=use_ln
+      )
+    elif kind == 'memnet_full':
+      processor = MemNetFull(
+          vocab_size=out_size,
+          sentence_size=out_size,
+          linear_output_size=out_size,
+      )
+    elif kind == 'memnet_masked':
+      processor = MemNetMasked(
+          vocab_size=out_size,
+          sentence_size=out_size,
+          linear_output_size=out_size,
+      )
+    elif kind == 'mpnn':
+      processor = MPNN(
+          out_size=out_size,
+          msgs_mlp_sizes=[out_size, out_size],
+          use_ln=use_ln
+      )
+    elif kind == 'pgn':
+      processor = PGN(
+          out_size=out_size,
+          msgs_mlp_sizes=[out_size, out_size],
+          use_ln=use_ln
+      )
+    elif kind == 'pgn_mask':
+      processor = PGNMask(
+          out_size=out_size,
+          msgs_mlp_sizes=[out_size, out_size],
+          use_ln=use_ln
+      )
+    else:
+      raise ValueError('Unexpected processor kind ' + kind)
+
+    return processor
+
+  return _factory
