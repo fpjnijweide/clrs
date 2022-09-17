@@ -407,7 +407,7 @@ if __name__ == '__main__':
         'topological_sort',
     ]
 
-    for model in ["gatv2","mpnn"]:
+    for model in reversed(["gatv2","mpnn"]):
         for memory_size in [20,100]:
             if model=="gatv2":
                 algo_list=GAT_BEST
@@ -416,16 +416,18 @@ if __name__ == '__main__':
 
             for algo in algo_list:
                 FLAGS.algorithm = algo
-                FLAGS.processor = model
+                FLAGS.processor_type = model
                 FLAGS.memory_size = memory_size
-                app.run(main)
+
+                if not (FLAGS.memory_size==20 and FLAGS.processor_type=="gatv2" and FLAGS.algorithm=="lcs_length"):
+                    app.run(main)
     for model in ["gat"]:
         for memory_size in [20, 100]:
             algo_list = GAT_BEST
 
             for algo in algo_list:
                 FLAGS.algorithm = algo
-                FLAGS.processor = model
+                FLAGS.processor_type = model
                 FLAGS.memory_size = memory_size
                 app.run(main)
 
@@ -438,7 +440,7 @@ if __name__ == '__main__':
 
             for algo in algo_list:
                 FLAGS.algorithm = algo
-                FLAGS.processor = model
+                FLAGS.processor_type = model
                 FLAGS.memory_size = memory_size
                 app.run(main)
     # MPNN size 20
