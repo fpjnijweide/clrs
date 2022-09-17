@@ -335,6 +335,8 @@ def main(unused_argv):
                 extras=common_extras)
             rng_key = new_rng_key
             logging.info('(val) step %d: %s', step, val_stats)
+            with open(f"logs_{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}.txt", "a") as myfile:
+                myfile.write(f"(val) step {step}: {val_stats}\n")
 
             # If best scores, update checkpoint.
             score = val_stats['score']
@@ -444,7 +446,6 @@ if __name__ == '__main__':
                 FLAGS.algorithm = algo
                 FLAGS.processor_type = model
                 FLAGS.memory_size = memory_size
-
                 logging.info(f"running with specs: {algo}, {model}, {memory_size}")
                 app.run(main)
     # MPNN size 20
