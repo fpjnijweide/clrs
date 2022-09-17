@@ -254,6 +254,7 @@ def main(unused_argv):
         decode_hints=decode_hints,
         decode_diffs=decode_diffs,
         use_memory=FLAGS.use_memory,
+        memory_size=FLAGS.memory_size,
         learning_rate=FLAGS.learning_rate,
         checkpoint_path=FLAGS.checkpoint_path,
         freeze_processor=FLAGS.freeze_processor,
@@ -335,7 +336,7 @@ def main(unused_argv):
                 extras=common_extras)
             rng_key = new_rng_key
             logging.info('(val) step %d: %s', step, val_stats)
-            with open(f"logs_{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}.txt", "a") as myfile:
+            with open(f"logs_{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}.txt", "a") as myfile:
                 myfile.write(f"(val) step {step}: {val_stats}\n")
 
             # If best scores, update checkpoint.
@@ -363,10 +364,10 @@ def main(unused_argv):
     rng_key = new_rng_key
     logging.info('(test) step %d: %s', step, test_stats)
 
-    train_model.save_model(f"{FLAGS.algorithm}_best_{FLAGS.processor_type}_{FLAGS.use_memory}.pkl")
+    train_model.save_model(f"{FLAGS.algorithm}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}.pkl")
     with open("results.txt", "a") as myfile:
         myfile.write(
-            f"{FLAGS.algorithm}_best_{FLAGS.processor_type}_{FLAGS.use_memory}.pkl: (test) step {step}: {test_stats}\n")
+            f"{FLAGS.algorithm}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}.pkl: (test) step {step}: {test_stats}\n")
 
 
 if __name__ == '__main__':
@@ -422,7 +423,7 @@ if __name__ == '__main__':
                 FLAGS.memory_size = memory_size
 
                 if not (memory_size==20 and model=="gatv2" and algo=="lcs_length"):
-                    logging.info(f"running with specs: {algo}, {model}, {memory_size}")
+                    print(f"running with specs: {algo}, {model}, {memory_size}")
                     app.run(main)
     for model in ["gat"]:
         for memory_size in [20]:
@@ -432,7 +433,7 @@ if __name__ == '__main__':
                 FLAGS.algorithm = algo
                 FLAGS.processor_type = model
                 FLAGS.memory_size = memory_size
-                logging.info(f"running with specs: {algo}, {model}, {memory_size}")
+                print(f"running with specs: {algo}, {model}, {memory_size}")
                 app.run(main)
 
     for model in reversed(["gatv2","mpnn","gat"]):
@@ -446,7 +447,7 @@ if __name__ == '__main__':
                 FLAGS.algorithm = algo
                 FLAGS.processor_type = model
                 FLAGS.memory_size = memory_size
-                logging.info(f"running with specs: {algo}, {model}, {memory_size}")
+                print(f"running with specs: {algo}, {model}, {memory_size}")
                 app.run(main)
     # MPNN size 20
     # then gatv2 size 20,
