@@ -675,10 +675,6 @@ class MemoryAugmentedProcessor(Processor):
         self.read_node_fts, self.memory_state = self.memory(memory_input,self.memory_state)
 
 
-        # TODO "lstm" state via baselines,etc
-        # TODO how to refresh memory, read node fts for each new example set? the network will be called multiple times until done
-
-        # TODO do for MPNN
         # TODO do for PGN?
         # TODO do for deque
         # TODO do for own architecture
@@ -686,7 +682,7 @@ class MemoryAugmentedProcessor(Processor):
 
 
 
-        # TODO experiment with memory size
+        # TODO experiment with memory size and such
 
         return ret
 
