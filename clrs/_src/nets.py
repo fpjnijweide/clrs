@@ -17,7 +17,7 @@
 
 import functools
 
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, NamedTuple
 
 import chex
 
@@ -52,7 +52,7 @@ class _MessagePassingScanState:
   gt_diffs: chex.Array
   output_preds: chex.Array
   hiddens: chex.Array
-  lstm_state: Optional[hk.LSTMState]
+  memory_state: Optional[NamedTuple]
 
 
 @chex.dataclass
@@ -70,7 +70,7 @@ class MessagePassingStateChunked:
   is_first: chex.Array
   hint_preds: chex.Array
   hiddens: chex.Array
-  lstm_state: Optional[hk.LSTMState]
+  memory_state: Optional[NamedTuple]
 
 
 class Net(hk.Module):
@@ -84,17 +84,15 @@ class Net(hk.Module):
       decode_hints: bool,
       decode_diffs: bool,
       processor_factory: clrs._src.processor_factory.ProcessorFactory,
-      use_lstm: bool,
+      use_memory: str,
       dropout_prob: float,
       hint_teacher_forcing_noise: float,
       nb_dims=None,
       name: str = 'net',
-      lstm_type ="lstm",
   ):
     """Constructs a `Net`."""
     super().__init__(name=name)
 
-    self.lstm_type = lstm_type
     self._dropout_prob = dropout_prob
     self._hint_teacher_forcing_noise = hint_teacher_forcing_noise
     self.spec = spec
@@ -104,7 +102,7 @@ class Net(hk.Module):
     self.decode_diffs = decode_diffs
     self.processor_factory = processor_factory
     self.nb_dims = nb_dims
-    self.use_lstm = use_lstm
+    self.use_memory = use_memory
 
   def _msg_passing_step(self,
                         mp_state: _MessagePassingScanState,
@@ -169,9 +167,9 @@ class Net(hk.Module):
         gt_diffs[loc] = (gt_diffs[loc] > 0.0).astype(jnp.float32) * 1.0
 
     (hiddens, output_preds_cand, hint_preds, diff_logits,
-     lstm_state) = self._one_step_pred(inputs, cur_hint, mp_state.hiddens,
+     memory_state) = self._one_step_pred(inputs, cur_hint, mp_state.hiddens,
                                        batch_size, nb_nodes,
-                                       mp_state.lstm_state,
+                                       mp_state.memory_state,
                                        spec, encs, decs, diff_decs)
 
     if first_step:
@@ -206,7 +204,7 @@ class Net(hk.Module):
 
     new_mp_state = _MessagePassingScanState(
         hint_preds=hint_preds, diff_logits=diff_logits, gt_diffs=gt_diffs,
-        output_preds=output_preds, hiddens=hiddens, lstm_state=lstm_state)
+        output_preds=output_preds, hiddens=hiddens, memory_state=memory_state)
 
     # Complying to jax.scan, the first returned value is the state we carry over
     # the second value is the output that will be stacked over steps.
@@ -248,18 +246,18 @@ class Net(hk.Module):
      self.diff_decoders) = self._construct_encoders_decoders()
     self.processor = self.processor_factory(self.hidden_dim)
 
-    # Optionally construct LSTM.
-    if self.use_lstm:
-        if self.lstm_type=="LSTM":
-          self.lstm = hk.LSTM(
+    # Optionally construct memory.
+    if self.use_memory and self.use_memory!="":
+        if self.use_memory=="LSTM":
+          self.memory = hk.LSTM(
               hidden_size=self.hidden_dim,
               name='processor_lstm')
-        elif self.lstm_type=="NTM":
-            self.lstm = NTMMemory_standalone(hidden_size=self.hidden_dim,name='ntm_standalone')
-        lstm_init = self.lstm.initial_state
+        elif self.use_memory=="NTM":
+            self.memory = NTMMemory_standalone(hidden_size=self.hidden_dim, name='ntm_standalone')
+        memory_init = self.memory.initial_state
     else:
-      self.lstm = None
-      lstm_init = lambda x: 0
+      self.memory = None
+      memory_init = lambda x: 0
 
     for algorithm_index, features in zip(algorithm_indices, features_list):
       inputs = features.inputs
@@ -271,18 +269,20 @@ class Net(hk.Module):
       nb_mp_steps = max(1, hints[0].data.shape[0] - 1)
       hiddens = jnp.zeros((batch_size, nb_nodes, self.hidden_dim))
 
-      if self.use_lstm:
+      if self.use_memory=="LSTM":
           # TODO change
-        lstm_state = lstm_init(batch_size * nb_nodes)
-        lstm_state = jax.tree_map(
+        memory_state = memory_init(batch_size * nb_nodes)
+        memory_state = jax.tree_map(
             lambda x, b=batch_size, n=nb_nodes: jnp.reshape(x, [b, n, -1]),
-            lstm_state)
+            memory_state)
       else:
-        lstm_state = None
+          # TODO change network used
+          # TODO init other memories here
+        memory_state = None
 
       mp_state = _MessagePassingScanState(
           hint_preds=None, diff_logits=None, gt_diffs=None,
-          output_preds=None, hiddens=hiddens, lstm_state=lstm_state)
+          output_preds=None, hiddens=hiddens, memory_state=memory_state)
 
       # Do the first step outside of the scan because it has a different
       # computation graph.
@@ -379,7 +379,7 @@ class Net(hk.Module):
       hidden: _Array,
       batch_size: int,
       nb_nodes: int,
-      lstm_state: Optional[hk.LSTMState],
+      memory_state: Optional[NamedTuple],
       spec: _Spec,
       encs: Dict[str, List[hk.Module]],
       decs: Dict[str, Tuple[hk.Module]],
@@ -424,12 +424,13 @@ class Net(hk.Module):
     )
     nxt_hidden = hk.dropout(hk.next_rng_key(), self._dropout_prob, nxt_hidden)
 
-    if self.use_lstm:
+    if self.use_memory=="LSTM":
       # lstm doesn't accept multiple batch dimensions (in our case, batch and
       # nodes), so we vmap over the (first) batch dimension.
-      nxt_hidden, nxt_lstm_state = jax.vmap(self.lstm)(nxt_hidden, lstm_state)
+      nxt_hidden, nxt_memory_state = jax.vmap(self.memory)(nxt_hidden, memory_state)
     else:
-      nxt_lstm_state = None
+        # TODO OTHER MEMORIES
+      nxt_memory_state = None
 
     h_t = jnp.concatenate([node_fts, hidden, nxt_hidden], axis=-1)
 
@@ -457,7 +458,7 @@ class Net(hk.Module):
         decode_diffs=self.decode_diffs,
     )
 
-    return nxt_hidden, output_preds, hint_preds, diff_preds, nxt_lstm_state
+    return nxt_hidden, output_preds, hint_preds, diff_preds, nxt_memory_state
 
 
 class NetChunked(Net):
@@ -558,15 +559,16 @@ class NetChunked(Net):
         gt_diffs[loc] = (gt_diffs[loc] > 0.0).astype(jnp.float32) * 1.0
 
     hiddens = jnp.where(is_first[..., None, None], 0.0, mp_state.hiddens)
-    if self.use_lstm:
-      lstm_state = jax.tree_map(
+    if self.use_memory=="LSTM":
+      memory_state = jax.tree_map(
           lambda x: jnp.where(is_first[..., None, None], 0.0, x),
-          mp_state.lstm_state)
+          mp_state.memory_state)
     else:
-      lstm_state = None
+        # TODO other memories
+      memory_state = None
     (hiddens, output_preds, hint_preds, diff_logits,
-     lstm_state) = self._one_step_pred(inputs, hints_for_pred, hiddens,
-                                       batch_size, nb_nodes, lstm_state,
+     memory_state) = self._one_step_pred(inputs, hints_for_pred, hiddens,
+                                       batch_size, nb_nodes, memory_state,
                                        spec, encs, decs, diff_decs)
 
     if self.decode_diffs and self.decode_hints:
@@ -588,7 +590,7 @@ class NetChunked(Net):
                                           prev_hint)
 
     new_mp_state = MessagePassingStateChunked(
-        hiddens=hiddens, lstm_state=lstm_state, hint_preds=hint_preds,
+        hiddens=hiddens, memory_state=memory_state, hint_preds=hint_preds,
         inputs=nxt_inputs, hints=nxt_hints, is_first=nxt_is_first)
     mp_output = _MessagePassingOutputChunked(
         hint_preds=hint_preds, diff_logits=diff_logits, gt_diffs=gt_diffs,
@@ -660,14 +662,15 @@ class NetChunked(Net):
      self.diff_decoders) = self._construct_encoders_decoders()
     self.processor = self.processor_factory(self.hidden_dim)
     # Optionally construct LSTM.
-    if self.use_lstm:
-      self.lstm = hk.LSTM(
+    if self.use_memory=="LSTM":
+      self.memory = hk.LSTM(
           hidden_size=self.hidden_dim,
           name='processor_lstm')
-      lstm_init = self.lstm.initial_state
+      memory_init = self.memory.initial_state
     else:
-      self.lstm = None
-      lstm_init = lambda x: 0
+        # TODO other memories
+      self.memory = None
+      memory_init = lambda x: 0
 
     if init_mp_state:
       output_mp_states = []
@@ -677,12 +680,15 @@ class NetChunked(Net):
         hints = features.hints
         batch_size, nb_nodes = _data_dimensions_chunked(features)
 
-        if self.use_lstm:
-          lstm_state = lstm_init(batch_size * nb_nodes)
-          lstm_state = jax.tree_map(
+        if self.use_memory=="LSTM":
+          memory_state = memory_init(batch_size * nb_nodes)
+          memory_state = jax.tree_map(
               lambda x, b=batch_size, n=nb_nodes: jnp.reshape(x, [b, n, -1]),
-              lstm_state)
-          mp_state.lstm_state = lstm_state
+              memory_state)
+          mp_state.memory_state = memory_state
+        else:
+            pass
+            # TODO other memories
         mp_state.inputs = jax.tree_map(lambda x: x[0], inputs)
         mp_state.hints = jax.tree_map(lambda x: x[0], hints)
         mp_state.is_first = jnp.zeros(batch_size, dtype=int)

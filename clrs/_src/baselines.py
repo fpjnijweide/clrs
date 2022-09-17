@@ -65,7 +65,7 @@ class BaselineModel(model.Model):
       encode_hints: bool = False,
       decode_hints: bool = True,
       decode_diffs: bool = False,
-      use_lstm: bool = False,
+      use_memory: str = "",
       learning_rate: float = 0.005,
       checkpoint_path: str = '/tmp/clrs3',
       freeze_processor: bool = False,
@@ -93,7 +93,7 @@ class BaselineModel(model.Model):
       encode_hints: Whether to provide hints as model inputs.
       decode_hints: Whether to provide hints as model outputs.
       decode_diffs: Whether to predict masks within the model.
-      use_lstm: Whether to insert an LSTM after message passing.
+      use_memory: Whether to insert memory after message passing. Choose from '','LSTM','NTM','DNC','Deque','Register'
       learning_rate: Learning rate for training.
       checkpoint_path: Path for loading/saving checkpoints.
       freeze_processor: If True, the processor weights will be frozen and
@@ -133,18 +133,18 @@ class BaselineModel(model.Model):
         nb_dims[outp.name] = outp.data.shape[-1]
       self.nb_dims.append(nb_dims)
 
-    self._create_net_fns(hidden_dim, encode_hints, processor_factory, use_lstm,
+    self._create_net_fns(hidden_dim, encode_hints, processor_factory, use_memory,
                          dropout_prob, hint_teacher_forcing_noise)
     self.params = None
     self.opt_state = None
     self.opt_state_skeleton = None
 
   def _create_net_fns(self, hidden_dim, encode_hints, processor_factory,
-                      use_lstm, dropout_prob, hint_teacher_forcing_noise):
+                      use_memory, dropout_prob, hint_teacher_forcing_noise):
     def _use_net(*args, **kwargs):
       return nets.Net(self._spec, hidden_dim, encode_hints,
                       self.decode_hints, self.decode_diffs,
-                      processor_factory, use_lstm, dropout_prob,
+                      processor_factory, use_memory, dropout_prob,
                       hint_teacher_forcing_noise, self.nb_dims)(*args, **kwargs)
 
     self.net_fn = hk.transform(_use_net)
@@ -333,12 +333,12 @@ class BaselineModelChunked(BaselineModel):
   mp_states: List[nets.MessagePassingStateChunked]
 
   def _create_net_fns(self, hidden_dim, encode_hints, processor_factory,
-                      use_lstm, dropout_prob, hint_teacher_forcing_noise):
+                      use_memory, dropout_prob, hint_teacher_forcing_noise):
     def _use_net(*args, **kwargs):
       return nets.NetChunked(
           self._spec, hidden_dim, encode_hints,
           self.decode_hints, self.decode_diffs,
-          processor_factory, use_lstm, dropout_prob,
+          processor_factory, use_memory, dropout_prob,
           hint_teacher_forcing_noise, self.nb_dims)(*args, **kwargs)
 
     self.net_fn = hk.transform(_use_net)

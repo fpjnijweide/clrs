@@ -81,8 +81,8 @@ flags.DEFINE_enum('hint_mode', 'encoded_decoded_nodiff',
 
 flags.DEFINE_boolean('use_ln', True,
                      'Whether to use layer normalisation in the processor.')
-flags.DEFINE_boolean('use_lstm', False,
-                     'Whether to insert an LSTM after message passing.')
+flags.DEFINE_string('use_memory', "",
+                     'Whether to insert memory after message passing.')
 flags.DEFINE_enum(
     'processor_type', 'mpnn',
     ['deepsets', 'mpnn', 'pgn', 'pgn_mask',
@@ -252,7 +252,7 @@ def main(unused_argv):
       encode_hints=encode_hints,
       decode_hints=decode_hints,
       decode_diffs=decode_diffs,
-      use_lstm=FLAGS.use_lstm,
+      use_memory=FLAGS.use_memory,
       learning_rate=FLAGS.learning_rate,
       checkpoint_path=FLAGS.checkpoint_path,
       freeze_processor=FLAGS.freeze_processor,
