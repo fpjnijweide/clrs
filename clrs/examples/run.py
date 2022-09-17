@@ -282,8 +282,10 @@ def main(unused_argv):
     current_train_items = 0
     step = 0
     next_eval = 0
+    this_is_first_time_we_see_this_score = True
 
     while current_train_items < FLAGS.train_items:
+
         feedback = next(train_sampler)
 
         # Initialize model.
@@ -344,7 +346,16 @@ def main(unused_argv):
             if score > best_score:
                 logging.info('Saving new checkpoint...')
                 best_score = score
-                train_model.save_model(f"{FLAGS.algorithm}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}.pkl")
+                train_model.save_model(
+                    f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl")
+                this_is_first_time_we_see_this_score = True
+
+            if score == best_score:
+                logging.info('Saving new checkpoint (second time)...')
+                train_model.save_model(
+                    f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_last.pkl")
+                this_is_first_time_we_see_this_score = False
+
             next_eval += FLAGS.eval_every
             if score==1.0:
                 break
@@ -352,7 +363,7 @@ def main(unused_argv):
 
     # Training complete, evaluate on test set.
     logging.info('Restoring best model from checkpoint...')
-    eval_model.restore_model(f"{FLAGS.algorithm}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}.pkl", only_load_processor=False)
+    eval_model.restore_model(f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl", only_load_processor=False)
 
     rng_key, new_rng_key = jax.random.split(rng_key)
     test_stats = collect_and_eval(
@@ -362,12 +373,31 @@ def main(unused_argv):
         rng_key,
         spec=spec,
         extras=common_extras)
-    rng_key = new_rng_key
-    logging.info('(test) step %d: %s', step, test_stats)
+    # rng_key = new_rng_key
+    logging.info('(test first best) step %d: %s', step, test_stats)
 
     with open("results.txt", "a+") as myfile:
         myfile.write(
-            f"{FLAGS.algorithm}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}.pkl: (test) step {step}: {test_stats}\n")
+            f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl: (test) step {step}: {test_stats}\n")
+
+    if not this_is_first_time_we_see_this_score:
+        eval_model.restore_model(
+            f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_last.pkl",
+            only_load_processor=False)
+
+        test_stats = collect_and_eval(
+            test_sampler,
+            eval_model.predict,
+            test_samples,
+            rng_key,
+            spec=spec,
+            extras=common_extras)
+        # rng_key = new_rng_key
+        logging.info('(test last best) step %d: %s', step, test_stats)
+
+        with open("results.txt", "a+") as myfile:
+            myfile.write(
+                f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_last.pkl: (test) step {step}: {test_stats}\n")
 
 
 if __name__ == '__main__':
