@@ -169,15 +169,14 @@ class Gatv2_NTM(GATv2):
                                                                   self.lstm_state)
         self.read_node_fts = jnp.stack(NTM_read_vector_lists,axis=1)
 
-        # TODO "lstm" state
+        # TODO "lstm" state via baselines,etc
         # TODO how to refresh memory, read node fts for each new example set? the network will be called multiple times until done
-        # TODO ensure there is no dense layer for itself?
 
         # TODO do for MPNN
-        # TODO do for PGN before bed
-        # TODO do for deque by 12
-        # TODO do for own architecture 18
-        # TODO do for DNC by 24
+        # TODO do for PGN?
+        # TODO do for deque
+        # TODO do for own architecture
+        # TODO do for DNC
 
 
 
