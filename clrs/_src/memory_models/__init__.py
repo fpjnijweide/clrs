@@ -17,26 +17,17 @@ from jax import numpy as jnp
 
 def extend_features(adj_mat, edge_fts, hidden, node_fts,read_nodes_amount,write_nodes_amount,write_node_fts_layer,write_edge_fts_layer,read_node_fts,read_edge_fts_layer,read_node_fts_layer):
     b, n, _ = node_fts.shape
-    write_node_fts_shape = jnp.array(node_fts.shape)
-    write_node_fts_shape = write_node_fts_shape.at[0].set(1)
-    write_node_fts_shape = write_node_fts_shape.at[1].set(write_nodes_amount)
-    write_node_fts = write_node_fts_layer(shape=write_node_fts_shape, dtype=jnp.float32)
+    write_node_fts = write_node_fts_layer(shape=(1,write_nodes_amount,node_fts.shape[2]), dtype=jnp.float32)
     write_node_fts = jnp.repeat(write_node_fts, b, axis=0)
     if read_node_fts is None:
-        read_node_fts_shape = jnp.array(node_fts.shape)
-        read_node_fts_shape = read_node_fts_shape.at[0].set(1)
-        read_node_fts_shape = read_node_fts_shape.at[1].set(read_nodes_amount)
-
-        read_node_fts = read_node_fts_layer(shape=read_node_fts_shape, dtype=jnp.float32)
+        read_node_fts = read_node_fts_layer(shape=(1,read_nodes_amount,node_fts.shape[2]), dtype=jnp.float32)
         read_node_fts = jnp.repeat(read_node_fts, b, axis=0)
     # Setting the new node fts
     node_fts_new = jnp.concatenate([node_fts, read_node_fts, write_node_fts], axis=1)
-    new_edge_feat_shape = jnp.array(edge_fts.shape)
-    edge_fts_embedding_size = new_edge_feat_shape[-1]
+    edge_fts_embedding_size = edge_fts.shape[-1]
     edge_fts_embedding_size_for_write = (write_nodes_amount, edge_fts_embedding_size)
-    new_edge_feat_shape = new_edge_feat_shape.at[1].set(n + write_nodes_amount + read_nodes_amount)
-    new_edge_feat_shape = new_edge_feat_shape.at[2].set(n + write_nodes_amount + read_nodes_amount)
-    new_edge_fts = jnp.zeros(new_edge_feat_shape)
+    new_n = n + write_nodes_amount + read_nodes_amount
+    new_edge_fts = jnp.zeros(shape=(b,new_n,new_n,edge_fts_embedding_size))
     new_edge_fts = new_edge_fts.at[:, :n, :n, :].set(edge_fts)
     # The edge features to/from write/read nodes will be generated via a dense layer
     write_edge_fts = write_edge_fts_layer(shape=edge_fts_embedding_size_for_write, dtype=jnp.float32)
@@ -57,9 +48,9 @@ def extend_features(adj_mat, edge_fts, hidden, node_fts,read_nodes_amount,write_
         1)  # From normal nodes to write nodes: edges
     adj_mat_new = adj_mat_new.at[:, n:n + read_nodes_amount, :n].set(
         1)  # From read nodes to normal nodes: edges
-    hidden_new_shape = jnp.array(hidden.shape)
-    hidden_new_shape = hidden_new_shape.at[1].set(
-        hidden_new_shape[1] + read_nodes_amount + write_nodes_amount)
-    hidden_new = jnp.zeros(hidden_new_shape, dtype=jnp.float32)
+    # hidden_new_shape = jnp.array(hidden.shape)
+    # hidden_new_shape = hidden_new_shape.at[1].set(
+    #     hidden_new_shape[1] + read_nodes_amount + write_nodes_amount)
+    hidden_new = jnp.zeros((hidden.shape[0],hidden.shape[1]+read_nodes_amount + write_nodes_amount,hidden.shape[2]), dtype=jnp.float32)
     hidden_new = hidden_new.at[:, :n, :].set(hidden)  # TODO what to do about hidden
     return adj_mat_new, hidden_new, new_edge_fts, node_fts_new

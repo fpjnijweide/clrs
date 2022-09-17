@@ -30,7 +30,7 @@ import tensorflow as tf
 
 from clrs._src import processors
 
-flags.DEFINE_string('algorithm', 'bfs', 'Which algorithm to run.')
+flags.DEFINE_string('algorithm', 'dag_shortest_paths', 'Which algorithm to run.')
 flags.DEFINE_integer('seed', 42, 'Random seed to set')
 
 flags.DEFINE_integer('batch_size', 32, 'Batch size used for training.')
@@ -81,10 +81,10 @@ flags.DEFINE_enum('hint_mode', 'encoded_decoded_nodiff',
 
 flags.DEFINE_boolean('use_ln', True,
                      'Whether to use layer normalisation in the processor.')
-flags.DEFINE_string('use_memory', "",
+flags.DEFINE_string('use_memory', "NTM",
                      'Whether to insert memory after message passing.')
 flags.DEFINE_enum(
-    'processor_type', 'mpnn',
+    'processor_type', 'gatv2',
     ['deepsets', 'mpnn', 'pgn', 'pgn_mask',
      'gat', 'gatv2', 'gat_full', 'gatv2_full',
      'memnet_full', 'memnet_masked'],
