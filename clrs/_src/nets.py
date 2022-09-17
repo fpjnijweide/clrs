@@ -89,10 +89,12 @@ class Net(hk.Module):
       hint_teacher_forcing_noise: float,
       nb_dims=None,
       name: str = 'net',
+      lstm_type ="lstm",
   ):
     """Constructs a `Net`."""
     super().__init__(name=name)
 
+    self.lstm_type = lstm_type
     self._dropout_prob = dropout_prob
     self._hint_teacher_forcing_noise = hint_teacher_forcing_noise
     self.spec = spec
@@ -248,10 +250,13 @@ class Net(hk.Module):
 
     # Optionally construct LSTM.
     if self.use_lstm:
-      self.lstm = hk.LSTM(
-          hidden_size=self.hidden_dim,
-          name='processor_lstm')
-      lstm_init = self.lstm.initial_state
+        if self.lstm_type=="LSTM":
+          self.lstm = hk.LSTM(
+              hidden_size=self.hidden_dim,
+              name='processor_lstm')
+        elif self.lstm_type=="NTM":
+            self.lstm = NTMMemory_standalone(hidden_size=self.hidden_dim,name='ntm_standalone')
+        lstm_init = self.lstm.initial_state
     else:
       self.lstm = None
       lstm_init = lambda x: 0
@@ -267,6 +272,7 @@ class Net(hk.Module):
       hiddens = jnp.zeros((batch_size, nb_nodes, self.hidden_dim))
 
       if self.use_lstm:
+          # TODO change
         lstm_state = lstm_init(batch_size * nb_nodes)
         lstm_state = jax.tree_map(
             lambda x, b=batch_size, n=nb_nodes: jnp.reshape(x, [b, n, -1]),
