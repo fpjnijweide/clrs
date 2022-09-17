@@ -24,8 +24,6 @@ import numpy as np
 from absl.testing import absltest
 from absl.testing import parameterized
 
-import clrs._src.processor_factory
-import clrs._src.processors
 from clrs._src import baselines
 from clrs._src import processors
 from clrs._src import samplers
@@ -141,7 +139,7 @@ class BaselinesTest(parameterized.TestCase):
 
         with chex.fake_jit():  # jitting makes test longer
 
-            processor_factory = clrs._src.processors.get_processor_factory('gatv2_ntm', use_ln=True, nb_heads=1)
+            processor_factory = processors.get_processor_factory('gatv2_ntm', use_ln=True, nb_heads=1)
             common_args = dict(processor_factory=processor_factory, hidden_dim=8,
                                learning_rate=0.01, decode_diffs=True,
                                decode_hints=True, encode_hints=True)

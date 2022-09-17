@@ -29,7 +29,7 @@ class NTMState(NamedTuple):
     read_vector_list: List[jnp.ndarray]
 
 
-class NTMMemory(hk.RNNCore):
+class NTM(hk.RNNCore):
     def __init__(self, memory_vector_dim=None, memory_size=20, read_head_num=1, write_head_num=1,
                  addressing_mode='content_and_location', shift_range=1, clip_value=20, init_mode='constant',name: Optional[str] = None):
         # self.controller_layers = controller_layers
@@ -59,11 +59,11 @@ class NTMMemory(hk.RNNCore):
         self.beta_g_y_t_dense_layer = hk.Linear(output_size=3)
         self.s_t_dense_layer = hk.Linear(output_size=self.memory_size)
 
-        self.total_heads = self.memory.write_head_num + self.memory.read_head_num
+        self.total_heads = self.write_head_num + self.read_head_num
         self.w_nodes_amount = 3 * self.total_heads
-        self.erase_add_nodes_amount = 2 * (self.memory.write_head_num)
+        self.erase_add_nodes_amount = 2 * (self.write_head_num)
 
-        self.read_nodes_amount = self.memory.read_head_num
+        self.read_nodes_amount = self.read_head_num
         self.write_nodes_amount = self.w_nodes_amount + self.erase_add_nodes_amount
         # self.num_parameters_per_head = self.memory_vector_dim + 1 + 1 + (self.shift_range * 2 + 1) + 1
         # self.num_heads = self.read_head_num + self.write_head_num

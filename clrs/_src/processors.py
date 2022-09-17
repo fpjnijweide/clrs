@@ -24,7 +24,8 @@ import jax
 import jax.numpy as jnp
 import numpy as np
 # from clrs._src.memory import NTM
-from clrs._src.nets import extend_features
+from clrs._src.memory_models import extend_features
+from clrs._src.memory_models.ntm.ntm_memory import NTM
 
 _Array = chex.Array
 _Fn = Callable[..., Any]
@@ -788,6 +789,8 @@ def get_processor_factory(kind: str,
       )
     elif kind == 'gatv2_ntm':
       processor = MemoryAugmentedProcessor(
+          processor_type=GATv2,
+          memory_type=NTM,
           out_size=out_size,
           nb_heads=nb_heads,
           use_ln=use_ln

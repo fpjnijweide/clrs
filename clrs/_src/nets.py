@@ -23,14 +23,13 @@ import haiku as hk
 import jax
 import jax.numpy as jnp
 
-import clrs._src.processor_factory
-import clrs._src.processors
 from clrs._src import decoders
 from clrs._src import encoders
 from clrs._src import probing
 from clrs._src import samplers
+from clrs._src import processors
 from clrs._src import specs
-from clrs._src.memory_models.ntm.ntm_memory import NTMMemory
+from clrs._src.memory_models.ntm.ntm_memory import NTM
 
 _Array = chex.Array
 _DataPoint = probing.DataPoint
@@ -81,7 +80,7 @@ class Net(hk.Module):
             encode_hints: bool,
             decode_hints: bool,
             decode_diffs: bool,
-            processor_factory: clrs._src.processors.ProcessorFactory,
+            processor_factory: processors.ProcessorFactory,
             use_memory: str,
             dropout_prob: float,
             hint_teacher_forcing_noise: float,
@@ -251,7 +250,7 @@ class Net(hk.Module):
                     hidden_size=self.hidden_dim,
                     name='processor_lstm')
             elif self.use_memory == "NTM":
-                self.memory = NTMMemory('processor_NTM')
+                self.memory = NTM('processor_NTM')
             else:
                 raise NotImplementedError(f"Memory type {self.use_memory} does not exist")
             memory_init = self.memory.initial_state
@@ -778,51 +777,3 @@ def _is_not_done_broadcast(lengths, i, tensor):
         is_not_done = jnp.expand_dims(is_not_done, -1)
     return is_not_done
 
-def extend_features(adj_mat, edge_fts, hidden, node_fts,read_nodes_amount,write_nodes_amount,write_node_fts_layer,write_edge_fts_layer,read_node_fts,read_edge_fts_layer,read_node_fts_layer):
-    b, n, _ = node_fts.shape
-    write_node_fts_shape = jnp.array(node_fts.shape)
-    write_node_fts_shape = write_node_fts_shape.at[0].set(1)
-    write_node_fts_shape = write_node_fts_shape.at[1].set(write_nodes_amount)
-    write_node_fts = write_node_fts_layer(shape=write_node_fts_shape, dtype=jnp.float32)
-    write_node_fts = jnp.repeat(write_node_fts, b, axis=0)
-    if read_node_fts is None:
-        read_node_fts_shape = jnp.array(node_fts.shape)
-        read_node_fts_shape = read_node_fts_shape.at[0].set(1)
-        read_node_fts_shape = read_node_fts_shape.at[1].set(read_nodes_amount)
-
-        read_node_fts = read_node_fts_layer(shape=read_node_fts_shape, dtype=jnp.float32)
-        read_node_fts = jnp.repeat(read_node_fts, b, axis=0)
-    # Setting the new node fts
-    node_fts_new = jnp.concatenate([node_fts, read_node_fts, write_node_fts], axis=1)
-    new_edge_feat_shape = jnp.array(edge_fts.shape)
-    edge_fts_embedding_size = new_edge_feat_shape[-1]
-    edge_fts_embedding_size_for_write = (write_nodes_amount, edge_fts_embedding_size)
-    new_edge_feat_shape = new_edge_feat_shape.at[1].set(n + write_nodes_amount + read_nodes_amount)
-    new_edge_feat_shape = new_edge_feat_shape.at[2].set(n + write_nodes_amount + read_nodes_amount)
-    new_edge_fts = jnp.zeros(new_edge_feat_shape)
-    new_edge_fts = new_edge_fts.at[:, :n, :n, :].set(edge_fts)
-    # The edge features to/from write/read nodes will be generated via a dense layer
-    write_edge_fts = write_edge_fts_layer(shape=edge_fts_embedding_size_for_write, dtype=jnp.float32)
-    read_edge_fts = read_edge_fts_layer(shape=(1, edge_fts_embedding_size), dtype=jnp.float32)
-    write_edge_fts_tiled = jnp.tile(write_edge_fts, [b, n, 1, 1])
-    read_edge_fts_tiled = jnp.tile(read_edge_fts, [b, read_nodes_amount, n, 1])
-    new_edge_fts = new_edge_fts.at[:, :n,
-                   n + read_nodes_amount:n + read_nodes_amount + write_nodes_amount, :].set(
-        write_edge_fts_tiled)  # From normal nodes to write nodes: edges
-    new_edge_fts = new_edge_fts.at[:, n:n + read_nodes_amount, :n, :].set(
-        read_edge_fts_tiled)  # From read nodes to normal nodes: edges
-    # Setting the ajdacency matrix
-    adj_mat_new = jnp.zeros([b, n + write_nodes_amount + read_nodes_amount,
-                             n + write_nodes_amount + read_nodes_amount])
-    adj_mat_new = adj_mat_new.at[:, :n, :n].set(adj_mat)
-    adj_mat_new = adj_mat_new.at[:, :n,
-                  n + read_nodes_amount:n + read_nodes_amount + write_nodes_amount].set(
-        1)  # From normal nodes to write nodes: edges
-    adj_mat_new = adj_mat_new.at[:, n:n + read_nodes_amount, :n].set(
-        1)  # From read nodes to normal nodes: edges
-    hidden_new_shape = jnp.array(hidden.shape)
-    hidden_new_shape = hidden_new_shape.at[1].set(
-        hidden_new_shape[1] + read_nodes_amount + write_nodes_amount)
-    hidden_new = jnp.zeros(hidden_new_shape, dtype=jnp.float32)
-    hidden_new = hidden_new.at[:, :n, :].set(hidden)  # TODO what to do about hidden
-    return adj_mat_new, hidden_new, new_edge_fts, node_fts_new
