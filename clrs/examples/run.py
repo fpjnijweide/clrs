@@ -17,6 +17,7 @@
 
 import os
 import shutil
+import sys
 import time
 from absl import app
 from absl import flags
@@ -282,8 +283,10 @@ def main(unused_argv):
     current_train_items = 0
     step = 0
     next_eval = 0
+    this_is_first_time_we_see_this_score = True
 
     while current_train_items < FLAGS.train_items:
+
         feedback = next(train_sampler)
 
         # Initialize model.
@@ -344,15 +347,21 @@ def main(unused_argv):
             if score > best_score:
                 logging.info('Saving new checkpoint...')
                 best_score = score
-                train_model.save_model('best.pkl')
+                train_model.save_model(
+                    f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl")
+                this_is_first_time_we_see_this_score = True
+            elif score == best_score:
+                logging.info('Saving new checkpoint (same score)...')
+                train_model.save_model(
+                    f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_last.pkl")
+                this_is_first_time_we_see_this_score = False
+
             next_eval += FLAGS.eval_every
-            if score==1.0:
-                break
         step += 1
 
     # Training complete, evaluate on test set.
     logging.info('Restoring best model from checkpoint...')
-    eval_model.restore_model('best.pkl', only_load_processor=False)
+    eval_model.restore_model(f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl", only_load_processor=False)
 
     rng_key, new_rng_key = jax.random.split(rng_key)
     test_stats = collect_and_eval(
@@ -362,16 +371,36 @@ def main(unused_argv):
         rng_key,
         spec=spec,
         extras=common_extras)
-    rng_key = new_rng_key
-    logging.info('(test) step %d: %s', step, test_stats)
+    # rng_key = new_rng_key
+    logging.info('(test first best) step %d: %s', step, test_stats)
 
-    train_model.save_model(f"{FLAGS.algorithm}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}.pkl")
     with open("results.txt", "a+") as myfile:
         myfile.write(
-            f"{FLAGS.algorithm}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}.pkl: (test) step {step}: {test_stats}\n")
+            f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl: (test) step {step}: {test_stats}\n")
+
+    if not this_is_first_time_we_see_this_score:
+        eval_model.restore_model(
+            f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_last.pkl",
+            only_load_processor=False)
+
+        test_stats = collect_and_eval(
+            test_sampler,
+            eval_model.predict,
+            test_samples,
+            rng_key,
+            spec=spec,
+            extras=common_extras)
+        # rng_key = new_rng_key
+        logging.info('(test last best) step %d: %s', step, test_stats)
+
+        with open("results.txt", "a+") as myfile:
+            myfile.write(
+                f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_last.pkl: (test) step {step}: {test_stats}\n")
 
 
 if __name__ == '__main__':
+    FLAGS = flags.FLAGS
+    FLAGS(sys.argv)
     GAT_BEST = [
         'dfs',
         'jarvis_march',
@@ -411,45 +440,26 @@ if __name__ == '__main__':
         'topological_sort',
     ]
 
-    for model in ["gatv2","mpnn"]:
-        for memory_size in [100]:
-            if model=="gatv2":
-                algo_list=GAT_BEST
-            else:
-                algo_list = MPNN_BEST
+    # memory_type = "NTM"
+    # model="gatv2"
+    # memory_size=20
 
-            for algo in algo_list:
-                FLAGS.algorithm = algo
-                FLAGS.processor_type = model
-                FLAGS.memory_size = memory_size
 
-                if not (memory_size==20 and model=="gatv2" and algo=="lcs_length"):
-                    print(f"running with specs: {algo}, {model}, {memory_size}")
-                    app.run(main)
-    for model in ["gat"]:
-        for memory_size in [100]:
-            algo_list = GAT_BEST
+    if FLAGS.processor_type=="gatv2" or FLAGS.processor_type=="gat":
+        algo_list=GAT_BEST
+    elif FLAGS.processor_type=="mpnn":
+        algo_list = MPNN_BEST
+    else:
+        algo_list = PGN_best
 
-            for algo in algo_list:
-                FLAGS.algorithm = algo
-                FLAGS.processor_type = model
-                FLAGS.memory_size = memory_size
-                print(f"running with specs: {algo}, {model}, {memory_size}")
+    for algo in algo_list:
+        FLAGS.algorithm = algo
+
+        with open("results.txt", "a+") as myfile:
+            if not (f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in myfile.read()):
+                print(f"running with specs: {algo}, {FLAGS.use_memory}, {FLAGS.processor_type}, {FLAGS.memory_size}")
                 app.run(main)
 
-    for model in ["gatv2","mpnn","gat"]:
-        for memory_size in [60]:
-            if model == "gatv2" or model=="gat":
-                algo_list = GAT_BEST
-            else:
-                algo_list = MPNN_BEST
-
-            for algo in algo_list:
-                FLAGS.algorithm = algo
-                FLAGS.processor_type = model
-                FLAGS.memory_size = memory_size
-                print(f"running with specs: {algo}, {model}, {memory_size}")
-                app.run(main)
     # MPNN size 20
     # then gatv2 size 20,
     # Then MPNN size 100
