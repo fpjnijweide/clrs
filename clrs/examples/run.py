@@ -17,6 +17,7 @@
 
 import os
 import shutil
+import sys
 import time
 from absl import app
 from absl import flags
@@ -398,6 +399,8 @@ def main(unused_argv):
 
 
 if __name__ == '__main__':
+    FLAGS = flags.FLAGS
+    FLAGS(sys.argv)
     GAT_BEST = [
         'dfs',
         'jarvis_march',
@@ -437,45 +440,26 @@ if __name__ == '__main__':
         'topological_sort',
     ]
 
-    for model in reversed(["gatv2","mpnn"]):
-        for memory_size in [20]:
-            if model=="gatv2":
-                algo_list=GAT_BEST
-            else:
-                algo_list = MPNN_BEST
+    # memory_type = "NTM"
+    # model="gatv2"
+    # memory_size=20
 
-            for algo in algo_list:
-                FLAGS.algorithm = algo
-                FLAGS.processor_type = model
-                FLAGS.memory_size = memory_size
 
-                if not (memory_size==20 and model=="gatv2" and algo=="lcs_length"):
-                    print(f"running with specs: {algo}, {model}, {memory_size}")
-                    app.run(main)
-    for model in ["gat"]:
-        for memory_size in [20]:
-            algo_list = GAT_BEST
+    if FLAGS.processor_type=="gatv2" or FLAGS.processor_type=="gat":
+        algo_list=GAT_BEST
+    elif FLAGS.processor_type=="mpnn":
+        algo_list = MPNN_BEST
+    else:
+        algo_list = PGN_best
 
-            for algo in algo_list:
-                FLAGS.algorithm = algo
-                FLAGS.processor_type = model
-                FLAGS.memory_size = memory_size
-                print(f"running with specs: {algo}, {model}, {memory_size}")
+    for algo in algo_list:
+        FLAGS.algorithm = algo
+
+        with open("results.txt", "a+") as myfile:
+            if not (f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in myfile.read()):
+                print(f"running with specs: {algo}, {FLAGS.use_memory}, {FLAGS.processor_type}, {FLAGS.memory_size}")
                 app.run(main)
 
-    for model in reversed(["gatv2","mpnn","gat"]):
-        for memory_size in [60]:
-            if model == "gatv2" or model=="gat":
-                algo_list = GAT_BEST
-            else:
-                algo_list = MPNN_BEST
-
-            for algo in algo_list:
-                FLAGS.algorithm = algo
-                FLAGS.processor_type = model
-                FLAGS.memory_size = memory_size
-                print(f"running with specs: {algo}, {model}, {memory_size}")
-                app.run(main)
     # MPNN size 20
     # then gatv2 size 20,
     # Then MPNN size 100
