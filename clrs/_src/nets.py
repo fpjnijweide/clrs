@@ -450,7 +450,7 @@ class Net(hk.Module):
             # nodes), so we vmap over the (first) batch dimension.
             nxt_hidden, nxt_memory_state = jax.vmap(self.memory)(nxt_hidden, memory_state)
         elif self.use_memory=="NTM":
-            self.read_node_fts, nxt_memory_state = jax.vmap(self.memory)(memory_input, memory_state)
+            self.read_node_fts, nxt_memory_state = self.memory(memory_input, memory_state)
         else:
             nxt_memory_state = None
 
