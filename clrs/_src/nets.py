@@ -83,6 +83,7 @@ class Net(hk.Module):
             decode_diffs: bool,
             processor_factory: processors.ProcessorFactory,
             use_memory: str,
+            memory_size: int,
             dropout_prob: float,
             hint_teacher_forcing_noise: float,
             nb_dims=None,
@@ -101,6 +102,7 @@ class Net(hk.Module):
         self.processor_factory = processor_factory
         self.nb_dims = nb_dims
         self.use_memory = use_memory
+        self.memory_size = memory_size
 
     def _msg_passing_step(self,
                           mp_state: _MessagePassingScanState,
@@ -251,7 +253,7 @@ class Net(hk.Module):
                     hidden_size=self.hidden_dim,
                     name='processor_lstm')
             elif self.use_memory == "NTM":
-                self.memory = NTM(name='processor_NTM')
+                self.memory = NTM(name='processor_NTM',memory_size=self.memory_size)
                 self.read_node_fts = None
                 self.write_node_fts_layer = hk.initializers.RandomNormal(stddev=0.5)
                 self.read_node_fts_layer = hk.initializers.RandomNormal(stddev=0.5)
