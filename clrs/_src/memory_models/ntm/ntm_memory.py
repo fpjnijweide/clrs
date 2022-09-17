@@ -9,7 +9,7 @@
 # I take no credit for any of the ideas
 # - Frederik Nijweide, June 2022
 # -----------------------
-from typing import List, NamedTuple
+from typing import List, NamedTuple, Optional
 
 import haiku as hk
 import jax.numpy as jnp
@@ -31,10 +31,10 @@ class NTMState(NamedTuple):
 
 class NTMMemory(hk.RNNCore):
     def __init__(self, memory_vector_dim=None, memory_size=20, read_head_num=1, write_head_num=1,
-                 addressing_mode='content_and_location', shift_range=1, clip_value=20, init_mode='constant'):
+                 addressing_mode='content_and_location', shift_range=1, clip_value=20, init_mode='constant',name: Optional[str] = None):
         # self.controller_layers = controller_layers
         # self.controller_units = controller_units
-        super().__init__()
+        super().__init__(name=name)
         self.memory_size = memory_size
         self.memory_vector_dim = memory_vector_dim
         self.read_head_num = read_head_num
@@ -55,6 +55,9 @@ class NTMMemory(hk.RNNCore):
 
         # self.output_dim = output_dim
         self.shift_range = shift_range
+
+        self.beta_g_y_t_dense_layer = hk.Linear(output_size=3)
+        self.s_t_dense_layer = hk.Linear(output_size=self.memory_size)
         # self.num_parameters_per_head = self.memory_vector_dim + 1 + 1 + (self.shift_range * 2 + 1) + 1
         # self.num_heads = self.read_head_num + self.write_head_num
         # self.total_parameter_num = self.num_parameters_per_head * self.num_heads +\
@@ -152,7 +155,7 @@ class NTMMemory(hk.RNNCore):
         # self.step += 1
 
         next_state = NTMState(M, w_list, read_vector_list)
-        output = read_vector_list
+        output = jnp.stack(read_vector_list,axis=1)
 
         return output, next_state
 
@@ -220,6 +223,40 @@ class NTMMemory(hk.RNNCore):
         w = w_sharpen / jnp.sum(w_sharpen, axis=1, keepdims=True)  # eq (9)
 
         return w
+
+    def prepare_memory_input(self, concatenated_ret, n):
+        # TODO reduce for loops?
+        w_nodes_amount = 3* (self.write_head_num + self.read_head_num)
+
+        real_ret, _, write_ret = jnp.split(concatenated_ret, [n, n + self.read_head_num], axis=1)
+        w_nodes, a_e_nodes = jnp.split(write_ret, [w_nodes_amount], axis=1)
+        list_of_params_for_each_w = jnp.split(w_nodes, self.write_head_num+self.read_head_num, axis=1)
+        list_of_params_for_each_write = jnp.split(a_e_nodes, self.write_head_num, axis=1)
+        w_params_for_batch = []
+        for i, params in enumerate(list_of_params_for_each_w):
+            s_t_pre_dense, beta_g_y_t, k_t = jnp.split(params, 3, axis=1)
+            s_t = self.s_t_dense_layer(s_t_pre_dense.squeeze())
+            beta_g_y_t_post_dense = self.beta_g_y_t_dense_layer(beta_g_y_t.squeeze())
+
+            beta_t, g_t, gamma_t = jnp.split(beta_g_y_t_post_dense, 3, axis=1)
+            k = jnp.tanh(k_t.squeeze())
+            beta = nn.softplus(beta_t)
+            g = nn.sigmoid(g_t)
+            s = nn.softmax(
+                s_t
+            )
+            gamma = nn.softplus(gamma_t) + 1
+            head_parameters = (k, beta, g, s, gamma)
+            w_params_for_batch.append(head_parameters)
+        e_a_params_for_batch = []
+        for i, params in enumerate(list_of_params_for_each_write):
+            e_t, a_t = jnp.split(params, 2, axis=1)
+            e_t = e_t.squeeze()
+            a_t = a_t.squeeze()
+            e_a_final = (e_t, a_t)
+            e_a_params_for_batch.append(e_a_final)
+        final_tuple = (w_params_for_batch, e_a_params_for_batch)
+        return final_tuple, real_ret
 
     # def get_initial_state(self, inputs=None, batch_size=None, dtype=None):
     #     # with jnp.variable_scope('init', reuse=self.reuse):

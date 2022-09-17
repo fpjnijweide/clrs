@@ -28,7 +28,7 @@ from clrs._src.model import evaluate
 from clrs._src.model import evaluate_hints
 from clrs._src.model import Model
 from clrs._src.probing import DataPoint
-from clrs._src.processor_factory import get_processor_factory
+from clrs._src.processor_factory import ProcessorFactory,get_processor_factory
 from clrs._src.samplers import build_sampler
 from clrs._src.samplers import CLRS30
 from clrs._src.samplers import Features
@@ -51,6 +51,7 @@ __all__ = (
     "create_dataset",
     "get_clrs_folder",
     "get_dataset_gcp_url",
+    "get_processor_factory",
     "DataPoint",
     "evaluate",
     "evaluate_hints",
@@ -58,6 +59,7 @@ __all__ = (
     "Feedback",
     "Location",
     "Model",
+    "ProcessorFactory",
     "Sampler",
     "Spec",
     "SPECS",
