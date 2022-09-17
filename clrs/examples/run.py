@@ -335,6 +335,8 @@ def main(unused_argv):
                 extras=common_extras)
             rng_key = new_rng_key
             logging.info('(val) step %d: %s', step, val_stats)
+            with open(f"logs_{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}.txt", "a") as myfile:
+                myfile.write(f"(val) step {step}: {val_stats}\n")
 
             # If best scores, update checkpoint.
             score = val_stats['score']
@@ -408,7 +410,7 @@ if __name__ == '__main__':
     ]
 
     for model in reversed(["gatv2","mpnn"]):
-        for memory_size in [20,100]:
+        for memory_size in [20]:
             if model=="gatv2":
                 algo_list=GAT_BEST
             else:
@@ -419,19 +421,21 @@ if __name__ == '__main__':
                 FLAGS.processor_type = model
                 FLAGS.memory_size = memory_size
 
-                if not (FLAGS.memory_size==20 and FLAGS.processor_type=="gatv2" and FLAGS.algorithm=="lcs_length"):
+                if not (memory_size==20 and model=="gatv2" and algo=="lcs_length"):
+                    logging.info(f"running with specs: {algo}, {model}, {memory_size}")
                     app.run(main)
     for model in ["gat"]:
-        for memory_size in [20, 100]:
+        for memory_size in [20]:
             algo_list = GAT_BEST
 
             for algo in algo_list:
                 FLAGS.algorithm = algo
                 FLAGS.processor_type = model
                 FLAGS.memory_size = memory_size
+                logging.info(f"running with specs: {algo}, {model}, {memory_size}")
                 app.run(main)
 
-    for model in ["gatv2","mpnn","gat"]:
+    for model in reversed(["gatv2","mpnn","gat"]):
         for memory_size in [60]:
             if model == "gatv2" or model=="gat":
                 algo_list = GAT_BEST
@@ -442,6 +446,7 @@ if __name__ == '__main__':
                 FLAGS.algorithm = algo
                 FLAGS.processor_type = model
                 FLAGS.memory_size = memory_size
+                logging.info(f"running with specs: {algo}, {model}, {memory_size}")
                 app.run(main)
     # MPNN size 20
     # then gatv2 size 20,
