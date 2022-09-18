@@ -456,8 +456,7 @@ def main_wrapper():
         logging.get_absl_handler().use_absl_log_file(f"logs_{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}.txt", "./")
         FLAGS.algorithm = algo
 
-        with open("results.txt",'a+') as myfile:
-            myfile.seek(0)
+        with open("results.txt") as myfile:
             txt = myfile.read()
             if not (f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt) and not (
                     f"{algo}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt):
