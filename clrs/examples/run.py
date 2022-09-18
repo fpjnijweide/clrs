@@ -20,7 +20,7 @@ import re
 import shutil
 import sys
 import time
-from absl import app
+
 from absl import flags
 from absl import logging
 
@@ -198,7 +198,7 @@ def maybe_download_dataset():
     return dataset_folder
 
 
-def main(unused_argv):
+def main():
     # Use canonical CLRS-30 samplers.
     clrs30_spec = clrs.CLRS30
     logging.info('Using CLRS30 spec: %s', clrs30_spec)
@@ -378,7 +378,7 @@ def main(unused_argv):
                         logging.info('(test first best) step %d: %s', step, test_stats)
                         with open("results.txt", "a+") as myfile:
                             myfile.write(
-                                f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl: (test) step {step}: {test_stats}\n")
+                                f"\n{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl: (test) step {step}: {test_stats}\n")
 
                 elif score == best_score:
                     logging.info('Saving new checkpoint (same score)...')
@@ -420,7 +420,7 @@ def main(unused_argv):
                         logging.info('(test first best) step %d: %s', step, test_stats)
                         with open("results.txt", "a+") as myfile:
                             myfile.write(
-                                f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl: (test) step {step}: {test_stats}\n")
+                                f"\n{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl: (test) step {step}: {test_stats}\n")
 
             rng_key = new_rng_key
 
@@ -444,7 +444,7 @@ def main(unused_argv):
 
     with open("results.txt", "a+") as myfile:
         myfile.write(
-            f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl: (test) step {step}: {test_stats}\n")
+            f"\n{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl: (test) step {step}: {test_stats}\n")
 
     if not this_is_first_time_we_see_this_score:
         eval_model.restore_model(
@@ -463,9 +463,12 @@ def main(unused_argv):
 
         with open("results.txt", "a+") as myfile:
             myfile.write(
-                f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_last.pkl: (test) step {step}: {test_stats}\n")
+                f"\n{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_last.pkl: (test) step {step}: {test_stats}\n")
 
-def main_wrapper():
+
+
+
+if __name__ == '__main__':
     FLAGS = flags.FLAGS
     FLAGS(sys.argv)
     GAT_BEST = [
@@ -578,19 +581,4 @@ def main_wrapper():
                 logging.get_absl_handler().use_absl_log_file(
                     f"logs_{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}.txt", "./")
 
-                app.run(main)
-
-    # MPNN size 20
-    # then gatv2 size 20,
-    # Then MPNN size 100
-    # then gatv2 size 100
-    #  then gat 20
-    # then gat 100
-
-    # then PGN
-
-    # DNC,deque,own
-
-
-if __name__ == '__main__':
-    main_wrapper()
+                main()
