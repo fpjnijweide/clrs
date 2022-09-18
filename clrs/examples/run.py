@@ -397,8 +397,7 @@ def main(unused_argv):
             myfile.write(
                 f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_last.pkl: (test) step {step}: {test_stats}\n")
 
-
-if __name__ == '__main__':
+def main_wrapper():
     FLAGS = flags.FLAGS
     FLAGS(sys.argv)
     GAT_BEST = [
@@ -444,12 +443,12 @@ if __name__ == '__main__':
     # model="gatv2"
     # memory_size=20
 
-    FLAGS.memory_size=100
-    for model in ["gatv2","mpnn"]:
+    FLAGS.memory_size = 100
+    for model in ["gatv2", "mpnn"]:
         FLAGS.processor_type = model
-        if FLAGS.processor_type=="gatv2" or FLAGS.processor_type=="gat":
-            algo_list=GAT_BEST
-        elif FLAGS.processor_type=="mpnn":
+        if FLAGS.processor_type == "gatv2" or FLAGS.processor_type == "gat":
+            algo_list = GAT_BEST
+        elif FLAGS.processor_type == "mpnn":
             algo_list = MPNN_BEST
         else:
             algo_list = PGN_best
@@ -459,8 +458,10 @@ if __name__ == '__main__':
 
             with open("results.txt") as myfile:
                 txt = myfile.read()
-                if not (f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt) and not (f"{algo}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt) :
-                    print(f"running with specs: {algo}, {FLAGS.use_memory}, {FLAGS.processor_type}, {FLAGS.memory_size}")
+                if not (f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt) and not (
+                        f"{algo}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt):
+                    print(
+                        f"running with specs: {algo}, {FLAGS.use_memory}, {FLAGS.processor_type}, {FLAGS.memory_size}")
                     app.run(main)
 
     # MPNN size 20
@@ -474,3 +475,6 @@ if __name__ == '__main__':
 
     # DNC,deque,own
 
+
+if __name__ == '__main__':
+    main_wrapper()
