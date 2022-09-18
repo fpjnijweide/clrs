@@ -379,7 +379,8 @@ def main():
                         with open("results.txt", "a+") as myfile:
                             myfile.write(
                                 f"\n{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl: (test) step {step}: {test_stats}\n")
-
+                        with open(f"./results/{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.txt","a+") as myfile:
+                            myfile.write(test_stats['score'])
                 elif score == best_score:
                     logging.info('Saving new checkpoint (same score)...')
                     train_model.save_model(
@@ -421,6 +422,8 @@ def main():
                         with open("results.txt", "a+") as myfile:
                             myfile.write(
                                 f"\n{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl: (test) step {step}: {test_stats}\n")
+                        with open(f"./results/{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.txt","a+") as myfile:
+                            myfile.write(test_stats['score'])
 
             rng_key = new_rng_key
 
@@ -445,6 +448,9 @@ def main():
     with open("results.txt", "a+") as myfile:
         myfile.write(
             f"\n{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl: (test) step {step}: {test_stats}\n")
+    with open(f"./results/{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.txt",
+              "a+") as myfile:
+        myfile.write(test_stats['score'])
 
     if not this_is_first_time_we_see_this_score:
         eval_model.restore_model(
@@ -464,6 +470,9 @@ def main():
         with open("results.txt", "a+") as myfile:
             myfile.write(
                 f"\n{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_last.pkl: (test) step {step}: {test_stats}\n")
+        with open(f"./results/{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_last.txt",
+                  "a+") as myfile:
+            myfile.write(test_stats['score'])
 
 
 

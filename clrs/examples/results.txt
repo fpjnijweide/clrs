@@ -6,3 +6,5 @@ kmp_matcher_gatv2_NTM_100_best.pkl: (test) step 10000: {'match': 0.02099609375, 
 dfs_gatv2_NTM_20_best.pkl: (test first best) step 10000: {'pi': 0.12158203125, 'score': 0.12158203125, 'examples_seen': 320000, 'step': 9999}
 dfs_gatv2_NTM_20_last.pkl: (test last best) step 10000: {'pi': 0.123046875, 'score': 0.123046875, 'examples_seen': 320000, 'step': 9999}
 activity_selector_pgn_NTM_100_best.pkl: (test first best) step 10000: {'selected': 0.6893039345741272, 'score': 0.6893039345741272, 'examples_seen': 320000, 'step': 9999}
+articulation_points_mpnn_NTM_100_best.pkl: (test first best) step 10000: {'is_cut': 0.534453809261322, 'score': 0.534453809261322, 'examples_seen': 320000, 'step': 9999}
+articulation_points_mpnn_NTM_100_last.pkl: (test last best) step 10000: {'is_cut': 0.5484247207641602, 'score': 0.5484247207641602, 'examples_seen': 320000, 'step': 9999}
