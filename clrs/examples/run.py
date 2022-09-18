@@ -456,7 +456,7 @@ def main_wrapper():
         for algo in algo_list:
             FLAGS.algorithm = algo
 
-            with open("results.txt") as myfile:
+            with open("results.txt","a+") as myfile:
                 txt = myfile.read()
                 if not (f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt) and not (
                         f"{algo}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt):
