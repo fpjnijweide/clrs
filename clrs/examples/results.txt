@@ -1,2 +1,4 @@
-lcs_length_best_gatv2_NTM_20.pkl: (test) step 10000: {'b': 0.486053466796875, 'score': 0.486053466796875, 'examples_seen': 320000, 'step': 9999}
-dfs_best_gatv2_NTM_100.pkl: (test) step 1949: {'pi': 0.08203125, 'score': 0.08203125, 'examples_seen': 62368, 'step': 1949}
+lcs_length_best_gatv2_NTM_20.pkl: (test first best) step 10000: {'b': 0.486053466796875, 'score': 0.486053466796875, 'examples_seen': 320000, 'step': 9999}
+dfs_best_gatv2_NTM_100.pkl: (test first best) step 1949: {'pi': 0.08203125, 'score': 0.08203125, 'examples_seen': 62368, 'step': 1949}
+articulation_points_mpnn_NTM_20_best.pkl: (test first best) step 10000: {'is_cut': 0.46712806820869446, 'score': 0.46712806820869446, 'examples_seen': 320000, 'step': 9999}
+articulation_points_mpnn_NTM_20_last.pkl: (test last best) step 10000: {'is_cut': 0.668705403804779, 'score': 0.668705403804779, 'examples_seen': 320000, 'step': 9999}

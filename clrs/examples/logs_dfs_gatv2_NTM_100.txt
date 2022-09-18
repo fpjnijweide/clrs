@@ -430,3 +430,13 @@
 (val) step 1059: {'pi': 0.904296875, 'score': 0.904296875, 'examples_seen': 33920, 'step': 1059}
 (val) step 1069: {'pi': 0.888671875, 'score': 0.888671875, 'examples_seen': 34240, 'step': 1069}
 (val) step 1079: {'pi': 0.94140625, 'score': 0.94140625, 'examples_seen': 34560, 'step': 1079}
+(val) step 0: {'pi': 0.12890625, 'score': 0.12890625, 'examples_seen': 32, 'step': 0}
+(val) step 9: {'pi': 0.203125, 'score': 0.203125, 'examples_seen': 320, 'step': 9}
+(val) step 19: {'pi': 0.36328125, 'score': 0.36328125, 'examples_seen': 640, 'step': 19}
+(val) step 29: {'pi': 0.345703125, 'score': 0.345703125, 'examples_seen': 960, 'step': 29}
+(val) step 39: {'pi': 0.427734375, 'score': 0.427734375, 'examples_seen': 1280, 'step': 39}
+(val) step 49: {'pi': 0.3671875, 'score': 0.3671875, 'examples_seen': 1600, 'step': 49}
+(val) step 59: {'pi': 0.38671875, 'score': 0.38671875, 'examples_seen': 1920, 'step': 59}
+(val) step 69: {'pi': 0.4140625, 'score': 0.4140625, 'examples_seen': 2240, 'step': 69}
+(val) step 79: {'pi': 0.439453125, 'score': 0.439453125, 'examples_seen': 2560, 'step': 79}
+(val) step 89: {'pi': 0.412109375, 'score': 0.412109375, 'examples_seen': 2880, 'step': 89}

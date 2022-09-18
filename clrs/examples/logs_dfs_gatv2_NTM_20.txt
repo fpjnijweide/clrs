@@ -1,0 +1,2 @@
+(val) step 0: {'pi': 0.126953125, 'score': 0.126953125, 'examples_seen': 32, 'step': 0}
+(val) step 9: {'pi': 0.197265625, 'score': 0.197265625, 'examples_seen': 320, 'step': 9}
