@@ -339,8 +339,8 @@ def main(unused_argv):
                 extras=common_extras)
             rng_key = new_rng_key
             logging.info('(val) step %d: %s', step, val_stats)
-            with open(f"logs_{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}.txt", "a+") as myfile:
-                myfile.write(f"(val) step {step}: {val_stats}\n")
+            # with open(f"logs_{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}.txt", "a+") as myfile:
+            #     myfile.write(f"(val) step {step}: {val_stats}\n")
 
             # If best scores, update checkpoint.
             score = val_stats['score']
@@ -453,6 +453,7 @@ def main_wrapper():
         algo_list = PGN_best
 
     for algo in algo_list:
+        logging.get_absl_handler().use_absl_log_file(f"logs_{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}.txt", "./")
         FLAGS.algorithm = algo
 
         with open("results.txt",'a+') as myfile:
@@ -460,7 +461,7 @@ def main_wrapper():
             txt = myfile.read()
             if not (f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt) and not (
                     f"{algo}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt):
-                print(
+                logging.info(
                     f"running with specs: {algo}, {FLAGS.use_memory}, {FLAGS.processor_type}, {FLAGS.memory_size}")
                 app.run(main)
 
