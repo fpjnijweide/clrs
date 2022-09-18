@@ -1,0 +1,11 @@
+I0918 19:47:39.647011 139862104778624 run.py:204] Using CLRS30 spec: {'train': {'num_samples': 1000, 'length': 16, 'seed': 1}, 'val': {'num_samples': 32, 'length': 16, 'seed': 2}, 'test': {'num_samples': 32, 'length': 64, 'seed': 3}}
+I0918 19:47:39.647763 139862104778624 run.py:188] Dataset found at /tmp/CLRS30/CLRS30_v1.0.0. Skipping download.
+I0918 19:47:40.708706 139862104778624 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/graham_scan_train/1.0.0
+I0918 19:47:40.716019 139862104778624 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/graham_scan_train/1.0.0)
+I0918 19:47:40.716404 139862104778624 logging_logger.py:45] Constructing tf.data.Dataset clrs_dataset for split train, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/graham_scan_train/1.0.0
+I0918 19:47:40.961954 139862104778624 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/graham_scan_val/1.0.0
+I0918 19:47:40.963971 139862104778624 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/graham_scan_val/1.0.0)
+I0918 19:47:40.964338 139862104778624 logging_logger.py:45] Constructing tf.data.Dataset clrs_dataset for split val, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/graham_scan_val/1.0.0
+I0918 19:47:41.266542 139862104778624 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/graham_scan_test/1.0.0
+I0918 19:47:41.268303 139862104778624 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/graham_scan_test/1.0.0)
+I0918 19:47:41.268644 139862104778624 logging_logger.py:45] Constructing tf.data.Dataset clrs_dataset for split test, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/graham_scan_test/1.0.0

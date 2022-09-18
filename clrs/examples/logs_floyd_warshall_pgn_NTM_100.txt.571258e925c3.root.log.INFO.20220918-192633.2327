@@ -1,0 +1,11 @@
+I0918 19:26:33.480769 140663434737536 run.py:204] Using CLRS30 spec: {'train': {'num_samples': 1000, 'length': 16, 'seed': 1}, 'val': {'num_samples': 32, 'length': 16, 'seed': 2}, 'test': {'num_samples': 32, 'length': 64, 'seed': 3}}
+I0918 19:26:33.481684 140663434737536 run.py:188] Dataset found at /tmp/CLRS30/CLRS30_v1.0.0. Skipping download.
+I0918 19:26:39.475203 140663434737536 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/floyd_warshall_train/1.0.0
+I0918 19:26:39.477042 140663434737536 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/floyd_warshall_train/1.0.0)
+I0918 19:26:39.477408 140663434737536 logging_logger.py:45] Constructing tf.data.Dataset clrs_dataset for split train, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/floyd_warshall_train/1.0.0
+I0918 19:26:39.822556 140663434737536 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/floyd_warshall_val/1.0.0
+I0918 19:26:39.824329 140663434737536 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/floyd_warshall_val/1.0.0)
+I0918 19:26:39.824660 140663434737536 logging_logger.py:45] Constructing tf.data.Dataset clrs_dataset for split val, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/floyd_warshall_val/1.0.0
+I0918 19:26:53.706379 140663434737536 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/floyd_warshall_test/1.0.0
+I0918 19:26:53.707991 140663434737536 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/floyd_warshall_test/1.0.0)
+I0918 19:26:53.708334 140663434737536 logging_logger.py:45] Constructing tf.data.Dataset clrs_dataset for split test, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/floyd_warshall_test/1.0.0
