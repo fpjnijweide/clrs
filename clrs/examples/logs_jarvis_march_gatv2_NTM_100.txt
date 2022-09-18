@@ -21,6 +21,7 @@
 (val) step 399: {'in_hull': 0.6633663773536682, 'score': 0.6633663773536682, 'examples_seen': 6400, 'step': 399}
 (val) step 419: {'in_hull': 0.6228711009025574, 'score': 0.6228711009025574, 'examples_seen': 6720, 'step': 419}
 (val) step 439: {'in_hull': 0.6976743936538696, 'score': 0.6976743936538696, 'examples_seen': 7040, 'step': 439}
+Saving new checkpoint... BEST
 (val) step 459: {'in_hull': 0.6932084560394287, 'score': 0.6932084560394287, 'examples_seen': 7360, 'step': 459}
 (val) step 479: {'in_hull': 0.6744186282157898, 'score': 0.6744186282157898, 'examples_seen': 7680, 'step': 479}
 (val) step 499: {'in_hull': 0.694444477558136, 'score': 0.694444477558136, 'examples_seen': 8000, 'step': 499}

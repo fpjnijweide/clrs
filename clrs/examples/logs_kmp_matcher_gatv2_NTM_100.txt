@@ -143,4 +143,5 @@
 (val) step 1419: {'match': 0.80908203125, 'score': 0.80908203125, 'examples_seen': 45440, 'step': 1419}
 (val) step 1429: {'match': 0.82275390625, 'score': 0.82275390625, 'examples_seen': 45760, 'step': 1429}
 (val) step 1439: {'match': 0.85546875, 'score': 0.85546875, 'examples_seen': 46080, 'step': 1439}
+Saving new checkpoint... BEST
 (val) step 1449: {'match': 0.849609375, 'score': 0.849609375, 'examples_seen': 46400, 'step': 1449}
