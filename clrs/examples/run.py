@@ -104,6 +104,8 @@ flags.DEFINE_integer('skip_to_step', 0,
                      'Will read model from a pickle file and skip first n steps if non-zero')
 flags.DEFINE_boolean('load_from_last', False,
                      'If true, skip_to_step will load the .pkl file ending in _last instead of _best')
+flags.DEFINE_boolean('algo_list_reverse',False,
+                     'Whether or nto to reverse the list of algorithms we test (for parallel runs)')
 FLAGS = flags.FLAGS
 
 
@@ -471,16 +473,21 @@ def main():
 def main_wrapper(unused_argv):
     FLAGS = flags.FLAGS
     FLAGS(sys.argv)
-    GAT_BEST = [
+
+    if FLAGS.algo_list_reverse:
+        reverse_func = reversed
+    else:
+        reverse_func = lambda x: x
+    GAT_BEST = reverse_func([
         'dfs',
         # 'jarvis_march',
         'kmp_matcher',
         'lcs_length',
         'quickselect',
         'task_scheduling'
-    ]
+    ])
     # MPNN algos
-    MPNN_BEST = [
+    MPNN_BEST = reverse_func([
         'articulation_points',
         'activity_selector',
         'bfs',
@@ -492,8 +499,8 @@ def main_wrapper(unused_argv):
         'naive_string_matcher',
         'segments_intersect',
         'strongly_connected_components',
-    ]
-    PGN_best = [
+    ])
+    PGN_best = reverse_func([
         'activity_selector',
         'bellman_ford',
         'binary_search',
@@ -508,7 +515,7 @@ def main_wrapper(unused_argv):
         'strongly_connected_components',
         'task_scheduling',
         'topological_sort',
-    ]
+    ])
 
     # memory_type = "NTM"
     # model="gatv2"
