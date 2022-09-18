@@ -1,0 +1,43 @@
+I0918 14:59:06.046565 8549877440 run.py:202] Using CLRS30 spec: {'train': {'num_samples': 1000, 'length': 16, 'seed': 1}, 'val': {'num_samples': 32, 'length': 16, 'seed': 2}, 'test': {'num_samples': 32, 'length': 64, 'seed': 3}}
+I0918 14:59:06.046682 8549877440 run.py:186] Dataset found at /tmp/CLRS30/CLRS30_v1.0.0. Skipping download.
+I0918 14:59:06.507242 8549877440 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/kmp_matcher_train/1.0.0
+I0918 14:59:06.509217 8549877440 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/kmp_matcher_train/1.0.0)
+I0918 14:59:06.509273 8549877440 logging_logger.py:44] Constructing tf.data.Dataset clrs_dataset for split train, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/kmp_matcher_train/1.0.0
+I0918 14:59:07.684608 8549877440 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/kmp_matcher_val/1.0.0
+I0918 14:59:07.686211 8549877440 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/kmp_matcher_val/1.0.0)
+I0918 14:59:07.686302 8549877440 logging_logger.py:44] Constructing tf.data.Dataset clrs_dataset for split val, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/kmp_matcher_val/1.0.0
+I0918 14:59:12.918776 8549877440 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/kmp_matcher_test/1.0.0
+I0918 14:59:12.920557 8549877440 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/kmp_matcher_test/1.0.0)
+I0918 14:59:12.920609 8549877440 logging_logger.py:44] Constructing tf.data.Dataset clrs_dataset for split test, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/kmp_matcher_test/1.0.0
+I0918 14:59:13.023704 8549877440 xla_bridge.py:174] Remote TPU is not linked into jax; skipping remote TPU.
+I0918 14:59:13.023819 8549877440 xla_bridge.py:350] Unable to initialize backend 'tpu_driver': Could not initialize backend 'tpu_driver'
+I0918 14:59:13.023871 8549877440 xla_bridge.py:350] Unable to initialize backend 'cuda': module 'jaxlib.xla_extension' has no attribute 'GpuAllocatorConfig'
+I0918 14:59:13.023909 8549877440 xla_bridge.py:350] Unable to initialize backend 'rocm': module 'jaxlib.xla_extension' has no attribute 'GpuAllocatorConfig'
+I0918 14:59:13.024027 8549877440 xla_bridge.py:350] Unable to initialize backend 'tpu': module 'jaxlib.xla_extension' has no attribute 'get_tpu_client'
+I0918 14:59:20.431088 8549877440 run.py:310] Compiled feedback step in 7.366924 s.
+I0918 14:59:53.919234 8549877440 run.py:385] Restored model at step 1439
+I0918 14:59:53.919356 8549877440 run.py:386] (val) step 1439: {'match': 0.85546875, 'score': 0.85546875, 'examples_seen': 46080, 'step': 1439}
+I0918 15:01:16.125872 8549877440 run.py:341] (train) step 1449: {'match': 0.90625, 'score': 0.90625, 'loss': 0.6862196326255798, 'examples_seen': 46400, 'step': 1449}
+I0918 15:03:52.563560 8549877440 run.py:355] (val) step 1449: {'match': 0.8486328125, 'score': 0.8486328125, 'examples_seen': 46400, 'step': 1449}
+I0918 15:04:14.147454 8549877440 run.py:341] (train) step 1459: {'match': 0.84375, 'score': 0.84375, 'loss': 0.7676812410354614, 'examples_seen': 46720, 'step': 1459}
+I0918 15:04:38.459327 8549877440 run.py:355] (val) step 1459: {'match': 0.81103515625, 'score': 0.81103515625, 'examples_seen': 46720, 'step': 1459}
+I0918 15:04:59.333585 8549877440 run.py:341] (train) step 1469: {'match': 0.875, 'score': 0.875, 'loss': 0.8529946208000183, 'examples_seen': 47040, 'step': 1469}
+I0918 15:05:23.982882 8549877440 run.py:355] (val) step 1469: {'match': 0.87841796875, 'score': 0.87841796875, 'examples_seen': 47040, 'step': 1469}
+I0918 15:05:23.983000 8549877440 run.py:362] Saving new checkpoint...
+I0918 15:05:45.279152 8549877440 run.py:341] (train) step 1479: {'match': 1.0, 'score': 1.0, 'loss': 0.6200748682022095, 'examples_seen': 47360, 'step': 1479}
+I0918 15:06:09.670083 8549877440 run.py:355] (val) step 1479: {'match': 0.86328125, 'score': 0.86328125, 'examples_seen': 47360, 'step': 1479}
+I0918 15:13:04.448415 8549877440 run.py:341] (train) step 1489: {'match': 0.9375, 'score': 0.9375, 'loss': 0.6317021250724792, 'examples_seen': 47680, 'step': 1489}
+I0918 15:13:28.257322 8549877440 run.py:355] (val) step 1489: {'match': 0.85791015625, 'score': 0.85791015625, 'examples_seen': 47680, 'step': 1489}
+I0918 15:13:49.824923 8549877440 run.py:341] (train) step 1499: {'match': 0.96875, 'score': 0.96875, 'loss': 0.6643378138542175, 'examples_seen': 48000, 'step': 1499}
+I0918 15:14:15.377243 8549877440 run.py:355] (val) step 1499: {'match': 0.828125, 'score': 0.828125, 'examples_seen': 48000, 'step': 1499}
+I0918 15:14:36.892822 8549877440 run.py:341] (train) step 1509: {'match': 0.90625, 'score': 0.90625, 'loss': 0.7297741174697876, 'examples_seen': 48320, 'step': 1509}
+I0918 15:15:01.962759 8549877440 run.py:355] (val) step 1509: {'match': 0.87109375, 'score': 0.87109375, 'examples_seen': 48320, 'step': 1509}
+I0918 15:15:23.829055 8549877440 run.py:341] (train) step 1519: {'match': 0.9375, 'score': 0.9375, 'loss': 0.6070070266723633, 'examples_seen': 48640, 'step': 1519}
+I0918 15:15:48.854753 8549877440 run.py:355] (val) step 1519: {'match': 0.84326171875, 'score': 0.84326171875, 'examples_seen': 48640, 'step': 1519}
+I0918 15:16:10.429324 8549877440 run.py:341] (train) step 1529: {'match': 0.90625, 'score': 0.90625, 'loss': 0.65636146068573, 'examples_seen': 48960, 'step': 1529}
+I0918 15:16:34.449026 8549877440 run.py:355] (val) step 1529: {'match': 0.892578125, 'score': 0.892578125, 'examples_seen': 48960, 'step': 1529}
+I0918 15:16:34.449138 8549877440 run.py:362] Saving new checkpoint...
+I0918 15:16:56.338930 8549877440 run.py:341] (train) step 1539: {'match': 0.90625, 'score': 0.90625, 'loss': 0.7329021096229553, 'examples_seen': 49280, 'step': 1539}
+I0918 15:17:21.197007 8549877440 run.py:355] (val) step 1539: {'match': 0.87451171875, 'score': 0.87451171875, 'examples_seen': 49280, 'step': 1539}
+I0918 15:17:42.397421 8549877440 run.py:341] (train) step 1549: {'match': 0.9375, 'score': 0.9375, 'loss': 0.8041747212409973, 'examples_seen': 49600, 'step': 1549}
+I0918 15:18:07.253349 8549877440 run.py:355] (val) step 1549: {'match': 0.86767578125, 'score': 0.86767578125, 'examples_seen': 49600, 'step': 1549}
