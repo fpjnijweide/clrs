@@ -34,7 +34,7 @@ from clrs._src import processors
 flags.DEFINE_string('algorithm', 'lcs_length', 'Which algorithm to run.')
 flags.DEFINE_integer('seed', 42, 'Random seed to set')
 
-flags.DEFINE_integer('batch_size', 32, 'Batch size used for training.')
+flags.DEFINE_integer('batch_size', 16, 'Batch size used for training.')
 flags.DEFINE_boolean('chunked_training', False,
                      'Whether to use chunking for training.')
 flags.DEFINE_integer('chunk_length', 100,
@@ -444,21 +444,24 @@ if __name__ == '__main__':
     # model="gatv2"
     # memory_size=20
 
+    FLAGS.memory_size=100
+    for model in ["gatv2","mpnn"]:
+        FLAGS.processor_type = model
+        if FLAGS.processor_type=="gatv2" or FLAGS.processor_type=="gat":
+            algo_list=GAT_BEST
+        elif FLAGS.processor_type=="mpnn":
+            algo_list = MPNN_BEST
+        else:
+            algo_list = PGN_best
 
-    if FLAGS.processor_type=="gatv2" or FLAGS.processor_type=="gat":
-        algo_list=GAT_BEST
-    elif FLAGS.processor_type=="mpnn":
-        algo_list = MPNN_BEST
-    else:
-        algo_list = PGN_best
+        for algo in algo_list:
+            FLAGS.algorithm = algo
 
-    for algo in algo_list:
-        FLAGS.algorithm = algo
-
-        with open("results.txt", "a+") as myfile:
-            if not (f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in myfile.read()):
-                print(f"running with specs: {algo}, {FLAGS.use_memory}, {FLAGS.processor_type}, {FLAGS.memory_size}")
-                app.run(main)
+            with open("results.txt") as myfile:
+                txt = myfile.read()
+                if not (f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt) and not (f"{algo}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt) :
+                    print(f"running with specs: {algo}, {FLAGS.use_memory}, {FLAGS.processor_type}, {FLAGS.memory_size}")
+                    app.run(main)
 
     # MPNN size 20
     # then gatv2 size 20,

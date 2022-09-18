@@ -1,0 +1,2 @@
+lcs_length_best_gatv2_NTM_20.pkl: (test) step 10000: {'b': 0.486053466796875, 'score': 0.486053466796875, 'examples_seen': 320000, 'step': 9999}
+dfs_best_gatv2_NTM_100.pkl: (test) step 1949: {'pi': 0.08203125, 'score': 0.08203125, 'examples_seen': 62368, 'step': 1949}
