@@ -16,6 +16,7 @@
 """Run a full test run for one or more algorithmic tasks from CLRS."""
 
 import os
+import re
 import shutil
 import sys
 import time
@@ -99,6 +100,8 @@ flags.DEFINE_boolean('freeze_processor', False,
                      'Whether to freeze the processor of the model.')
 flags.DEFINE_integer('memory_size', 20,
                      'Size of differentiable data structure memory.')
+flags.DEFINE_integer('skip_to_step', 0,
+                     'Will read model from a pickle file and skip first n steps if non-zero')
 FLAGS = flags.FLAGS
 
 
@@ -284,8 +287,12 @@ def main(unused_argv):
     step = 0
     next_eval = 0
     this_is_first_time_we_see_this_score = True
+    target_step = FLAGS.skip_to_step
+
 
     while current_train_items < FLAGS.train_items:
+        currently_skipping = (target_step != 0) and (step <= target_step)
+
 
         feedback = next(train_sampler)
 
@@ -296,7 +303,8 @@ def main(unused_argv):
 
         # Training step step.
         rng_key, new_rng_key = jax.random.split(rng_key)
-        cur_loss = train_model.feedback(rng_key, feedback)
+        if not currently_skipping:
+            cur_loss = train_model.feedback(rng_key, feedback)
         rng_key = new_rng_key
         if current_train_items == 0:
             logging.info('Compiled feedback step in %f s.', time.time() - t)
@@ -305,6 +313,19 @@ def main(unused_argv):
         else:
             examples_in_chunk = len(feedback.features.lengths)
         current_train_items += examples_in_chunk
+
+        if currently_skipping:
+            if step==target_step:
+                train_model.restore_model(
+                    f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl",
+                    only_load_processor=False)
+                logging.info(f"Restored model at step {target_step}")
+                step += 1
+                continue
+            else:
+                step += 1
+                next_eval = target_step + FLAGS.eval_every
+                continue
 
         # Periodically evaluate model.
         if current_train_items >= next_eval:
@@ -463,6 +484,33 @@ def main_wrapper():
             print("\n\n")
             if (not (f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt)) and (not (
                     f"{algo}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt)):
+
+                print("Checking if pkl file exists...")
+                pkl_string = f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl"
+
+                file_exists = os.path.exists(pkl_string)
+                if file_exists:
+                    print("pkl file exists!")
+                    log_files = sorted([filename for filename in os.listdir('.') if filename.startswith(f"logs_{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}")])
+                    log_filename=log_files[-1]
+                    print(f"Reading {log_filename}")
+                    with open(log_filename, 'r') as f:
+                        contents = f.readlines()
+                    targets = [line_index for (line_index,line) in enumerate(contents) if "Saving new checkpoint..." in line]
+                    final_target = targets[-1]
+                    line_before_that = final_target-1
+                    relevant_line = contents[line_before_that]
+                    print(relevant_line)
+
+                    p = re.compile("step ([0-9]*)")
+                    resulting_step = p.findall(relevant_line)[0]
+
+                    print(f"Skipping to step {resulting_step}")
+
+                    # TODO what to do with resulting step
+                    FLAGS.skip_to_step=int(resulting_step)
+
+
                 print(
                     f"running with specs: {algo}, {FLAGS.use_memory}, {FLAGS.processor_type}, {FLAGS.memory_size}")
                 app.run(main)
