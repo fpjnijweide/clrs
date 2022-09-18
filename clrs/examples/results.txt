@@ -1,5 +1,3 @@
-lcs_length_best_gatv2_NTM_20.pkl: (test first best) step 10000: {'b': 0.486053466796875, 'score': 0.486053466796875, 'examples_seen': 320000, 'step': 9999}
-dfs_best_gatv2_NTM_100.pkl: (test first best) step 1949: {'pi': 0.08203125, 'score': 0.08203125, 'examples_seen': 62368, 'step': 1949}
 articulation_points_mpnn_NTM_20_best.pkl: (test first best) step 10000: {'is_cut': 0.46712806820869446, 'score': 0.46712806820869446, 'examples_seen': 320000, 'step': 9999}
 articulation_points_mpnn_NTM_20_last.pkl: (test last best) step 10000: {'is_cut': 0.668705403804779, 'score': 0.668705403804779, 'examples_seen': 320000, 'step': 9999}
 kmp_matcher_gatv2_NTM_100_best.pkl: (test) step 10000: {'match': 0.02099609375, 'score': 0.02099609375, 'examples_seen': 320000, 'step': 9999}
@@ -46,3 +44,30 @@ kmp_matcher_gatv2_NTM_20_best.pkl: (test) step 10000: {'match': 0.03564453125, '
 kmp_matcher_gatv2_NTM_20_last.pkl: (test) step 10000: {'match': 0.02783203125, 'score': 0.02783203125, 'examples_seen': 320000, 'step': 9999}
 lcs_length_gat_NTM_20_best.pkl: (test) step 10000: {'b': 0.502227783203125, 'score': 0.502227783203125, 'examples_seen': 320000, 'step': 9999}
 graham_scan_mpnn_NTM_100_best.pkl: (test) step 10000: {'in_hull': 0.9060913920402527, 'score': 0.9060913920402527, 'examples_seen': 320000, 'step': 9999}
+find_maximum_subarray_kadane_pgn_NTM_20_best.pkl: (test) step 10000: {'end': 0.109375, 'start': 0.2392578125, 'score': 0.17431640625, 'examples_seen': 320000, 'step': 9999}
+dijkstra_mpnn_NTM_20_best.pkl: (test) step 10000: {'pi': 0.88916015625, 'score': 0.88916015625, 'examples_seen': 320000, 'step': 9999}
+dijkstra_mpnn_NTM_20_last.pkl: (test) step 10000: {'pi': 0.86572265625, 'score': 0.86572265625, 'examples_seen': 320000, 'step': 9999}
+task_scheduling_gatv2_NTM_20_best.pkl: (test) step 10000: {'selected': 0.8357534408569336, 'score': 0.8357534408569336, 'examples_seen': 320000, 'step': 9999}
+matrix_chain_order_pgn_NTM_100_best.pkl: (test) step 10000: {'s': 0.7747039794921875, 'score': 0.7747039794921875, 'examples_seen': 320000, 'step': 9999}
+floyd_warshall_pgn_NTM_20_best.pkl: (test) step 10000: {'Pi': 0.289154052734375, 'score': 0.289154052734375, 'examples_seen': 320000, 'step': 9999}
+graham_scan_mpnn_NTM_20_best.pkl: (test) step 10000: {'in_hull': 0.9202898740768433, 'score': 0.9202898740768433, 'examples_seen': 320000, 'step': 9999}
+mst_kruskal_mpnn_NTM_100_best.pkl: (test) step 10000: {'in_mst': 0.680754542350769, 'score': 0.680754542350769, 'examples_seen': 320000, 'step': 9999}
+mst_kruskal_mpnn_NTM_100_last.pkl: (test) step 10000: {'in_mst': 0.6593647599220276, 'score': 0.6593647599220276, 'examples_seen': 320000, 'step': 9999}
+dfs_gatv2_NTM_100_best.pkl: (test) step 1949: {'pi': 0.072265625, 'score': 0.072265625, 'examples_seen': 62400, 'step': 1949}
+matrix_chain_order_pgn_NTM_20_best.pkl: (test) step 10000: {'s': 0.7218704223632812, 'score': 0.7218704223632812, 'examples_seen': 320000, 'step': 9999}
+minimum_pgn_NTM_100_best.pkl: (test) step 10000: {'min': 0.86572265625, 'score': 0.86572265625, 'examples_seen': 320000, 'step': 9999}
+mst_prim_mpnn_NTM_100_best.pkl: (test) step 10000: {'pi': 0.81640625, 'score': 0.81640625, 'examples_seen': 320000, 'step': 9999}
+mst_kruskal_mpnn_NTM_20_best.pkl: (test) step 10000: {'in_mst': 0.7119376063346863, 'score': 0.7119376063346863, 'examples_seen': 320000, 'step': 9999}
+mst_kruskal_mpnn_NTM_20_last.pkl: (test) step 10000: {'in_mst': 0.7002037167549133, 'score': 0.7002037167549133, 'examples_seen': 320000, 'step': 9999}
+quickselect_gat_NTM_20_best.pkl: (test) step 10000: {'median': 0.02099609375, 'score': 0.02099609375, 'examples_seen': 320000, 'step': 9999}
+minimum_pgn_NTM_20_best.pkl: (test) step 10000: {'min': 0.80322265625, 'score': 0.80322265625, 'examples_seen': 320000, 'step': 9999}
+mst_prim_pgn_NTM_100_best.pkl: (test) step 10000: {'pi': 0.6611328125, 'score': 0.6611328125, 'examples_seen': 320000, 'step': 9999}
+dfs_gatv2_NTM_100_best.pkl: (test) step 10000: {'pi': 0.07373046875, 'score': 0.07373046875, 'examples_seen': 320000, 'step': 9999}
+dfs_gatv2_NTM_100_last.pkl: (test) step 10000: {'pi': 0.08447265625, 'score': 0.08447265625, 'examples_seen': 320000, 'step': 9999}
+task_scheduling_gat_NTM_20_best.pkl: (test) step 10000: {'selected': 0.8321028351783752, 'score': 0.8321028351783752, 'examples_seen': 320000, 'step': 9999}
+mst_prim_pgn_NTM_20_best.pkl: (test) step 10000: {'pi': 0.68994140625, 'score': 0.68994140625, 'examples_seen': 320000, 'step': 9999}
+mst_prim_mpnn_NTM_20_best.pkl: (test) step 10000: {'pi': 0.77880859375, 'score': 0.77880859375, 'examples_seen': 320000, 'step': 9999}
+naive_string_matcher_mpnn_NTM_20_best.pkl: (test) step 529: {'match': 0.03173828125, 'score': 0.03173828125, 'examples_seen': 16960, 'step': 529}
+optimal_bst_pgn_NTM_20_best.pkl: (test) step 10000: {'root': 0.6564866900444031, 'score': 0.6564866900444031, 'examples_seen': 320000, 'step': 9999}
+naive_string_matcher_mpnn_NTM_100_best.pkl: (test) step 569: {'match': 0.02392578125, 'score': 0.02392578125, 'examples_seen': 18240, 'step': 569}
+optimal_bst_pgn_NTM_100_best.pkl: (test) step 10000: {'root': 0.6161686182022095, 'score': 0.6161686182022095, 'examples_seen': 320000, 'step': 9999}
