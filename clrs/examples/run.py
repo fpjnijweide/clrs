@@ -461,7 +461,7 @@ def main_wrapper():
             txt = myfile.read()
             if not (f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt) and not (
                     f"{algo}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt):
-                logging.info(
+                print(
                     f"running with specs: {algo}, {FLAGS.use_memory}, {FLAGS.processor_type}, {FLAGS.memory_size}")
                 app.run(main)
 
