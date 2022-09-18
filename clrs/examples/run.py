@@ -34,7 +34,7 @@ from clrs._src import processors
 flags.DEFINE_string('algorithm', 'lcs_length', 'Which algorithm to run.')
 flags.DEFINE_integer('seed', 42, 'Random seed to set')
 
-flags.DEFINE_integer('batch_size', 16, 'Batch size used for training.')
+flags.DEFINE_integer('batch_size', 32, 'Batch size used for training.')
 flags.DEFINE_boolean('chunked_training', False,
                      'Whether to use chunking for training.')
 flags.DEFINE_integer('chunk_length', 100,
@@ -402,7 +402,7 @@ def main_wrapper():
     FLAGS(sys.argv)
     GAT_BEST = [
         'dfs',
-        'jarvis_march',
+        # 'jarvis_march',
         'kmp_matcher',
         'lcs_length',
         'quickselect',
