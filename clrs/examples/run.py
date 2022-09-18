@@ -102,6 +102,8 @@ flags.DEFINE_integer('memory_size', 20,
                      'Size of differentiable data structure memory.')
 flags.DEFINE_integer('skip_to_step', 0,
                      'Will read model from a pickle file and skip first n steps if non-zero')
+flags.DEFINE_boolean('load_from_last', False,
+                     'If true, skip_to_step will load the .pkl file ending in _last instead of _best')
 FLAGS = flags.FLAGS
 
 
@@ -385,8 +387,14 @@ def main(unused_argv):
                     this_is_first_time_we_see_this_score = False
             else:
                 if step == target_step:
+                    if FLAGS.load_from_last:
+                        restore_string = "last"
+                        this_is_first_time_we_see_this_score = False
+                    else:
+                        restore_string= "best"
+                        this_is_first_time_we_see_this_score = True
                     train_model.restore_model(
-                        f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl",
+                        f"{FLAGS.algorithm}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_{restore_string}.pkl",
                         only_load_processor=False)
                     eval_model.params = train_model.params
                     val_stats = collect_and_eval(
@@ -400,8 +408,7 @@ def main(unused_argv):
                     logging.info('(val) step %d: %s', step, val_stats)
                     score = val_stats['score']
                     best_score=score
-                    this_is_first_time_we_see_this_score=True
-                    if score==1.0:
+                    if score==1.0 and this_is_first_time_we_see_this_score:
                         test_stats = collect_and_eval(
                             test_sampler,
                             eval_model.predict,
@@ -537,18 +544,34 @@ def main_wrapper():
                         contents = f.readlines()
                     targets = [line_index for (line_index,line) in enumerate(contents) if "Saving new checkpoint..." in line]
                     final_target = targets[-1]
-                    line_before_that = final_target-1
-                    relevant_line = contents[line_before_that]
+                    line_before_best_target = final_target-1
+                    relevant_line = contents[line_before_best_target]
                     print(relevant_line)
 
                     p = re.compile("step ([0-9]*)")
                     resulting_step = p.findall(relevant_line)[0]
 
                     print(f"Skipping to step {resulting_step}")
-
-                    # TODO what to do with resulting step
                     FLAGS.skip_to_step=int(resulting_step)
 
+                    targets_same_score = [line_index for (line_index, line) in enumerate(contents) if
+                               "Saving new checkpoint (same score)..." in line]
+                    pkl_string_last = f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_last.pkl"
+
+                    file_exists_last = os.path.exists(pkl_string_last)
+                    if len(targets_same_score)>0 and file_exists_last:
+                        last_target = targets_same_score[-1]
+                        line_before_last_target = last_target-1
+                        if line_before_last_target>line_before_best_target:
+                            relevant_line = contents[line_before_best_target]
+                            print(relevant_line)
+
+                            p = re.compile("step ([0-9]*)")
+                            resulting_step = p.findall(relevant_line)[0]
+
+                            print(f"Skipping to step {resulting_step} instead, as this had the same val score")
+                            FLAGS.skip_to_step = int(resulting_step)
+                            FLAGS.load_from_last=True
 
                 print(
                     f"running with specs: {algo}, {FLAGS.use_memory}, {FLAGS.processor_type}, {FLAGS.memory_size}")
