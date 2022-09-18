@@ -458,8 +458,11 @@ def main_wrapper():
 
         with open("results.txt") as myfile:
             txt = myfile.read()
-            if not (f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt) and not (
-                    f"{algo}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt):
+            print("\n\n")
+            print(txt)
+            print("\n\n")
+            if (not (f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt)) and (not (
+                    f"{algo}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt)):
                 print(
                     f"running with specs: {algo}, {FLAGS.use_memory}, {FLAGS.processor_type}, {FLAGS.memory_size}")
                 app.run(main)

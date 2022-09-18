@@ -320,5 +320,4 @@ Saving new checkpoint... BEST
 (val) step 3179: {'pi': 1.0, 'score': 1.0, 'examples_seen': 101760, 'step': 3179}
 (val) step 3189: {'pi': 1.0, 'score': 1.0, 'examples_seen': 102080, 'step': 3189}
 (val) step 3199: {'pi': 1.0, 'score': 1.0, 'examples_seen': 102400, 'step': 3199}
-Saving new checkpoint... LAST
 (val) step 3209: {'pi': 0.98046875, 'score': 0.98046875, 'examples_seen': 102720, 'step': 3209}
