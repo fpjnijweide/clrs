@@ -1,0 +1,14 @@
+I0918 14:09:06.482820 139882072844160 run.py:204] Using CLRS30 spec: {'train': {'num_samples': 1000, 'length': 16, 'seed': 1}, 'val': {'num_samples': 32, 'length': 16, 'seed': 2}, 'test': {'num_samples': 32, 'length': 64, 'seed': 3}}
+I0918 14:09:06.484160 139882072844160 run.py:190] Dataset not found in /tmp/CLRS30/CLRS30_v1.0.0. Downloading...
+I0918 14:09:35.385427 139882072844160 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/articulation_points_train/1.0.0
+I0918 14:09:35.389615 139882072844160 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/articulation_points_train/1.0.0)
+I0918 14:09:35.389997 139882072844160 logging_logger.py:45] Constructing tf.data.Dataset clrs_dataset for split train, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/articulation_points_train/1.0.0
+I0918 14:09:36.766089 139882072844160 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/articulation_points_val/1.0.0
+I0918 14:09:36.767737 139882072844160 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/articulation_points_val/1.0.0)
+I0918 14:09:36.768055 139882072844160 logging_logger.py:45] Constructing tf.data.Dataset clrs_dataset for split val, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/articulation_points_val/1.0.0
+I0918 14:09:37.814187 139882072844160 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/articulation_points_test/1.0.0
+I0918 14:09:37.816123 139882072844160 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/articulation_points_test/1.0.0)
+I0918 14:09:37.816500 139882072844160 logging_logger.py:45] Constructing tf.data.Dataset clrs_dataset for split test, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/articulation_points_test/1.0.0
+I0918 14:09:38.154814 139882072844160 xla_bridge.py:350] Unable to initialize backend 'tpu_driver': NOT_FOUND: Unable to find driver in registry given worker: 
+I0918 14:09:38.176724 139882072844160 xla_bridge.py:350] Unable to initialize backend 'rocm': NOT_FOUND: Could not find registered platform with name: "rocm". Available platform names are: Interpreter CUDA Host
+I0918 14:09:38.177431 139882072844160 xla_bridge.py:350] Unable to initialize backend 'tpu': module 'jaxlib.xla_extension' has no attribute 'get_tpu_client'

@@ -1,0 +1,628 @@
+I0918 15:51:27.178061 140704218514368 run.py:204] Using CLRS30 spec: {'train': {'num_samples': 1000, 'length': 16, 'seed': 1}, 'val': {'num_samples': 32, 'length': 16, 'seed': 2}, 'test': {'num_samples': 32, 'length': 64, 'seed': 3}}
+I0918 15:51:27.180616 140704218514368 run.py:188] Dataset found at /tmp/CLRS30/CLRS30_v1.0.0. Skipping download.
+I0918 15:51:32.718434 140704218514368 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/dfs_train/1.0.0
+I0918 15:51:32.722031 140704218514368 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/dfs_train/1.0.0)
+I0918 15:51:32.722733 140704218514368 logging_logger.py:44] Constructing tf.data.Dataset clrs_dataset for split train, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/dfs_train/1.0.0
+I0918 15:51:33.518282 140704218514368 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/dfs_val/1.0.0
+I0918 15:51:33.519816 140704218514368 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/dfs_val/1.0.0)
+I0918 15:51:33.520188 140704218514368 logging_logger.py:44] Constructing tf.data.Dataset clrs_dataset for split val, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/dfs_val/1.0.0
+I0918 15:51:34.728664 140704218514368 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/dfs_test/1.0.0
+I0918 15:51:34.730318 140704218514368 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/dfs_test/1.0.0)
+I0918 15:51:34.730863 140704218514368 logging_logger.py:44] Constructing tf.data.Dataset clrs_dataset for split test, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/dfs_test/1.0.0
+I0918 15:51:35.105762 140704218514368 xla_bridge.py:350] Unable to initialize backend 'tpu_driver': NOT_FOUND: Unable to find driver in registry given worker: 
+I0918 15:51:35.109434 140704218514368 xla_bridge.py:350] Unable to initialize backend 'rocm': NOT_FOUND: Could not find registered platform with name: "rocm". Available platform names are: Interpreter Host CUDA
+I0918 15:51:35.111427 140704218514368 xla_bridge.py:350] Unable to initialize backend 'tpu': module 'jaxlib.xla_extension' has no attribute 'get_tpu_client'
+I0918 15:52:12.708072 140704218514368 run.py:312] Compiled feedback step in 37.072758 s.
+I0918 15:52:56.488792 140704218514368 run.py:407] Restored model at step 7649
+I0918 15:52:56.489574 140704218514368 run.py:408] (val) step 7649: {'pi': 1.0, 'score': 1.0, 'examples_seen': 244800, 'step': 7649}
+I0918 15:54:02.389743 140704218514368 run.py:343] (train) step 7659: {'pi': 1.0, 'score': 1.0, 'loss': 0.002335216384381056, 'examples_seen': 245120, 'step': 7659}
+I0918 15:54:02.618031 140704218514368 run.py:357] (val) step 7659: {'pi': 1.0, 'score': 1.0, 'examples_seen': 245120, 'step': 7659}
+I0918 15:54:02.618877 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:54:18.142938 140704218514368 run.py:343] (train) step 7669: {'pi': 1.0, 'score': 1.0, 'loss': 0.0022208194714039564, 'examples_seen': 245440, 'step': 7669}
+I0918 15:54:18.379246 140704218514368 run.py:357] (val) step 7669: {'pi': 1.0, 'score': 1.0, 'examples_seen': 245440, 'step': 7669}
+I0918 15:54:18.380176 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:54:32.762743 140704218514368 run.py:343] (train) step 7679: {'pi': 1.0, 'score': 1.0, 'loss': 0.0034658238291740417, 'examples_seen': 245760, 'step': 7679}
+I0918 15:54:32.972334 140704218514368 run.py:357] (val) step 7679: {'pi': 1.0, 'score': 1.0, 'examples_seen': 245760, 'step': 7679}
+I0918 15:54:32.973033 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:54:49.101510 140704218514368 run.py:343] (train) step 7689: {'pi': 1.0, 'score': 1.0, 'loss': 0.002415963215753436, 'examples_seen': 246080, 'step': 7689}
+I0918 15:54:49.346025 140704218514368 run.py:357] (val) step 7689: {'pi': 1.0, 'score': 1.0, 'examples_seen': 246080, 'step': 7689}
+I0918 15:54:49.346786 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:55:05.703143 140704218514368 run.py:343] (train) step 7699: {'pi': 1.0, 'score': 1.0, 'loss': 0.0018575445283204317, 'examples_seen': 246400, 'step': 7699}
+I0918 15:55:05.959969 140704218514368 run.py:357] (val) step 7699: {'pi': 1.0, 'score': 1.0, 'examples_seen': 246400, 'step': 7699}
+I0918 15:55:05.960582 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:55:20.681700 140704218514368 run.py:343] (train) step 7709: {'pi': 1.0, 'score': 1.0, 'loss': 0.0029437355697155, 'examples_seen': 246720, 'step': 7709}
+I0918 15:55:20.852455 140704218514368 run.py:357] (val) step 7709: {'pi': 1.0, 'score': 1.0, 'examples_seen': 246720, 'step': 7709}
+I0918 15:55:20.853008 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:55:34.992346 140704218514368 run.py:343] (train) step 7719: {'pi': 1.0, 'score': 1.0, 'loss': 0.002596279140561819, 'examples_seen': 247040, 'step': 7719}
+I0918 15:55:35.184875 140704218514368 run.py:357] (val) step 7719: {'pi': 1.0, 'score': 1.0, 'examples_seen': 247040, 'step': 7719}
+I0918 15:55:35.185424 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:55:47.844625 140704218514368 run.py:343] (train) step 7729: {'pi': 1.0, 'score': 1.0, 'loss': 0.0025211176835000515, 'examples_seen': 247360, 'step': 7729}
+I0918 15:55:48.091220 140704218514368 run.py:357] (val) step 7729: {'pi': 1.0, 'score': 1.0, 'examples_seen': 247360, 'step': 7729}
+I0918 15:55:48.091958 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:56:00.700179 140704218514368 run.py:343] (train) step 7739: {'pi': 1.0, 'score': 1.0, 'loss': 0.0019362906459718943, 'examples_seen': 247680, 'step': 7739}
+I0918 15:56:00.909320 140704218514368 run.py:357] (val) step 7739: {'pi': 1.0, 'score': 1.0, 'examples_seen': 247680, 'step': 7739}
+I0918 15:56:00.909876 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:56:13.102380 140704218514368 run.py:343] (train) step 7749: {'pi': 1.0, 'score': 1.0, 'loss': 0.0023442518431693316, 'examples_seen': 248000, 'step': 7749}
+I0918 15:56:13.307070 140704218514368 run.py:357] (val) step 7749: {'pi': 1.0, 'score': 1.0, 'examples_seen': 248000, 'step': 7749}
+I0918 15:56:13.307616 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:56:25.658713 140704218514368 run.py:343] (train) step 7759: {'pi': 1.0, 'score': 1.0, 'loss': 0.002016695449128747, 'examples_seen': 248320, 'step': 7759}
+I0918 15:56:25.853778 140704218514368 run.py:357] (val) step 7759: {'pi': 1.0, 'score': 1.0, 'examples_seen': 248320, 'step': 7759}
+I0918 15:56:25.864255 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:56:40.388393 140704218514368 run.py:343] (train) step 7769: {'pi': 1.0, 'score': 1.0, 'loss': 0.0020148700568825006, 'examples_seen': 248640, 'step': 7769}
+I0918 15:56:40.648334 140704218514368 run.py:357] (val) step 7769: {'pi': 1.0, 'score': 1.0, 'examples_seen': 248640, 'step': 7769}
+I0918 15:56:40.648927 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:56:52.879910 140704218514368 run.py:343] (train) step 7779: {'pi': 1.0, 'score': 1.0, 'loss': 0.0026780494954437017, 'examples_seen': 248960, 'step': 7779}
+I0918 15:56:53.054776 140704218514368 run.py:357] (val) step 7779: {'pi': 1.0, 'score': 1.0, 'examples_seen': 248960, 'step': 7779}
+I0918 15:56:53.055325 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:57:05.106618 140704218514368 run.py:343] (train) step 7789: {'pi': 1.0, 'score': 1.0, 'loss': 0.0020786274690181017, 'examples_seen': 249280, 'step': 7789}
+I0918 15:57:05.325098 140704218514368 run.py:357] (val) step 7789: {'pi': 1.0, 'score': 1.0, 'examples_seen': 249280, 'step': 7789}
+I0918 15:57:05.325696 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:57:17.435960 140704218514368 run.py:343] (train) step 7799: {'pi': 1.0, 'score': 1.0, 'loss': 0.002535448409616947, 'examples_seen': 249600, 'step': 7799}
+I0918 15:57:17.613280 140704218514368 run.py:357] (val) step 7799: {'pi': 1.0, 'score': 1.0, 'examples_seen': 249600, 'step': 7799}
+I0918 15:57:17.613889 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:57:30.141347 140704218514368 run.py:343] (train) step 7809: {'pi': 1.0, 'score': 1.0, 'loss': 0.002180954208597541, 'examples_seen': 249920, 'step': 7809}
+I0918 15:57:30.352312 140704218514368 run.py:357] (val) step 7809: {'pi': 1.0, 'score': 1.0, 'examples_seen': 249920, 'step': 7809}
+I0918 15:57:30.353009 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:57:42.495309 140704218514368 run.py:343] (train) step 7819: {'pi': 1.0, 'score': 1.0, 'loss': 0.002704174257814884, 'examples_seen': 250240, 'step': 7819}
+I0918 15:57:42.670278 140704218514368 run.py:357] (val) step 7819: {'pi': 1.0, 'score': 1.0, 'examples_seen': 250240, 'step': 7819}
+I0918 15:57:42.670838 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:57:54.986253 140704218514368 run.py:343] (train) step 7829: {'pi': 1.0, 'score': 1.0, 'loss': 0.0023228127975016832, 'examples_seen': 250560, 'step': 7829}
+I0918 15:57:55.185014 140704218514368 run.py:357] (val) step 7829: {'pi': 1.0, 'score': 1.0, 'examples_seen': 250560, 'step': 7829}
+I0918 15:57:55.185593 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:58:08.048109 140704218514368 run.py:343] (train) step 7839: {'pi': 1.0, 'score': 1.0, 'loss': 0.0021929533686488867, 'examples_seen': 250880, 'step': 7839}
+I0918 15:58:08.242294 140704218514368 run.py:357] (val) step 7839: {'pi': 1.0, 'score': 1.0, 'examples_seen': 250880, 'step': 7839}
+I0918 15:58:08.242962 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:58:20.241142 140704218514368 run.py:343] (train) step 7849: {'pi': 1.0, 'score': 1.0, 'loss': 0.0023274612613022327, 'examples_seen': 251200, 'step': 7849}
+I0918 15:58:20.437563 140704218514368 run.py:357] (val) step 7849: {'pi': 1.0, 'score': 1.0, 'examples_seen': 251200, 'step': 7849}
+I0918 15:58:20.438142 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:58:32.921606 140704218514368 run.py:343] (train) step 7859: {'pi': 1.0, 'score': 1.0, 'loss': 0.002805381780490279, 'examples_seen': 251520, 'step': 7859}
+I0918 15:58:33.112417 140704218514368 run.py:357] (val) step 7859: {'pi': 0.9765625, 'score': 0.9765625, 'examples_seen': 251520, 'step': 7859}
+I0918 15:58:44.856995 140704218514368 run.py:343] (train) step 7869: {'pi': 1.0, 'score': 1.0, 'loss': 0.002649997128173709, 'examples_seen': 251840, 'step': 7869}
+I0918 15:58:45.047838 140704218514368 run.py:357] (val) step 7869: {'pi': 1.0, 'score': 1.0, 'examples_seen': 251840, 'step': 7869}
+I0918 15:58:45.048474 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:58:58.041167 140704218514368 run.py:343] (train) step 7879: {'pi': 1.0, 'score': 1.0, 'loss': 0.001436751801520586, 'examples_seen': 252160, 'step': 7879}
+I0918 15:58:58.233990 140704218514368 run.py:357] (val) step 7879: {'pi': 1.0, 'score': 1.0, 'examples_seen': 252160, 'step': 7879}
+I0918 15:58:58.234577 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:59:10.511839 140704218514368 run.py:343] (train) step 7889: {'pi': 1.0, 'score': 1.0, 'loss': 0.002078897785395384, 'examples_seen': 252480, 'step': 7889}
+I0918 15:59:10.717005 140704218514368 run.py:357] (val) step 7889: {'pi': 1.0, 'score': 1.0, 'examples_seen': 252480, 'step': 7889}
+I0918 15:59:10.717687 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:59:24.068215 140704218514368 run.py:343] (train) step 7899: {'pi': 1.0, 'score': 1.0, 'loss': 0.0032925743144005537, 'examples_seen': 252800, 'step': 7899}
+I0918 15:59:24.252592 140704218514368 run.py:357] (val) step 7899: {'pi': 1.0, 'score': 1.0, 'examples_seen': 252800, 'step': 7899}
+I0918 15:59:24.253144 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:59:36.366415 140704218514368 run.py:343] (train) step 7909: {'pi': 1.0, 'score': 1.0, 'loss': 0.004215186927467585, 'examples_seen': 253120, 'step': 7909}
+I0918 15:59:36.541560 140704218514368 run.py:357] (val) step 7909: {'pi': 1.0, 'score': 1.0, 'examples_seen': 253120, 'step': 7909}
+I0918 15:59:36.542124 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 15:59:48.525496 140704218514368 run.py:343] (train) step 7919: {'pi': 1.0, 'score': 1.0, 'loss': 0.0032205048482865095, 'examples_seen': 253440, 'step': 7919}
+I0918 15:59:48.716296 140704218514368 run.py:357] (val) step 7919: {'pi': 1.0, 'score': 1.0, 'examples_seen': 253440, 'step': 7919}
+I0918 15:59:48.717055 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:00:01.666078 140704218514368 run.py:343] (train) step 7929: {'pi': 1.0, 'score': 1.0, 'loss': 0.003533445531502366, 'examples_seen': 253760, 'step': 7929}
+I0918 16:00:01.853532 140704218514368 run.py:357] (val) step 7929: {'pi': 1.0, 'score': 1.0, 'examples_seen': 253760, 'step': 7929}
+I0918 16:00:01.854392 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:00:15.153201 140704218514368 run.py:343] (train) step 7939: {'pi': 1.0, 'score': 1.0, 'loss': 0.004021957516670227, 'examples_seen': 254080, 'step': 7939}
+I0918 16:00:15.367067 140704218514368 run.py:357] (val) step 7939: {'pi': 0.982421875, 'score': 0.982421875, 'examples_seen': 254080, 'step': 7939}
+I0918 16:00:27.495455 140704218514368 run.py:343] (train) step 7949: {'pi': 1.0, 'score': 1.0, 'loss': 0.007084609940648079, 'examples_seen': 254400, 'step': 7949}
+I0918 16:00:27.677146 140704218514368 run.py:357] (val) step 7949: {'pi': 1.0, 'score': 1.0, 'examples_seen': 254400, 'step': 7949}
+I0918 16:00:27.677693 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:00:40.664440 140704218514368 run.py:343] (train) step 7959: {'pi': 1.0, 'score': 1.0, 'loss': 0.003971630707383156, 'examples_seen': 254720, 'step': 7959}
+I0918 16:00:40.866015 140704218514368 run.py:357] (val) step 7959: {'pi': 1.0, 'score': 1.0, 'examples_seen': 254720, 'step': 7959}
+I0918 16:00:40.866588 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:00:53.625668 140704218514368 run.py:343] (train) step 7969: {'pi': 1.0, 'score': 1.0, 'loss': 0.003366882912814617, 'examples_seen': 255040, 'step': 7969}
+I0918 16:00:53.819383 140704218514368 run.py:357] (val) step 7969: {'pi': 1.0, 'score': 1.0, 'examples_seen': 255040, 'step': 7969}
+I0918 16:00:53.819969 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:01:07.087702 140704218514368 run.py:343] (train) step 7979: {'pi': 1.0, 'score': 1.0, 'loss': 0.0027576033025979996, 'examples_seen': 255360, 'step': 7979}
+I0918 16:01:07.327948 140704218514368 run.py:357] (val) step 7979: {'pi': 1.0, 'score': 1.0, 'examples_seen': 255360, 'step': 7979}
+I0918 16:01:07.328655 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:01:22.120512 140704218514368 run.py:343] (train) step 7989: {'pi': 1.0, 'score': 1.0, 'loss': 0.003607891732826829, 'examples_seen': 255680, 'step': 7989}
+I0918 16:01:22.382553 140704218514368 run.py:357] (val) step 7989: {'pi': 1.0, 'score': 1.0, 'examples_seen': 255680, 'step': 7989}
+I0918 16:01:22.384109 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:01:35.708589 140704218514368 run.py:343] (train) step 7999: {'pi': 1.0, 'score': 1.0, 'loss': 0.0020078374072909355, 'examples_seen': 256000, 'step': 7999}
+I0918 16:01:35.927941 140704218514368 run.py:357] (val) step 7999: {'pi': 1.0, 'score': 1.0, 'examples_seen': 256000, 'step': 7999}
+I0918 16:01:35.928647 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:01:48.809009 140704218514368 run.py:343] (train) step 8009: {'pi': 1.0, 'score': 1.0, 'loss': 0.0021932281088083982, 'examples_seen': 256320, 'step': 8009}
+I0918 16:01:49.009846 140704218514368 run.py:357] (val) step 8009: {'pi': 1.0, 'score': 1.0, 'examples_seen': 256320, 'step': 8009}
+I0918 16:01:49.010432 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:02:01.952984 140704218514368 run.py:343] (train) step 8019: {'pi': 1.0, 'score': 1.0, 'loss': 0.002132574561983347, 'examples_seen': 256640, 'step': 8019}
+I0918 16:02:02.171874 140704218514368 run.py:357] (val) step 8019: {'pi': 1.0, 'score': 1.0, 'examples_seen': 256640, 'step': 8019}
+I0918 16:02:02.172534 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:02:14.619498 140704218514368 run.py:343] (train) step 8029: {'pi': 1.0, 'score': 1.0, 'loss': 0.002544411225244403, 'examples_seen': 256960, 'step': 8029}
+I0918 16:02:14.814688 140704218514368 run.py:357] (val) step 8029: {'pi': 1.0, 'score': 1.0, 'examples_seen': 256960, 'step': 8029}
+I0918 16:02:14.815789 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:02:26.903656 140704218514368 run.py:343] (train) step 8039: {'pi': 1.0, 'score': 1.0, 'loss': 0.0020204810425639153, 'examples_seen': 257280, 'step': 8039}
+I0918 16:02:27.130226 140704218514368 run.py:357] (val) step 8039: {'pi': 1.0, 'score': 1.0, 'examples_seen': 257280, 'step': 8039}
+I0918 16:02:27.130821 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:02:40.290332 140704218514368 run.py:343] (train) step 8049: {'pi': 1.0, 'score': 1.0, 'loss': 0.002318407641723752, 'examples_seen': 257600, 'step': 8049}
+I0918 16:02:40.465050 140704218514368 run.py:357] (val) step 8049: {'pi': 1.0, 'score': 1.0, 'examples_seen': 257600, 'step': 8049}
+I0918 16:02:40.465683 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:02:54.678697 140704218514368 run.py:343] (train) step 8059: {'pi': 1.0, 'score': 1.0, 'loss': 0.0020168167538940907, 'examples_seen': 257920, 'step': 8059}
+I0918 16:02:54.856775 140704218514368 run.py:357] (val) step 8059: {'pi': 1.0, 'score': 1.0, 'examples_seen': 257920, 'step': 8059}
+I0918 16:02:54.857319 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:03:07.606903 140704218514368 run.py:343] (train) step 8069: {'pi': 1.0, 'score': 1.0, 'loss': 0.0027812893968075514, 'examples_seen': 258240, 'step': 8069}
+I0918 16:03:07.797164 140704218514368 run.py:357] (val) step 8069: {'pi': 1.0, 'score': 1.0, 'examples_seen': 258240, 'step': 8069}
+I0918 16:03:07.797721 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:03:23.785969 140704218514368 run.py:343] (train) step 8079: {'pi': 1.0, 'score': 1.0, 'loss': 0.002103231381624937, 'examples_seen': 258560, 'step': 8079}
+I0918 16:03:23.967248 140704218514368 run.py:357] (val) step 8079: {'pi': 1.0, 'score': 1.0, 'examples_seen': 258560, 'step': 8079}
+I0918 16:03:23.967811 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:03:36.564633 140704218514368 run.py:343] (train) step 8089: {'pi': 1.0, 'score': 1.0, 'loss': 0.003473682329058647, 'examples_seen': 258880, 'step': 8089}
+I0918 16:03:36.786365 140704218514368 run.py:357] (val) step 8089: {'pi': 1.0, 'score': 1.0, 'examples_seen': 258880, 'step': 8089}
+I0918 16:03:36.786968 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:03:49.516298 140704218514368 run.py:343] (train) step 8099: {'pi': 1.0, 'score': 1.0, 'loss': 0.004786191042512655, 'examples_seen': 259200, 'step': 8099}
+I0918 16:03:49.729892 140704218514368 run.py:357] (val) step 8099: {'pi': 1.0, 'score': 1.0, 'examples_seen': 259200, 'step': 8099}
+I0918 16:03:49.730446 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:04:02.514178 140704218514368 run.py:343] (train) step 8109: {'pi': 1.0, 'score': 1.0, 'loss': 0.0023434602189809084, 'examples_seen': 259520, 'step': 8109}
+I0918 16:04:02.732367 140704218514368 run.py:357] (val) step 8109: {'pi': 1.0, 'score': 1.0, 'examples_seen': 259520, 'step': 8109}
+I0918 16:04:02.732988 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:04:16.418821 140704218514368 run.py:343] (train) step 8119: {'pi': 1.0, 'score': 1.0, 'loss': 0.002016211859881878, 'examples_seen': 259840, 'step': 8119}
+I0918 16:04:16.619760 140704218514368 run.py:357] (val) step 8119: {'pi': 1.0, 'score': 1.0, 'examples_seen': 259840, 'step': 8119}
+I0918 16:04:16.620397 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:04:30.770369 140704218514368 run.py:343] (train) step 8129: {'pi': 1.0, 'score': 1.0, 'loss': 0.002201275434345007, 'examples_seen': 260160, 'step': 8129}
+I0918 16:04:30.993848 140704218514368 run.py:357] (val) step 8129: {'pi': 1.0, 'score': 1.0, 'examples_seen': 260160, 'step': 8129}
+I0918 16:04:30.994599 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:04:44.358244 140704218514368 run.py:343] (train) step 8139: {'pi': 1.0, 'score': 1.0, 'loss': 0.0024405759759247303, 'examples_seen': 260480, 'step': 8139}
+I0918 16:04:44.571486 140704218514368 run.py:357] (val) step 8139: {'pi': 1.0, 'score': 1.0, 'examples_seen': 260480, 'step': 8139}
+I0918 16:04:44.572108 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:05:00.281634 140704218514368 run.py:343] (train) step 8149: {'pi': 1.0, 'score': 1.0, 'loss': 0.002317147795110941, 'examples_seen': 260800, 'step': 8149}
+I0918 16:05:00.555433 140704218514368 run.py:357] (val) step 8149: {'pi': 1.0, 'score': 1.0, 'examples_seen': 260800, 'step': 8149}
+I0918 16:05:00.556926 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:05:15.142909 140704218514368 run.py:343] (train) step 8159: {'pi': 1.0, 'score': 1.0, 'loss': 0.003748191986232996, 'examples_seen': 261120, 'step': 8159}
+I0918 16:05:15.370494 140704218514368 run.py:357] (val) step 8159: {'pi': 1.0, 'score': 1.0, 'examples_seen': 261120, 'step': 8159}
+I0918 16:05:15.371218 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:05:30.474014 140704218514368 run.py:343] (train) step 8169: {'pi': 1.0, 'score': 1.0, 'loss': 0.0027296605985611677, 'examples_seen': 261440, 'step': 8169}
+I0918 16:05:30.644690 140704218514368 run.py:357] (val) step 8169: {'pi': 1.0, 'score': 1.0, 'examples_seen': 261440, 'step': 8169}
+I0918 16:05:30.645238 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:05:45.172238 140704218514368 run.py:343] (train) step 8179: {'pi': 0.9609375, 'score': 0.9609375, 'loss': 0.06505201756954193, 'examples_seen': 261760, 'step': 8179}
+I0918 16:05:45.382977 140704218514368 run.py:357] (val) step 8179: {'pi': 0.900390625, 'score': 0.900390625, 'examples_seen': 261760, 'step': 8179}
+I0918 16:05:59.311770 140704218514368 run.py:343] (train) step 8189: {'pi': 0.462890625, 'score': 0.462890625, 'loss': 3.4123876094818115, 'examples_seen': 262080, 'step': 8189}
+I0918 16:05:59.484131 140704218514368 run.py:357] (val) step 8189: {'pi': 0.4765625, 'score': 0.4765625, 'examples_seen': 262080, 'step': 8189}
+I0918 16:06:10.672368 140704218514368 run.py:343] (train) step 8199: {'pi': 0.5234375, 'score': 0.5234375, 'loss': 1.3424121141433716, 'examples_seen': 262400, 'step': 8199}
+I0918 16:06:10.858643 140704218514368 run.py:357] (val) step 8199: {'pi': 0.5078125, 'score': 0.5078125, 'examples_seen': 262400, 'step': 8199}
+I0918 16:06:22.354594 140704218514368 run.py:343] (train) step 8209: {'pi': 0.474609375, 'score': 0.474609375, 'loss': 0.5506922006607056, 'examples_seen': 262720, 'step': 8209}
+I0918 16:06:22.539124 140704218514368 run.py:357] (val) step 8209: {'pi': 0.46875, 'score': 0.46875, 'examples_seen': 262720, 'step': 8209}
+I0918 16:06:34.587506 140704218514368 run.py:343] (train) step 8219: {'pi': 0.9375, 'score': 0.9375, 'loss': 0.422051340341568, 'examples_seen': 263040, 'step': 8219}
+I0918 16:06:34.771542 140704218514368 run.py:357] (val) step 8219: {'pi': 0.8828125, 'score': 0.8828125, 'examples_seen': 263040, 'step': 8219}
+I0918 16:06:45.965822 140704218514368 run.py:343] (train) step 8229: {'pi': 0.97265625, 'score': 0.97265625, 'loss': 0.12464621663093567, 'examples_seen': 263360, 'step': 8229}
+I0918 16:06:46.140334 140704218514368 run.py:357] (val) step 8229: {'pi': 0.94140625, 'score': 0.94140625, 'examples_seen': 263360, 'step': 8229}
+I0918 16:06:57.486944 140704218514368 run.py:343] (train) step 8239: {'pi': 0.970703125, 'score': 0.970703125, 'loss': 0.07359309494495392, 'examples_seen': 263680, 'step': 8239}
+I0918 16:06:57.690109 140704218514368 run.py:357] (val) step 8239: {'pi': 0.94921875, 'score': 0.94921875, 'examples_seen': 263680, 'step': 8239}
+I0918 16:07:09.081803 140704218514368 run.py:343] (train) step 8249: {'pi': 0.966796875, 'score': 0.966796875, 'loss': 0.1177479475736618, 'examples_seen': 264000, 'step': 8249}
+I0918 16:07:09.332637 140704218514368 run.py:357] (val) step 8249: {'pi': 0.94140625, 'score': 0.94140625, 'examples_seen': 264000, 'step': 8249}
+I0918 16:07:21.082336 140704218514368 run.py:343] (train) step 8259: {'pi': 0.99609375, 'score': 0.99609375, 'loss': 0.034964367747306824, 'examples_seen': 264320, 'step': 8259}
+I0918 16:07:21.306904 140704218514368 run.py:357] (val) step 8259: {'pi': 0.9609375, 'score': 0.9609375, 'examples_seen': 264320, 'step': 8259}
+I0918 16:07:33.862195 140704218514368 run.py:343] (train) step 8269: {'pi': 0.966796875, 'score': 0.966796875, 'loss': 0.027781132608652115, 'examples_seen': 264640, 'step': 8269}
+I0918 16:07:34.051994 140704218514368 run.py:357] (val) step 8269: {'pi': 0.96484375, 'score': 0.96484375, 'examples_seen': 264640, 'step': 8269}
+I0918 16:07:45.301876 140704218514368 run.py:343] (train) step 8279: {'pi': 0.978515625, 'score': 0.978515625, 'loss': 0.042207323014736176, 'examples_seen': 264960, 'step': 8279}
+I0918 16:07:45.476893 140704218514368 run.py:357] (val) step 8279: {'pi': 0.92578125, 'score': 0.92578125, 'examples_seen': 264960, 'step': 8279}
+I0918 16:07:56.994400 140704218514368 run.py:343] (train) step 8289: {'pi': 0.982421875, 'score': 0.982421875, 'loss': 0.02227231301367283, 'examples_seen': 265280, 'step': 8289}
+I0918 16:07:57.191564 140704218514368 run.py:357] (val) step 8289: {'pi': 0.978515625, 'score': 0.978515625, 'examples_seen': 265280, 'step': 8289}
+I0918 16:08:08.487431 140704218514368 run.py:343] (train) step 8299: {'pi': 0.966796875, 'score': 0.966796875, 'loss': 0.04205698519945145, 'examples_seen': 265600, 'step': 8299}
+I0918 16:08:08.674505 140704218514368 run.py:357] (val) step 8299: {'pi': 0.9765625, 'score': 0.9765625, 'examples_seen': 265600, 'step': 8299}
+I0918 16:08:20.021406 140704218514368 run.py:343] (train) step 8309: {'pi': 0.94140625, 'score': 0.94140625, 'loss': 0.09071493148803711, 'examples_seen': 265920, 'step': 8309}
+I0918 16:08:20.206762 140704218514368 run.py:357] (val) step 8309: {'pi': 0.939453125, 'score': 0.939453125, 'examples_seen': 265920, 'step': 8309}
+I0918 16:08:31.644510 140704218514368 run.py:343] (train) step 8319: {'pi': 0.9921875, 'score': 0.9921875, 'loss': 0.026111628860235214, 'examples_seen': 266240, 'step': 8319}
+I0918 16:08:31.823946 140704218514368 run.py:357] (val) step 8319: {'pi': 0.96875, 'score': 0.96875, 'examples_seen': 266240, 'step': 8319}
+I0918 16:08:43.846476 140704218514368 run.py:343] (train) step 8329: {'pi': 0.986328125, 'score': 0.986328125, 'loss': 0.04917538911104202, 'examples_seen': 266560, 'step': 8329}
+I0918 16:08:44.043450 140704218514368 run.py:357] (val) step 8329: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 266560, 'step': 8329}
+I0918 16:08:55.517812 140704218514368 run.py:343] (train) step 8339: {'pi': 0.998046875, 'score': 0.998046875, 'loss': 0.021124497056007385, 'examples_seen': 266880, 'step': 8339}
+I0918 16:08:55.700797 140704218514368 run.py:357] (val) step 8339: {'pi': 0.984375, 'score': 0.984375, 'examples_seen': 266880, 'step': 8339}
+I0918 16:09:07.250879 140704218514368 run.py:343] (train) step 8349: {'pi': 1.0, 'score': 1.0, 'loss': 0.03211003541946411, 'examples_seen': 267200, 'step': 8349}
+I0918 16:09:07.428852 140704218514368 run.py:357] (val) step 8349: {'pi': 0.986328125, 'score': 0.986328125, 'examples_seen': 267200, 'step': 8349}
+I0918 16:09:19.225438 140704218514368 run.py:343] (train) step 8359: {'pi': 0.984375, 'score': 0.984375, 'loss': 0.01537170261144638, 'examples_seen': 267520, 'step': 8359}
+I0918 16:09:19.397368 140704218514368 run.py:357] (val) step 8359: {'pi': 0.978515625, 'score': 0.978515625, 'examples_seen': 267520, 'step': 8359}
+I0918 16:09:30.583659 140704218514368 run.py:343] (train) step 8369: {'pi': 1.0, 'score': 1.0, 'loss': 0.015139328315854073, 'examples_seen': 267840, 'step': 8369}
+I0918 16:09:30.807782 140704218514368 run.py:357] (val) step 8369: {'pi': 1.0, 'score': 1.0, 'examples_seen': 267840, 'step': 8369}
+I0918 16:09:30.808328 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:09:42.687243 140704218514368 run.py:343] (train) step 8379: {'pi': 1.0, 'score': 1.0, 'loss': 0.015225660055875778, 'examples_seen': 268160, 'step': 8379}
+I0918 16:09:42.874463 140704218514368 run.py:357] (val) step 8379: {'pi': 0.984375, 'score': 0.984375, 'examples_seen': 268160, 'step': 8379}
+I0918 16:09:54.953449 140704218514368 run.py:343] (train) step 8389: {'pi': 1.0, 'score': 1.0, 'loss': 0.011317184194922447, 'examples_seen': 268480, 'step': 8389}
+I0918 16:09:55.126056 140704218514368 run.py:357] (val) step 8389: {'pi': 0.990234375, 'score': 0.990234375, 'examples_seen': 268480, 'step': 8389}
+I0918 16:10:06.589846 140704218514368 run.py:343] (train) step 8399: {'pi': 0.9921875, 'score': 0.9921875, 'loss': 0.029818139970302582, 'examples_seen': 268800, 'step': 8399}
+I0918 16:10:06.799542 140704218514368 run.py:357] (val) step 8399: {'pi': 1.0, 'score': 1.0, 'examples_seen': 268800, 'step': 8399}
+I0918 16:10:06.800078 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:10:18.696271 140704218514368 run.py:343] (train) step 8409: {'pi': 1.0, 'score': 1.0, 'loss': 0.010987081564962864, 'examples_seen': 269120, 'step': 8409}
+I0918 16:10:18.889385 140704218514368 run.py:357] (val) step 8409: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 269120, 'step': 8409}
+I0918 16:10:30.179422 140704218514368 run.py:343] (train) step 8419: {'pi': 1.0, 'score': 1.0, 'loss': 0.009650951251387596, 'examples_seen': 269440, 'step': 8419}
+I0918 16:10:30.365958 140704218514368 run.py:357] (val) step 8419: {'pi': 0.99609375, 'score': 0.99609375, 'examples_seen': 269440, 'step': 8419}
+I0918 16:10:41.707482 140704218514368 run.py:343] (train) step 8429: {'pi': 0.99609375, 'score': 0.99609375, 'loss': 0.012181996367871761, 'examples_seen': 269760, 'step': 8429}
+I0918 16:10:41.924830 140704218514368 run.py:357] (val) step 8429: {'pi': 0.978515625, 'score': 0.978515625, 'examples_seen': 269760, 'step': 8429}
+I0918 16:10:53.386651 140704218514368 run.py:343] (train) step 8439: {'pi': 1.0, 'score': 1.0, 'loss': 0.012305603362619877, 'examples_seen': 270080, 'step': 8439}
+I0918 16:10:53.565808 140704218514368 run.py:357] (val) step 8439: {'pi': 0.98828125, 'score': 0.98828125, 'examples_seen': 270080, 'step': 8439}
+I0918 16:11:05.083657 140704218514368 run.py:343] (train) step 8449: {'pi': 0.998046875, 'score': 0.998046875, 'loss': 0.009750190190970898, 'examples_seen': 270400, 'step': 8449}
+I0918 16:11:05.261810 140704218514368 run.py:357] (val) step 8449: {'pi': 0.978515625, 'score': 0.978515625, 'examples_seen': 270400, 'step': 8449}
+I0918 16:11:16.489110 140704218514368 run.py:343] (train) step 8459: {'pi': 1.0, 'score': 1.0, 'loss': 0.021835369989275932, 'examples_seen': 270720, 'step': 8459}
+I0918 16:11:16.662612 140704218514368 run.py:357] (val) step 8459: {'pi': 0.974609375, 'score': 0.974609375, 'examples_seen': 270720, 'step': 8459}
+I0918 16:11:27.627177 140704218514368 run.py:343] (train) step 8469: {'pi': 0.97265625, 'score': 0.97265625, 'loss': 0.024713553488254547, 'examples_seen': 271040, 'step': 8469}
+I0918 16:11:27.860304 140704218514368 run.py:357] (val) step 8469: {'pi': 0.916015625, 'score': 0.916015625, 'examples_seen': 271040, 'step': 8469}
+I0918 16:11:39.333297 140704218514368 run.py:343] (train) step 8479: {'pi': 0.990234375, 'score': 0.990234375, 'loss': 0.026809297502040863, 'examples_seen': 271360, 'step': 8479}
+I0918 16:11:39.523011 140704218514368 run.py:357] (val) step 8479: {'pi': 0.966796875, 'score': 0.966796875, 'examples_seen': 271360, 'step': 8479}
+I0918 16:11:51.652959 140704218514368 run.py:343] (train) step 8489: {'pi': 0.984375, 'score': 0.984375, 'loss': 0.021093346178531647, 'examples_seen': 271680, 'step': 8489}
+I0918 16:11:51.859662 140704218514368 run.py:357] (val) step 8489: {'pi': 0.990234375, 'score': 0.990234375, 'examples_seen': 271680, 'step': 8489}
+I0918 16:12:04.320388 140704218514368 run.py:343] (train) step 8499: {'pi': 0.984375, 'score': 0.984375, 'loss': 0.014291803352534771, 'examples_seen': 272000, 'step': 8499}
+I0918 16:12:04.544487 140704218514368 run.py:357] (val) step 8499: {'pi': 0.984375, 'score': 0.984375, 'examples_seen': 272000, 'step': 8499}
+I0918 16:12:16.608306 140704218514368 run.py:343] (train) step 8509: {'pi': 1.0, 'score': 1.0, 'loss': 0.016675075516104698, 'examples_seen': 272320, 'step': 8509}
+I0918 16:12:16.781668 140704218514368 run.py:357] (val) step 8509: {'pi': 1.0, 'score': 1.0, 'examples_seen': 272320, 'step': 8509}
+I0918 16:12:16.782204 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:12:29.637874 140704218514368 run.py:343] (train) step 8519: {'pi': 1.0, 'score': 1.0, 'loss': 0.0096796415746212, 'examples_seen': 272640, 'step': 8519}
+I0918 16:12:29.829873 140704218514368 run.py:357] (val) step 8519: {'pi': 0.958984375, 'score': 0.958984375, 'examples_seen': 272640, 'step': 8519}
+I0918 16:12:41.827888 140704218514368 run.py:343] (train) step 8529: {'pi': 1.0, 'score': 1.0, 'loss': 0.009986590594053268, 'examples_seen': 272960, 'step': 8529}
+I0918 16:12:42.023165 140704218514368 run.py:357] (val) step 8529: {'pi': 1.0, 'score': 1.0, 'examples_seen': 272960, 'step': 8529}
+I0918 16:12:42.023719 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:12:54.790063 140704218514368 run.py:343] (train) step 8539: {'pi': 1.0, 'score': 1.0, 'loss': 0.006468524690717459, 'examples_seen': 273280, 'step': 8539}
+I0918 16:12:54.981905 140704218514368 run.py:357] (val) step 8539: {'pi': 1.0, 'score': 1.0, 'examples_seen': 273280, 'step': 8539}
+I0918 16:12:54.982440 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:13:06.970466 140704218514368 run.py:343] (train) step 8549: {'pi': 1.0, 'score': 1.0, 'loss': 0.008246604353189468, 'examples_seen': 273600, 'step': 8549}
+I0918 16:13:07.175182 140704218514368 run.py:357] (val) step 8549: {'pi': 0.98046875, 'score': 0.98046875, 'examples_seen': 273600, 'step': 8549}
+I0918 16:13:20.691655 140704218514368 run.py:343] (train) step 8559: {'pi': 1.0, 'score': 1.0, 'loss': 0.011280572973191738, 'examples_seen': 273920, 'step': 8559}
+I0918 16:13:20.894056 140704218514368 run.py:357] (val) step 8559: {'pi': 0.978515625, 'score': 0.978515625, 'examples_seen': 273920, 'step': 8559}
+I0918 16:13:32.827845 140704218514368 run.py:343] (train) step 8569: {'pi': 0.984375, 'score': 0.984375, 'loss': 0.01607879437506199, 'examples_seen': 274240, 'step': 8569}
+I0918 16:13:33.005130 140704218514368 run.py:357] (val) step 8569: {'pi': 0.978515625, 'score': 0.978515625, 'examples_seen': 274240, 'step': 8569}
+I0918 16:13:44.820137 140704218514368 run.py:343] (train) step 8579: {'pi': 0.984375, 'score': 0.984375, 'loss': 0.1505102962255478, 'examples_seen': 274560, 'step': 8579}
+I0918 16:13:44.997131 140704218514368 run.py:357] (val) step 8579: {'pi': 0.9453125, 'score': 0.9453125, 'examples_seen': 274560, 'step': 8579}
+I0918 16:13:57.045005 140704218514368 run.py:343] (train) step 8589: {'pi': 1.0, 'score': 1.0, 'loss': 0.012966238893568516, 'examples_seen': 274880, 'step': 8589}
+I0918 16:13:57.240500 140704218514368 run.py:357] (val) step 8589: {'pi': 0.98828125, 'score': 0.98828125, 'examples_seen': 274880, 'step': 8589}
+I0918 16:14:08.716434 140704218514368 run.py:343] (train) step 8599: {'pi': 1.0, 'score': 1.0, 'loss': 0.050803981721401215, 'examples_seen': 275200, 'step': 8599}
+I0918 16:14:08.907756 140704218514368 run.py:357] (val) step 8599: {'pi': 1.0, 'score': 1.0, 'examples_seen': 275200, 'step': 8599}
+I0918 16:14:08.908326 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:14:20.960728 140704218514368 run.py:343] (train) step 8609: {'pi': 1.0, 'score': 1.0, 'loss': 0.029978865757584572, 'examples_seen': 275520, 'step': 8609}
+I0918 16:14:21.150184 140704218514368 run.py:357] (val) step 8609: {'pi': 0.98828125, 'score': 0.98828125, 'examples_seen': 275520, 'step': 8609}
+I0918 16:14:32.648402 140704218514368 run.py:343] (train) step 8619: {'pi': 0.998046875, 'score': 0.998046875, 'loss': 0.014704510569572449, 'examples_seen': 275840, 'step': 8619}
+I0918 16:14:32.828079 140704218514368 run.py:357] (val) step 8619: {'pi': 0.984375, 'score': 0.984375, 'examples_seen': 275840, 'step': 8619}
+I0918 16:14:44.392051 140704218514368 run.py:343] (train) step 8629: {'pi': 1.0, 'score': 1.0, 'loss': 0.0060365526005625725, 'examples_seen': 276160, 'step': 8629}
+I0918 16:14:44.585211 140704218514368 run.py:357] (val) step 8629: {'pi': 1.0, 'score': 1.0, 'examples_seen': 276160, 'step': 8629}
+I0918 16:14:44.585807 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:14:57.315510 140704218514368 run.py:343] (train) step 8639: {'pi': 1.0, 'score': 1.0, 'loss': 0.009145565330982208, 'examples_seen': 276480, 'step': 8639}
+I0918 16:14:57.495834 140704218514368 run.py:357] (val) step 8639: {'pi': 1.0, 'score': 1.0, 'examples_seen': 276480, 'step': 8639}
+I0918 16:14:57.496507 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:15:09.448943 140704218514368 run.py:343] (train) step 8649: {'pi': 0.998046875, 'score': 0.998046875, 'loss': 0.011791583150625229, 'examples_seen': 276800, 'step': 8649}
+I0918 16:15:09.657309 140704218514368 run.py:357] (val) step 8649: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 276800, 'step': 8649}
+I0918 16:15:21.274516 140704218514368 run.py:343] (train) step 8659: {'pi': 1.0, 'score': 1.0, 'loss': 0.006186026148498058, 'examples_seen': 277120, 'step': 8659}
+I0918 16:15:21.477617 140704218514368 run.py:357] (val) step 8659: {'pi': 1.0, 'score': 1.0, 'examples_seen': 277120, 'step': 8659}
+I0918 16:15:21.478183 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:15:33.866345 140704218514368 run.py:343] (train) step 8669: {'pi': 1.0, 'score': 1.0, 'loss': 0.0057596564292907715, 'examples_seen': 277440, 'step': 8669}
+I0918 16:15:34.070000 140704218514368 run.py:357] (val) step 8669: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 277440, 'step': 8669}
+I0918 16:15:45.626946 140704218514368 run.py:343] (train) step 8679: {'pi': 1.0, 'score': 1.0, 'loss': 0.0077599938958883286, 'examples_seen': 277760, 'step': 8679}
+I0918 16:15:45.827942 140704218514368 run.py:357] (val) step 8679: {'pi': 1.0, 'score': 1.0, 'examples_seen': 277760, 'step': 8679}
+I0918 16:15:45.828474 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:15:58.083562 140704218514368 run.py:343] (train) step 8689: {'pi': 1.0, 'score': 1.0, 'loss': 0.005235475488007069, 'examples_seen': 278080, 'step': 8689}
+I0918 16:15:58.262820 140704218514368 run.py:357] (val) step 8689: {'pi': 1.0, 'score': 1.0, 'examples_seen': 278080, 'step': 8689}
+I0918 16:15:58.263380 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:16:10.401755 140704218514368 run.py:343] (train) step 8699: {'pi': 1.0, 'score': 1.0, 'loss': 0.004747265018522739, 'examples_seen': 278400, 'step': 8699}
+I0918 16:16:10.584645 140704218514368 run.py:357] (val) step 8699: {'pi': 1.0, 'score': 1.0, 'examples_seen': 278400, 'step': 8699}
+I0918 16:16:10.585187 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:16:22.344070 140704218514368 run.py:343] (train) step 8709: {'pi': 1.0, 'score': 1.0, 'loss': 0.006759793497622013, 'examples_seen': 278720, 'step': 8709}
+I0918 16:16:22.520530 140704218514368 run.py:357] (val) step 8709: {'pi': 1.0, 'score': 1.0, 'examples_seen': 278720, 'step': 8709}
+I0918 16:16:22.521070 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:16:34.349524 140704218514368 run.py:343] (train) step 8719: {'pi': 1.0, 'score': 1.0, 'loss': 0.005259844474494457, 'examples_seen': 279040, 'step': 8719}
+I0918 16:16:34.539997 140704218514368 run.py:357] (val) step 8719: {'pi': 1.0, 'score': 1.0, 'examples_seen': 279040, 'step': 8719}
+I0918 16:16:34.540841 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:16:46.248336 140704218514368 run.py:343] (train) step 8729: {'pi': 1.0, 'score': 1.0, 'loss': 0.0045204125344753265, 'examples_seen': 279360, 'step': 8729}
+I0918 16:16:46.418848 140704218514368 run.py:357] (val) step 8729: {'pi': 1.0, 'score': 1.0, 'examples_seen': 279360, 'step': 8729}
+I0918 16:16:46.419451 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:16:58.408724 140704218514368 run.py:343] (train) step 8739: {'pi': 1.0, 'score': 1.0, 'loss': 0.004404645413160324, 'examples_seen': 279680, 'step': 8739}
+I0918 16:16:58.623341 140704218514368 run.py:357] (val) step 8739: {'pi': 1.0, 'score': 1.0, 'examples_seen': 279680, 'step': 8739}
+I0918 16:16:58.623895 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:17:10.296585 140704218514368 run.py:343] (train) step 8749: {'pi': 1.0, 'score': 1.0, 'loss': 0.004250932484865189, 'examples_seen': 280000, 'step': 8749}
+I0918 16:17:10.467065 140704218514368 run.py:357] (val) step 8749: {'pi': 1.0, 'score': 1.0, 'examples_seen': 280000, 'step': 8749}
+I0918 16:17:10.467616 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:17:22.330757 140704218514368 run.py:343] (train) step 8759: {'pi': 1.0, 'score': 1.0, 'loss': 0.0044076708145439625, 'examples_seen': 280320, 'step': 8759}
+I0918 16:17:22.505030 140704218514368 run.py:357] (val) step 8759: {'pi': 1.0, 'score': 1.0, 'examples_seen': 280320, 'step': 8759}
+I0918 16:17:22.505571 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:17:33.938629 140704218514368 run.py:343] (train) step 8769: {'pi': 1.0, 'score': 1.0, 'loss': 0.0037038081791251898, 'examples_seen': 280640, 'step': 8769}
+I0918 16:17:34.128250 140704218514368 run.py:357] (val) step 8769: {'pi': 1.0, 'score': 1.0, 'examples_seen': 280640, 'step': 8769}
+I0918 16:17:34.128851 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:17:45.833592 140704218514368 run.py:343] (train) step 8779: {'pi': 1.0, 'score': 1.0, 'loss': 0.004759177565574646, 'examples_seen': 280960, 'step': 8779}
+I0918 16:17:46.007734 140704218514368 run.py:357] (val) step 8779: {'pi': 1.0, 'score': 1.0, 'examples_seen': 280960, 'step': 8779}
+I0918 16:17:46.008262 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:17:57.426718 140704218514368 run.py:343] (train) step 8789: {'pi': 1.0, 'score': 1.0, 'loss': 0.0032775981817394495, 'examples_seen': 281280, 'step': 8789}
+I0918 16:17:57.614000 140704218514368 run.py:357] (val) step 8789: {'pi': 1.0, 'score': 1.0, 'examples_seen': 281280, 'step': 8789}
+I0918 16:17:57.614622 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:18:09.167300 140704218514368 run.py:343] (train) step 8799: {'pi': 1.0, 'score': 1.0, 'loss': 0.00512269139289856, 'examples_seen': 281600, 'step': 8799}
+I0918 16:18:09.358899 140704218514368 run.py:357] (val) step 8799: {'pi': 1.0, 'score': 1.0, 'examples_seen': 281600, 'step': 8799}
+I0918 16:18:09.359462 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:18:21.134508 140704218514368 run.py:343] (train) step 8809: {'pi': 1.0, 'score': 1.0, 'loss': 0.003908023703843355, 'examples_seen': 281920, 'step': 8809}
+I0918 16:18:21.309407 140704218514368 run.py:357] (val) step 8809: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 281920, 'step': 8809}
+I0918 16:18:32.313821 140704218514368 run.py:343] (train) step 8819: {'pi': 1.0, 'score': 1.0, 'loss': 0.0050062802620232105, 'examples_seen': 282240, 'step': 8819}
+I0918 16:18:32.489519 140704218514368 run.py:357] (val) step 8819: {'pi': 0.978515625, 'score': 0.978515625, 'examples_seen': 282240, 'step': 8819}
+I0918 16:18:43.598457 140704218514368 run.py:343] (train) step 8829: {'pi': 1.0, 'score': 1.0, 'loss': 0.0044415900483727455, 'examples_seen': 282560, 'step': 8829}
+I0918 16:18:43.776155 140704218514368 run.py:357] (val) step 8829: {'pi': 1.0, 'score': 1.0, 'examples_seen': 282560, 'step': 8829}
+I0918 16:18:43.776721 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:18:55.578468 140704218514368 run.py:343] (train) step 8839: {'pi': 1.0, 'score': 1.0, 'loss': 0.0039368849247694016, 'examples_seen': 282880, 'step': 8839}
+I0918 16:18:55.753679 140704218514368 run.py:357] (val) step 8839: {'pi': 1.0, 'score': 1.0, 'examples_seen': 282880, 'step': 8839}
+I0918 16:18:55.754317 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:19:07.303189 140704218514368 run.py:343] (train) step 8849: {'pi': 1.0, 'score': 1.0, 'loss': 0.005190462805330753, 'examples_seen': 283200, 'step': 8849}
+I0918 16:19:07.515901 140704218514368 run.py:357] (val) step 8849: {'pi': 1.0, 'score': 1.0, 'examples_seen': 283200, 'step': 8849}
+I0918 16:19:07.516441 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:19:19.274352 140704218514368 run.py:343] (train) step 8859: {'pi': 1.0, 'score': 1.0, 'loss': 0.0044159796088933945, 'examples_seen': 283520, 'step': 8859}
+I0918 16:19:19.481399 140704218514368 run.py:357] (val) step 8859: {'pi': 1.0, 'score': 1.0, 'examples_seen': 283520, 'step': 8859}
+I0918 16:19:19.482007 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:19:31.014969 140704218514368 run.py:343] (train) step 8869: {'pi': 1.0, 'score': 1.0, 'loss': 0.004243491683155298, 'examples_seen': 283840, 'step': 8869}
+I0918 16:19:31.184560 140704218514368 run.py:357] (val) step 8869: {'pi': 1.0, 'score': 1.0, 'examples_seen': 283840, 'step': 8869}
+I0918 16:19:31.185097 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:19:43.055216 140704218514368 run.py:343] (train) step 8879: {'pi': 1.0, 'score': 1.0, 'loss': 0.0024062953889369965, 'examples_seen': 284160, 'step': 8879}
+I0918 16:19:43.226447 140704218514368 run.py:357] (val) step 8879: {'pi': 1.0, 'score': 1.0, 'examples_seen': 284160, 'step': 8879}
+I0918 16:19:43.226990 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:19:55.165138 140704218514368 run.py:343] (train) step 8889: {'pi': 1.0, 'score': 1.0, 'loss': 0.00389302521944046, 'examples_seen': 284480, 'step': 8889}
+I0918 16:19:55.339809 140704218514368 run.py:357] (val) step 8889: {'pi': 1.0, 'score': 1.0, 'examples_seen': 284480, 'step': 8889}
+I0918 16:19:55.340364 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:20:06.995542 140704218514368 run.py:343] (train) step 8899: {'pi': 0.998046875, 'score': 0.998046875, 'loss': 0.004199039191007614, 'examples_seen': 284800, 'step': 8899}
+I0918 16:20:07.186196 140704218514368 run.py:357] (val) step 8899: {'pi': 1.0, 'score': 1.0, 'examples_seen': 284800, 'step': 8899}
+I0918 16:20:07.186750 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:20:18.840246 140704218514368 run.py:343] (train) step 8909: {'pi': 1.0, 'score': 1.0, 'loss': 0.0030362047255039215, 'examples_seen': 285120, 'step': 8909}
+I0918 16:20:19.038354 140704218514368 run.py:357] (val) step 8909: {'pi': 1.0, 'score': 1.0, 'examples_seen': 285120, 'step': 8909}
+I0918 16:20:19.039290 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:20:30.691644 140704218514368 run.py:343] (train) step 8919: {'pi': 1.0, 'score': 1.0, 'loss': 0.0032732002437114716, 'examples_seen': 285440, 'step': 8919}
+I0918 16:20:30.871055 140704218514368 run.py:357] (val) step 8919: {'pi': 1.0, 'score': 1.0, 'examples_seen': 285440, 'step': 8919}
+I0918 16:20:30.871610 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:20:42.444072 140704218514368 run.py:343] (train) step 8929: {'pi': 1.0, 'score': 1.0, 'loss': 0.3597286641597748, 'examples_seen': 285760, 'step': 8929}
+I0918 16:20:42.622530 140704218514368 run.py:357] (val) step 8929: {'pi': 0.98046875, 'score': 0.98046875, 'examples_seen': 285760, 'step': 8929}
+I0918 16:20:53.808719 140704218514368 run.py:343] (train) step 8939: {'pi': 0.853515625, 'score': 0.853515625, 'loss': 0.18953940272331238, 'examples_seen': 286080, 'step': 8939}
+I0918 16:20:53.981055 140704218514368 run.py:357] (val) step 8939: {'pi': 0.732421875, 'score': 0.732421875, 'examples_seen': 286080, 'step': 8939}
+I0918 16:21:05.085911 140704218514368 run.py:343] (train) step 8949: {'pi': 0.904296875, 'score': 0.904296875, 'loss': 0.18806768953800201, 'examples_seen': 286400, 'step': 8949}
+I0918 16:21:05.257470 140704218514368 run.py:357] (val) step 8949: {'pi': 0.939453125, 'score': 0.939453125, 'examples_seen': 286400, 'step': 8949}
+I0918 16:21:16.463618 140704218514368 run.py:343] (train) step 8959: {'pi': 0.9765625, 'score': 0.9765625, 'loss': 0.05231616646051407, 'examples_seen': 286720, 'step': 8959}
+I0918 16:21:16.658210 140704218514368 run.py:357] (val) step 8959: {'pi': 0.96875, 'score': 0.96875, 'examples_seen': 286720, 'step': 8959}
+I0918 16:21:27.834386 140704218514368 run.py:343] (train) step 8969: {'pi': 0.9921875, 'score': 0.9921875, 'loss': 0.027209335938096046, 'examples_seen': 287040, 'step': 8969}
+I0918 16:21:28.019049 140704218514368 run.py:357] (val) step 8969: {'pi': 0.9609375, 'score': 0.9609375, 'examples_seen': 287040, 'step': 8969}
+I0918 16:21:39.530149 140704218514368 run.py:343] (train) step 8979: {'pi': 1.0, 'score': 1.0, 'loss': 0.015624063089489937, 'examples_seen': 287360, 'step': 8979}
+I0918 16:21:39.740857 140704218514368 run.py:357] (val) step 8979: {'pi': 0.9609375, 'score': 0.9609375, 'examples_seen': 287360, 'step': 8979}
+I0918 16:21:51.558511 140704218514368 run.py:343] (train) step 8989: {'pi': 0.984375, 'score': 0.984375, 'loss': 0.01020127721130848, 'examples_seen': 287680, 'step': 8989}
+I0918 16:21:51.759054 140704218514368 run.py:357] (val) step 8989: {'pi': 1.0, 'score': 1.0, 'examples_seen': 287680, 'step': 8989}
+I0918 16:21:51.759611 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:22:04.380699 140704218514368 run.py:343] (train) step 8999: {'pi': 1.0, 'score': 1.0, 'loss': 0.014006286859512329, 'examples_seen': 288000, 'step': 8999}
+I0918 16:22:04.565029 140704218514368 run.py:357] (val) step 8999: {'pi': 0.990234375, 'score': 0.990234375, 'examples_seen': 288000, 'step': 8999}
+I0918 16:22:16.308759 140704218514368 run.py:343] (train) step 9009: {'pi': 1.0, 'score': 1.0, 'loss': 0.006951726507395506, 'examples_seen': 288320, 'step': 9009}
+I0918 16:22:16.483923 140704218514368 run.py:357] (val) step 9009: {'pi': 0.99609375, 'score': 0.99609375, 'examples_seen': 288320, 'step': 9009}
+I0918 16:22:27.694706 140704218514368 run.py:343] (train) step 9019: {'pi': 1.0, 'score': 1.0, 'loss': 0.006543769035488367, 'examples_seen': 288640, 'step': 9019}
+I0918 16:22:27.869245 140704218514368 run.py:357] (val) step 9019: {'pi': 0.99609375, 'score': 0.99609375, 'examples_seen': 288640, 'step': 9019}
+I0918 16:22:38.949131 140704218514368 run.py:343] (train) step 9029: {'pi': 1.0, 'score': 1.0, 'loss': 0.007629664149135351, 'examples_seen': 288960, 'step': 9029}
+I0918 16:22:39.124207 140704218514368 run.py:357] (val) step 9029: {'pi': 1.0, 'score': 1.0, 'examples_seen': 288960, 'step': 9029}
+I0918 16:22:39.124770 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:22:50.641153 140704218514368 run.py:343] (train) step 9039: {'pi': 1.0, 'score': 1.0, 'loss': 0.006862990092486143, 'examples_seen': 289280, 'step': 9039}
+I0918 16:22:50.817429 140704218514368 run.py:357] (val) step 9039: {'pi': 1.0, 'score': 1.0, 'examples_seen': 289280, 'step': 9039}
+I0918 16:22:50.817977 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:23:02.313312 140704218514368 run.py:343] (train) step 9049: {'pi': 1.0, 'score': 1.0, 'loss': 0.007485417649149895, 'examples_seen': 289600, 'step': 9049}
+I0918 16:23:02.486350 140704218514368 run.py:357] (val) step 9049: {'pi': 0.99609375, 'score': 0.99609375, 'examples_seen': 289600, 'step': 9049}
+I0918 16:23:13.560268 140704218514368 run.py:343] (train) step 9059: {'pi': 1.0, 'score': 1.0, 'loss': 0.005962911061942577, 'examples_seen': 289920, 'step': 9059}
+I0918 16:23:13.733518 140704218514368 run.py:357] (val) step 9059: {'pi': 0.994140625, 'score': 0.994140625, 'examples_seen': 289920, 'step': 9059}
+I0918 16:23:24.618062 140704218514368 run.py:343] (train) step 9069: {'pi': 1.0, 'score': 1.0, 'loss': 0.005698776338249445, 'examples_seen': 290240, 'step': 9069}
+I0918 16:23:24.792160 140704218514368 run.py:357] (val) step 9069: {'pi': 0.990234375, 'score': 0.990234375, 'examples_seen': 290240, 'step': 9069}
+I0918 16:23:35.955769 140704218514368 run.py:343] (train) step 9079: {'pi': 1.0, 'score': 1.0, 'loss': 0.005713975988328457, 'examples_seen': 290560, 'step': 9079}
+I0918 16:23:36.130491 140704218514368 run.py:357] (val) step 9079: {'pi': 0.99609375, 'score': 0.99609375, 'examples_seen': 290560, 'step': 9079}
+I0918 16:23:47.191723 140704218514368 run.py:343] (train) step 9089: {'pi': 1.0, 'score': 1.0, 'loss': 0.005355734843760729, 'examples_seen': 290880, 'step': 9089}
+I0918 16:23:47.382876 140704218514368 run.py:357] (val) step 9089: {'pi': 1.0, 'score': 1.0, 'examples_seen': 290880, 'step': 9089}
+I0918 16:23:47.383430 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:23:59.185220 140704218514368 run.py:343] (train) step 9099: {'pi': 1.0, 'score': 1.0, 'loss': 0.009816640987992287, 'examples_seen': 291200, 'step': 9099}
+I0918 16:23:59.366137 140704218514368 run.py:357] (val) step 9099: {'pi': 0.990234375, 'score': 0.990234375, 'examples_seen': 291200, 'step': 9099}
+I0918 16:24:10.562691 140704218514368 run.py:343] (train) step 9109: {'pi': 1.0, 'score': 1.0, 'loss': 0.004857426043599844, 'examples_seen': 291520, 'step': 9109}
+I0918 16:24:10.767011 140704218514368 run.py:357] (val) step 9109: {'pi': 1.0, 'score': 1.0, 'examples_seen': 291520, 'step': 9109}
+I0918 16:24:10.767557 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:24:22.625522 140704218514368 run.py:343] (train) step 9119: {'pi': 1.0, 'score': 1.0, 'loss': 0.005047999322414398, 'examples_seen': 291840, 'step': 9119}
+I0918 16:24:22.814724 140704218514368 run.py:357] (val) step 9119: {'pi': 1.0, 'score': 1.0, 'examples_seen': 291840, 'step': 9119}
+I0918 16:24:22.815278 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:24:34.401664 140704218514368 run.py:343] (train) step 9129: {'pi': 1.0, 'score': 1.0, 'loss': 0.002956565236672759, 'examples_seen': 292160, 'step': 9129}
+I0918 16:24:34.606920 140704218514368 run.py:357] (val) step 9129: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 292160, 'step': 9129}
+I0918 16:24:45.800286 140704218514368 run.py:343] (train) step 9139: {'pi': 1.0, 'score': 1.0, 'loss': 0.004795912187546492, 'examples_seen': 292480, 'step': 9139}
+I0918 16:24:45.974407 140704218514368 run.py:357] (val) step 9139: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 292480, 'step': 9139}
+I0918 16:24:57.182200 140704218514368 run.py:343] (train) step 9149: {'pi': 1.0, 'score': 1.0, 'loss': 0.004304869566112757, 'examples_seen': 292800, 'step': 9149}
+I0918 16:24:57.354098 140704218514368 run.py:357] (val) step 9149: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 292800, 'step': 9149}
+I0918 16:25:08.526862 140704218514368 run.py:343] (train) step 9159: {'pi': 1.0, 'score': 1.0, 'loss': 0.00406220369040966, 'examples_seen': 293120, 'step': 9159}
+I0918 16:25:08.703716 140704218514368 run.py:357] (val) step 9159: {'pi': 0.98046875, 'score': 0.98046875, 'examples_seen': 293120, 'step': 9159}
+I0918 16:25:20.157521 140704218514368 run.py:343] (train) step 9169: {'pi': 1.0, 'score': 1.0, 'loss': 0.003309657797217369, 'examples_seen': 293440, 'step': 9169}
+I0918 16:25:20.334649 140704218514368 run.py:357] (val) step 9169: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 293440, 'step': 9169}
+I0918 16:25:32.483447 140704218514368 run.py:343] (train) step 9179: {'pi': 1.0, 'score': 1.0, 'loss': 0.005718516651540995, 'examples_seen': 293760, 'step': 9179}
+I0918 16:25:32.733541 140704218514368 run.py:357] (val) step 9179: {'pi': 1.0, 'score': 1.0, 'examples_seen': 293760, 'step': 9179}
+I0918 16:25:32.734304 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:25:45.140313 140704218514368 run.py:343] (train) step 9189: {'pi': 1.0, 'score': 1.0, 'loss': 0.003209812333807349, 'examples_seen': 294080, 'step': 9189}
+I0918 16:25:45.326011 140704218514368 run.py:357] (val) step 9189: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 294080, 'step': 9189}
+I0918 16:25:56.833284 140704218514368 run.py:343] (train) step 9199: {'pi': 1.0, 'score': 1.0, 'loss': 0.0034686981234699488, 'examples_seen': 294400, 'step': 9199}
+I0918 16:25:57.029025 140704218514368 run.py:357] (val) step 9199: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 294400, 'step': 9199}
+I0918 16:26:08.591788 140704218514368 run.py:343] (train) step 9209: {'pi': 1.0, 'score': 1.0, 'loss': 0.008802708238363266, 'examples_seen': 294720, 'step': 9209}
+I0918 16:26:08.766968 140704218514368 run.py:357] (val) step 9209: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 294720, 'step': 9209}
+I0918 16:26:20.083290 140704218514368 run.py:343] (train) step 9219: {'pi': 1.0, 'score': 1.0, 'loss': 0.005304636899381876, 'examples_seen': 295040, 'step': 9219}
+I0918 16:26:20.287207 140704218514368 run.py:357] (val) step 9219: {'pi': 1.0, 'score': 1.0, 'examples_seen': 295040, 'step': 9219}
+I0918 16:26:20.287768 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:26:32.096611 140704218514368 run.py:343] (train) step 9229: {'pi': 1.0, 'score': 1.0, 'loss': 0.0033129118382930756, 'examples_seen': 295360, 'step': 9229}
+I0918 16:26:32.264689 140704218514368 run.py:357] (val) step 9229: {'pi': 0.99609375, 'score': 0.99609375, 'examples_seen': 295360, 'step': 9229}
+I0918 16:26:43.371746 140704218514368 run.py:343] (train) step 9239: {'pi': 1.0, 'score': 1.0, 'loss': 0.0032239696010947227, 'examples_seen': 295680, 'step': 9239}
+I0918 16:26:43.547173 140704218514368 run.py:357] (val) step 9239: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 295680, 'step': 9239}
+I0918 16:26:54.723520 140704218514368 run.py:343] (train) step 9249: {'pi': 1.0, 'score': 1.0, 'loss': 0.0031634552869945765, 'examples_seen': 296000, 'step': 9249}
+I0918 16:26:54.925126 140704218514368 run.py:357] (val) step 9249: {'pi': 0.99609375, 'score': 0.99609375, 'examples_seen': 296000, 'step': 9249}
+I0918 16:27:06.256677 140704218514368 run.py:343] (train) step 9259: {'pi': 1.0, 'score': 1.0, 'loss': 0.003063438693061471, 'examples_seen': 296320, 'step': 9259}
+I0918 16:27:06.442882 140704218514368 run.py:357] (val) step 9259: {'pi': 1.0, 'score': 1.0, 'examples_seen': 296320, 'step': 9259}
+I0918 16:27:06.443482 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:27:18.105119 140704218514368 run.py:343] (train) step 9269: {'pi': 1.0, 'score': 1.0, 'loss': 0.02533748373389244, 'examples_seen': 296640, 'step': 9269}
+I0918 16:27:18.285219 140704218514368 run.py:357] (val) step 9269: {'pi': 0.99609375, 'score': 0.99609375, 'examples_seen': 296640, 'step': 9269}
+I0918 16:27:29.460910 140704218514368 run.py:343] (train) step 9279: {'pi': 1.0, 'score': 1.0, 'loss': 0.0038835133891552687, 'examples_seen': 296960, 'step': 9279}
+I0918 16:27:29.678755 140704218514368 run.py:357] (val) step 9279: {'pi': 0.9765625, 'score': 0.9765625, 'examples_seen': 296960, 'step': 9279}
+I0918 16:27:40.752772 140704218514368 run.py:343] (train) step 9289: {'pi': 1.0, 'score': 1.0, 'loss': 0.0031964441295713186, 'examples_seen': 297280, 'step': 9289}
+I0918 16:27:40.968904 140704218514368 run.py:357] (val) step 9289: {'pi': 0.978515625, 'score': 0.978515625, 'examples_seen': 297280, 'step': 9289}
+I0918 16:27:51.988714 140704218514368 run.py:343] (train) step 9299: {'pi': 1.0, 'score': 1.0, 'loss': 0.004757516086101532, 'examples_seen': 297600, 'step': 9299}
+I0918 16:27:52.162686 140704218514368 run.py:357] (val) step 9299: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 297600, 'step': 9299}
+I0918 16:28:03.390596 140704218514368 run.py:343] (train) step 9309: {'pi': 1.0, 'score': 1.0, 'loss': 0.0031653742771595716, 'examples_seen': 297920, 'step': 9309}
+I0918 16:28:03.604432 140704218514368 run.py:357] (val) step 9309: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 297920, 'step': 9309}
+I0918 16:28:15.033452 140704218514368 run.py:343] (train) step 9319: {'pi': 1.0, 'score': 1.0, 'loss': 0.00489970063790679, 'examples_seen': 298240, 'step': 9319}
+I0918 16:28:15.209845 140704218514368 run.py:357] (val) step 9319: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 298240, 'step': 9319}
+I0918 16:28:26.459364 140704218514368 run.py:343] (train) step 9329: {'pi': 1.0, 'score': 1.0, 'loss': 0.003869713516905904, 'examples_seen': 298560, 'step': 9329}
+I0918 16:28:26.642805 140704218514368 run.py:357] (val) step 9329: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 298560, 'step': 9329}
+I0918 16:28:38.196623 140704218514368 run.py:343] (train) step 9339: {'pi': 1.0, 'score': 1.0, 'loss': 0.003763174870982766, 'examples_seen': 298880, 'step': 9339}
+I0918 16:28:38.387129 140704218514368 run.py:357] (val) step 9339: {'pi': 1.0, 'score': 1.0, 'examples_seen': 298880, 'step': 9339}
+I0918 16:28:38.387692 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:28:50.878073 140704218514368 run.py:343] (train) step 9349: {'pi': 1.0, 'score': 1.0, 'loss': 0.003876767121255398, 'examples_seen': 299200, 'step': 9349}
+I0918 16:28:51.095871 140704218514368 run.py:357] (val) step 9349: {'pi': 1.0, 'score': 1.0, 'examples_seen': 299200, 'step': 9349}
+I0918 16:28:51.096431 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:29:03.695786 140704218514368 run.py:343] (train) step 9359: {'pi': 0.97265625, 'score': 0.97265625, 'loss': 0.005379094276577234, 'examples_seen': 299520, 'step': 9359}
+I0918 16:29:03.897821 140704218514368 run.py:357] (val) step 9359: {'pi': 1.0, 'score': 1.0, 'examples_seen': 299520, 'step': 9359}
+I0918 16:29:03.898410 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:29:15.887394 140704218514368 run.py:343] (train) step 9369: {'pi': 1.0, 'score': 1.0, 'loss': 0.0028440821915864944, 'examples_seen': 299840, 'step': 9369}
+I0918 16:29:16.108376 140704218514368 run.py:357] (val) step 9369: {'pi': 1.0, 'score': 1.0, 'examples_seen': 299840, 'step': 9369}
+I0918 16:29:16.108944 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:29:27.982655 140704218514368 run.py:343] (train) step 9379: {'pi': 1.0, 'score': 1.0, 'loss': 0.0018001067219302058, 'examples_seen': 300160, 'step': 9379}
+I0918 16:29:28.162428 140704218514368 run.py:357] (val) step 9379: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 300160, 'step': 9379}
+I0918 16:29:39.474097 140704218514368 run.py:343] (train) step 9389: {'pi': 1.0, 'score': 1.0, 'loss': 0.003251916030421853, 'examples_seen': 300480, 'step': 9389}
+I0918 16:29:39.664105 140704218514368 run.py:357] (val) step 9389: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 300480, 'step': 9389}
+I0918 16:29:50.963951 140704218514368 run.py:343] (train) step 9399: {'pi': 1.0, 'score': 1.0, 'loss': 0.002829508623108268, 'examples_seen': 300800, 'step': 9399}
+I0918 16:29:51.141292 140704218514368 run.py:357] (val) step 9399: {'pi': 1.0, 'score': 1.0, 'examples_seen': 300800, 'step': 9399}
+I0918 16:29:51.141833 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:30:03.288656 140704218514368 run.py:343] (train) step 9409: {'pi': 1.0, 'score': 1.0, 'loss': 0.0024401654954999685, 'examples_seen': 301120, 'step': 9409}
+I0918 16:30:03.489198 140704218514368 run.py:357] (val) step 9409: {'pi': 1.0, 'score': 1.0, 'examples_seen': 301120, 'step': 9409}
+I0918 16:30:03.489798 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:30:15.610741 140704218514368 run.py:343] (train) step 9419: {'pi': 1.0, 'score': 1.0, 'loss': 0.0022460997570306063, 'examples_seen': 301440, 'step': 9419}
+I0918 16:30:15.791218 140704218514368 run.py:357] (val) step 9419: {'pi': 1.0, 'score': 1.0, 'examples_seen': 301440, 'step': 9419}
+I0918 16:30:15.791762 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:30:27.785905 140704218514368 run.py:343] (train) step 9429: {'pi': 1.0, 'score': 1.0, 'loss': 0.004073634278029203, 'examples_seen': 301760, 'step': 9429}
+I0918 16:30:27.975760 140704218514368 run.py:357] (val) step 9429: {'pi': 1.0, 'score': 1.0, 'examples_seen': 301760, 'step': 9429}
+I0918 16:30:27.976307 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:30:39.676391 140704218514368 run.py:343] (train) step 9439: {'pi': 1.0, 'score': 1.0, 'loss': 0.0022631005849689245, 'examples_seen': 302080, 'step': 9439}
+I0918 16:30:39.851455 140704218514368 run.py:357] (val) step 9439: {'pi': 0.984375, 'score': 0.984375, 'examples_seen': 302080, 'step': 9439}
+I0918 16:30:50.965974 140704218514368 run.py:343] (train) step 9449: {'pi': 1.0, 'score': 1.0, 'loss': 0.0020999256521463394, 'examples_seen': 302400, 'step': 9449}
+I0918 16:30:51.181133 140704218514368 run.py:357] (val) step 9449: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 302400, 'step': 9449}
+I0918 16:31:02.659452 140704218514368 run.py:343] (train) step 9459: {'pi': 1.0, 'score': 1.0, 'loss': 0.0033673096913844347, 'examples_seen': 302720, 'step': 9459}
+I0918 16:31:02.857104 140704218514368 run.py:357] (val) step 9459: {'pi': 1.0, 'score': 1.0, 'examples_seen': 302720, 'step': 9459}
+I0918 16:31:02.857634 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:31:14.246605 140704218514368 run.py:343] (train) step 9469: {'pi': 1.0, 'score': 1.0, 'loss': 0.0029397238977253437, 'examples_seen': 303040, 'step': 9469}
+I0918 16:31:14.447525 140704218514368 run.py:357] (val) step 9469: {'pi': 1.0, 'score': 1.0, 'examples_seen': 303040, 'step': 9469}
+I0918 16:31:14.448083 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:31:25.924903 140704218514368 run.py:343] (train) step 9479: {'pi': 1.0, 'score': 1.0, 'loss': 0.00240500271320343, 'examples_seen': 303360, 'step': 9479}
+I0918 16:31:26.116600 140704218514368 run.py:357] (val) step 9479: {'pi': 1.0, 'score': 1.0, 'examples_seen': 303360, 'step': 9479}
+I0918 16:31:26.117238 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:31:37.363842 140704218514368 run.py:343] (train) step 9489: {'pi': 0.98828125, 'score': 0.98828125, 'loss': 0.002517425687983632, 'examples_seen': 303680, 'step': 9489}
+I0918 16:31:37.580607 140704218514368 run.py:357] (val) step 9489: {'pi': 1.0, 'score': 1.0, 'examples_seen': 303680, 'step': 9489}
+I0918 16:31:37.581170 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:31:49.121946 140704218514368 run.py:343] (train) step 9499: {'pi': 1.0, 'score': 1.0, 'loss': 0.0021843977738171816, 'examples_seen': 304000, 'step': 9499}
+I0918 16:31:49.294736 140704218514368 run.py:357] (val) step 9499: {'pi': 0.982421875, 'score': 0.982421875, 'examples_seen': 304000, 'step': 9499}
+I0918 16:32:00.621525 140704218514368 run.py:343] (train) step 9509: {'pi': 1.0, 'score': 1.0, 'loss': 0.0018698713975027204, 'examples_seen': 304320, 'step': 9509}
+I0918 16:32:00.791661 140704218514368 run.py:357] (val) step 9509: {'pi': 0.982421875, 'score': 0.982421875, 'examples_seen': 304320, 'step': 9509}
+I0918 16:32:12.057448 140704218514368 run.py:343] (train) step 9519: {'pi': 1.0, 'score': 1.0, 'loss': 0.001620186259970069, 'examples_seen': 304640, 'step': 9519}
+I0918 16:32:12.232774 140704218514368 run.py:357] (val) step 9519: {'pi': 1.0, 'score': 1.0, 'examples_seen': 304640, 'step': 9519}
+I0918 16:32:12.233365 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:32:24.228858 140704218514368 run.py:343] (train) step 9529: {'pi': 1.0, 'score': 1.0, 'loss': 0.0024432747159153223, 'examples_seen': 304960, 'step': 9529}
+I0918 16:32:24.407136 140704218514368 run.py:357] (val) step 9529: {'pi': 1.0, 'score': 1.0, 'examples_seen': 304960, 'step': 9529}
+I0918 16:32:24.407680 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:32:36.457572 140704218514368 run.py:343] (train) step 9539: {'pi': 1.0, 'score': 1.0, 'loss': 0.002119768178090453, 'examples_seen': 305280, 'step': 9539}
+I0918 16:32:36.674860 140704218514368 run.py:357] (val) step 9539: {'pi': 1.0, 'score': 1.0, 'examples_seen': 305280, 'step': 9539}
+I0918 16:32:36.675439 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:32:48.593320 140704218514368 run.py:343] (train) step 9549: {'pi': 1.0, 'score': 1.0, 'loss': 0.0024178021121770144, 'examples_seen': 305600, 'step': 9549}
+I0918 16:32:48.773502 140704218514368 run.py:357] (val) step 9549: {'pi': 1.0, 'score': 1.0, 'examples_seen': 305600, 'step': 9549}
+I0918 16:32:48.774056 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:33:00.730459 140704218514368 run.py:343] (train) step 9559: {'pi': 1.0, 'score': 1.0, 'loss': 0.0022233016788959503, 'examples_seen': 305920, 'step': 9559}
+I0918 16:33:00.938458 140704218514368 run.py:357] (val) step 9559: {'pi': 1.0, 'score': 1.0, 'examples_seen': 305920, 'step': 9559}
+I0918 16:33:00.939015 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:33:13.109308 140704218514368 run.py:343] (train) step 9569: {'pi': 1.0, 'score': 1.0, 'loss': 0.002834753831848502, 'examples_seen': 306240, 'step': 9569}
+I0918 16:33:13.311388 140704218514368 run.py:357] (val) step 9569: {'pi': 1.0, 'score': 1.0, 'examples_seen': 306240, 'step': 9569}
+I0918 16:33:13.311941 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:33:25.399195 140704218514368 run.py:343] (train) step 9579: {'pi': 1.0, 'score': 1.0, 'loss': 0.002292464254423976, 'examples_seen': 306560, 'step': 9579}
+I0918 16:33:25.603001 140704218514368 run.py:357] (val) step 9579: {'pi': 1.0, 'score': 1.0, 'examples_seen': 306560, 'step': 9579}
+I0918 16:33:25.603553 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:33:37.369028 140704218514368 run.py:343] (train) step 9589: {'pi': 1.0, 'score': 1.0, 'loss': 0.0020436332561075687, 'examples_seen': 306880, 'step': 9589}
+I0918 16:33:37.585847 140704218514368 run.py:357] (val) step 9589: {'pi': 1.0, 'score': 1.0, 'examples_seen': 306880, 'step': 9589}
+I0918 16:33:37.586394 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:33:49.388486 140704218514368 run.py:343] (train) step 9599: {'pi': 1.0, 'score': 1.0, 'loss': 0.0020707272924482822, 'examples_seen': 307200, 'step': 9599}
+I0918 16:33:49.569830 140704218514368 run.py:357] (val) step 9599: {'pi': 0.982421875, 'score': 0.982421875, 'examples_seen': 307200, 'step': 9599}
+I0918 16:34:00.749296 140704218514368 run.py:343] (train) step 9609: {'pi': 1.0, 'score': 1.0, 'loss': 0.0019923222716897726, 'examples_seen': 307520, 'step': 9609}
+I0918 16:34:00.924268 140704218514368 run.py:357] (val) step 9609: {'pi': 1.0, 'score': 1.0, 'examples_seen': 307520, 'step': 9609}
+I0918 16:34:00.924807 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:34:12.199693 140704218514368 run.py:343] (train) step 9619: {'pi': 1.0, 'score': 1.0, 'loss': 0.002121769590303302, 'examples_seen': 307840, 'step': 9619}
+I0918 16:34:12.394007 140704218514368 run.py:357] (val) step 9619: {'pi': 1.0, 'score': 1.0, 'examples_seen': 307840, 'step': 9619}
+I0918 16:34:12.394575 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:34:24.173308 140704218514368 run.py:343] (train) step 9629: {'pi': 1.0, 'score': 1.0, 'loss': 0.0014213011600077152, 'examples_seen': 308160, 'step': 9629}
+I0918 16:34:24.429589 140704218514368 run.py:357] (val) step 9629: {'pi': 1.0, 'score': 1.0, 'examples_seen': 308160, 'step': 9629}
+I0918 16:34:24.436204 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:34:36.455585 140704218514368 run.py:343] (train) step 9639: {'pi': 1.0, 'score': 1.0, 'loss': 0.0026581583078950644, 'examples_seen': 308480, 'step': 9639}
+I0918 16:34:36.663197 140704218514368 run.py:357] (val) step 9639: {'pi': 1.0, 'score': 1.0, 'examples_seen': 308480, 'step': 9639}
+I0918 16:34:36.663754 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:34:48.669177 140704218514368 run.py:343] (train) step 9649: {'pi': 1.0, 'score': 1.0, 'loss': 0.0033885412849485874, 'examples_seen': 308800, 'step': 9649}
+I0918 16:34:48.854873 140704218514368 run.py:357] (val) step 9649: {'pi': 1.0, 'score': 1.0, 'examples_seen': 308800, 'step': 9649}
+I0918 16:34:48.855433 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:35:01.071255 140704218514368 run.py:343] (train) step 9659: {'pi': 1.0, 'score': 1.0, 'loss': 0.001863985089585185, 'examples_seen': 309120, 'step': 9659}
+I0918 16:35:01.265742 140704218514368 run.py:357] (val) step 9659: {'pi': 1.0, 'score': 1.0, 'examples_seen': 309120, 'step': 9659}
+I0918 16:35:01.266304 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:35:12.995043 140704218514368 run.py:343] (train) step 9669: {'pi': 1.0, 'score': 1.0, 'loss': 0.0019126979168504477, 'examples_seen': 309440, 'step': 9669}
+I0918 16:35:13.169407 140704218514368 run.py:357] (val) step 9669: {'pi': 1.0, 'score': 1.0, 'examples_seen': 309440, 'step': 9669}
+I0918 16:35:13.169963 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:35:25.095671 140704218514368 run.py:343] (train) step 9679: {'pi': 1.0, 'score': 1.0, 'loss': 0.002630822593346238, 'examples_seen': 309760, 'step': 9679}
+I0918 16:35:25.268907 140704218514368 run.py:357] (val) step 9679: {'pi': 1.0, 'score': 1.0, 'examples_seen': 309760, 'step': 9679}
+I0918 16:35:25.269462 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:35:37.255509 140704218514368 run.py:343] (train) step 9689: {'pi': 1.0, 'score': 1.0, 'loss': 0.002002440858632326, 'examples_seen': 310080, 'step': 9689}
+I0918 16:35:37.453877 140704218514368 run.py:357] (val) step 9689: {'pi': 1.0, 'score': 1.0, 'examples_seen': 310080, 'step': 9689}
+I0918 16:35:37.454467 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:35:49.069268 140704218514368 run.py:343] (train) step 9699: {'pi': 1.0, 'score': 1.0, 'loss': 0.001844081562012434, 'examples_seen': 310400, 'step': 9699}
+I0918 16:35:49.253060 140704218514368 run.py:357] (val) step 9699: {'pi': 1.0, 'score': 1.0, 'examples_seen': 310400, 'step': 9699}
+I0918 16:35:49.253614 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:36:01.494016 140704218514368 run.py:343] (train) step 9709: {'pi': 1.0, 'score': 1.0, 'loss': 0.016755418851971626, 'examples_seen': 310720, 'step': 9709}
+I0918 16:36:01.698203 140704218514368 run.py:357] (val) step 9709: {'pi': 0.962890625, 'score': 0.962890625, 'examples_seen': 310720, 'step': 9709}
+I0918 16:36:13.097591 140704218514368 run.py:343] (train) step 9719: {'pi': 1.0, 'score': 1.0, 'loss': 0.005054124630987644, 'examples_seen': 311040, 'step': 9719}
+I0918 16:36:13.271021 140704218514368 run.py:357] (val) step 9719: {'pi': 1.0, 'score': 1.0, 'examples_seen': 311040, 'step': 9719}
+I0918 16:36:13.271568 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:36:25.143453 140704218514368 run.py:343] (train) step 9729: {'pi': 1.0, 'score': 1.0, 'loss': 0.004311796277761459, 'examples_seen': 311360, 'step': 9729}
+I0918 16:36:25.326403 140704218514368 run.py:357] (val) step 9729: {'pi': 0.998046875, 'score': 0.998046875, 'examples_seen': 311360, 'step': 9729}
+I0918 16:36:36.805930 140704218514368 run.py:343] (train) step 9739: {'pi': 1.0, 'score': 1.0, 'loss': 0.004093322902917862, 'examples_seen': 311680, 'step': 9739}
+I0918 16:36:36.975060 140704218514368 run.py:357] (val) step 9739: {'pi': 1.0, 'score': 1.0, 'examples_seen': 311680, 'step': 9739}
+I0918 16:36:36.975599 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:36:48.671269 140704218514368 run.py:343] (train) step 9749: {'pi': 1.0, 'score': 1.0, 'loss': 0.0026146648451685905, 'examples_seen': 312000, 'step': 9749}
+I0918 16:36:48.851766 140704218514368 run.py:357] (val) step 9749: {'pi': 0.98046875, 'score': 0.98046875, 'examples_seen': 312000, 'step': 9749}
+I0918 16:37:00.658620 140704218514368 run.py:343] (train) step 9759: {'pi': 1.0, 'score': 1.0, 'loss': 0.003252986818552017, 'examples_seen': 312320, 'step': 9759}
+I0918 16:37:00.847232 140704218514368 run.py:357] (val) step 9759: {'pi': 1.0, 'score': 1.0, 'examples_seen': 312320, 'step': 9759}
+I0918 16:37:00.847807 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:37:12.834600 140704218514368 run.py:343] (train) step 9769: {'pi': 1.0, 'score': 1.0, 'loss': 0.0025789800565689802, 'examples_seen': 312640, 'step': 9769}
+I0918 16:37:13.015171 140704218514368 run.py:357] (val) step 9769: {'pi': 1.0, 'score': 1.0, 'examples_seen': 312640, 'step': 9769}
+I0918 16:37:13.015824 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:37:24.551661 140704218514368 run.py:343] (train) step 9779: {'pi': 1.0, 'score': 1.0, 'loss': 0.002495312364771962, 'examples_seen': 312960, 'step': 9779}
+I0918 16:37:24.739038 140704218514368 run.py:357] (val) step 9779: {'pi': 0.958984375, 'score': 0.958984375, 'examples_seen': 312960, 'step': 9779}
+I0918 16:37:35.901425 140704218514368 run.py:343] (train) step 9789: {'pi': 1.0, 'score': 1.0, 'loss': 0.0015115593560039997, 'examples_seen': 313280, 'step': 9789}
+I0918 16:37:36.099405 140704218514368 run.py:357] (val) step 9789: {'pi': 0.962890625, 'score': 0.962890625, 'examples_seen': 313280, 'step': 9789}
+I0918 16:37:47.221499 140704218514368 run.py:343] (train) step 9799: {'pi': 1.0, 'score': 1.0, 'loss': 0.0019370614318177104, 'examples_seen': 313600, 'step': 9799}
+I0918 16:37:47.397571 140704218514368 run.py:357] (val) step 9799: {'pi': 1.0, 'score': 1.0, 'examples_seen': 313600, 'step': 9799}
+I0918 16:37:47.398126 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:37:59.054235 140704218514368 run.py:343] (train) step 9809: {'pi': 1.0, 'score': 1.0, 'loss': 0.001647111028432846, 'examples_seen': 313920, 'step': 9809}
+I0918 16:37:59.224973 140704218514368 run.py:357] (val) step 9809: {'pi': 1.0, 'score': 1.0, 'examples_seen': 313920, 'step': 9809}
+I0918 16:37:59.225529 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:38:10.775353 140704218514368 run.py:343] (train) step 9819: {'pi': 1.0, 'score': 1.0, 'loss': 0.002310200361534953, 'examples_seen': 314240, 'step': 9819}
+I0918 16:38:10.947864 140704218514368 run.py:357] (val) step 9819: {'pi': 1.0, 'score': 1.0, 'examples_seen': 314240, 'step': 9819}
+I0918 16:38:10.948416 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:38:22.702299 140704218514368 run.py:343] (train) step 9829: {'pi': 1.0, 'score': 1.0, 'loss': 0.0017844090471044183, 'examples_seen': 314560, 'step': 9829}
+I0918 16:38:22.908375 140704218514368 run.py:357] (val) step 9829: {'pi': 1.0, 'score': 1.0, 'examples_seen': 314560, 'step': 9829}
+I0918 16:38:22.908905 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:38:34.845407 140704218514368 run.py:343] (train) step 9839: {'pi': 1.0, 'score': 1.0, 'loss': 0.001595734036527574, 'examples_seen': 314880, 'step': 9839}
+I0918 16:38:35.030893 140704218514368 run.py:357] (val) step 9839: {'pi': 0.994140625, 'score': 0.994140625, 'examples_seen': 314880, 'step': 9839}
+I0918 16:38:46.922786 140704218514368 run.py:343] (train) step 9849: {'pi': 1.0, 'score': 1.0, 'loss': 0.0021480971481651068, 'examples_seen': 315200, 'step': 9849}
+I0918 16:38:47.113871 140704218514368 run.py:357] (val) step 9849: {'pi': 1.0, 'score': 1.0, 'examples_seen': 315200, 'step': 9849}
+I0918 16:38:47.114446 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:38:59.427807 140704218514368 run.py:343] (train) step 9859: {'pi': 1.0, 'score': 1.0, 'loss': 0.0027990960516035557, 'examples_seen': 315520, 'step': 9859}
+I0918 16:38:59.630211 140704218514368 run.py:357] (val) step 9859: {'pi': 1.0, 'score': 1.0, 'examples_seen': 315520, 'step': 9859}
+I0918 16:38:59.630815 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:39:11.823142 140704218514368 run.py:343] (train) step 9869: {'pi': 1.0, 'score': 1.0, 'loss': 0.002206762321293354, 'examples_seen': 315840, 'step': 9869}
+I0918 16:39:12.050674 140704218514368 run.py:357] (val) step 9869: {'pi': 1.0, 'score': 1.0, 'examples_seen': 315840, 'step': 9869}
+I0918 16:39:12.051257 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:39:24.019995 140704218514368 run.py:343] (train) step 9879: {'pi': 0.888671875, 'score': 0.888671875, 'loss': 0.0440155491232872, 'examples_seen': 316160, 'step': 9879}
+I0918 16:39:24.201886 140704218514368 run.py:357] (val) step 9879: {'pi': 0.853515625, 'score': 0.853515625, 'examples_seen': 316160, 'step': 9879}
+I0918 16:39:35.375094 140704218514368 run.py:343] (train) step 9889: {'pi': 0.98046875, 'score': 0.98046875, 'loss': 0.06819675862789154, 'examples_seen': 316480, 'step': 9889}
+I0918 16:39:35.553560 140704218514368 run.py:357] (val) step 9889: {'pi': 0.93359375, 'score': 0.93359375, 'examples_seen': 316480, 'step': 9889}
+I0918 16:39:46.821678 140704218514368 run.py:343] (train) step 9899: {'pi': 0.986328125, 'score': 0.986328125, 'loss': 0.061884716153144836, 'examples_seen': 316800, 'step': 9899}
+I0918 16:39:47.010002 140704218514368 run.py:357] (val) step 9899: {'pi': 0.978515625, 'score': 0.978515625, 'examples_seen': 316800, 'step': 9899}
+I0918 16:39:58.534404 140704218514368 run.py:343] (train) step 9909: {'pi': 1.0, 'score': 1.0, 'loss': 0.01547530759125948, 'examples_seen': 317120, 'step': 9909}
+I0918 16:39:58.744492 140704218514368 run.py:357] (val) step 9909: {'pi': 0.93359375, 'score': 0.93359375, 'examples_seen': 317120, 'step': 9909}
+I0918 16:40:09.832030 140704218514368 run.py:343] (train) step 9919: {'pi': 1.0, 'score': 1.0, 'loss': 0.008021787740290165, 'examples_seen': 317440, 'step': 9919}
+I0918 16:40:10.010181 140704218514368 run.py:357] (val) step 9919: {'pi': 0.974609375, 'score': 0.974609375, 'examples_seen': 317440, 'step': 9919}
+I0918 16:40:21.320968 140704218514368 run.py:343] (train) step 9929: {'pi': 1.0, 'score': 1.0, 'loss': 0.008344965055584908, 'examples_seen': 317760, 'step': 9929}
+I0918 16:40:21.493434 140704218514368 run.py:357] (val) step 9929: {'pi': 0.98828125, 'score': 0.98828125, 'examples_seen': 317760, 'step': 9929}
+I0918 16:40:32.778378 140704218514368 run.py:343] (train) step 9939: {'pi': 1.0, 'score': 1.0, 'loss': 0.0042778123170137405, 'examples_seen': 318080, 'step': 9939}
+I0918 16:40:32.972003 140704218514368 run.py:357] (val) step 9939: {'pi': 0.974609375, 'score': 0.974609375, 'examples_seen': 318080, 'step': 9939}
+I0918 16:40:44.594575 140704218514368 run.py:343] (train) step 9949: {'pi': 1.0, 'score': 1.0, 'loss': 0.003695065388455987, 'examples_seen': 318400, 'step': 9949}
+I0918 16:40:44.812634 140704218514368 run.py:357] (val) step 9949: {'pi': 1.0, 'score': 1.0, 'examples_seen': 318400, 'step': 9949}
+I0918 16:40:44.813192 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:40:57.041964 140704218514368 run.py:343] (train) step 9959: {'pi': 1.0, 'score': 1.0, 'loss': 0.004722692538052797, 'examples_seen': 318720, 'step': 9959}
+I0918 16:40:57.222782 140704218514368 run.py:357] (val) step 9959: {'pi': 1.0, 'score': 1.0, 'examples_seen': 318720, 'step': 9959}
+I0918 16:40:57.223344 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:41:09.214317 140704218514368 run.py:343] (train) step 9969: {'pi': 1.0, 'score': 1.0, 'loss': 0.003084938507527113, 'examples_seen': 319040, 'step': 9969}
+I0918 16:41:09.393102 140704218514368 run.py:357] (val) step 9969: {'pi': 1.0, 'score': 1.0, 'examples_seen': 319040, 'step': 9969}
+I0918 16:41:09.393655 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:41:21.199427 140704218514368 run.py:343] (train) step 9979: {'pi': 1.0, 'score': 1.0, 'loss': 0.0022446622606366873, 'examples_seen': 319360, 'step': 9979}
+I0918 16:41:21.395061 140704218514368 run.py:357] (val) step 9979: {'pi': 1.0, 'score': 1.0, 'examples_seen': 319360, 'step': 9979}
+I0918 16:41:21.395624 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:41:33.379271 140704218514368 run.py:343] (train) step 9989: {'pi': 1.0, 'score': 1.0, 'loss': 0.002294309437274933, 'examples_seen': 319680, 'step': 9989}
+I0918 16:41:33.560207 140704218514368 run.py:357] (val) step 9989: {'pi': 1.0, 'score': 1.0, 'examples_seen': 319680, 'step': 9989}
+I0918 16:41:33.560772 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:41:45.566889 140704218514368 run.py:343] (train) step 9999: {'pi': 1.0, 'score': 1.0, 'loss': 0.0022408226504921913, 'examples_seen': 320000, 'step': 9999}
+I0918 16:41:45.757040 140704218514368 run.py:357] (val) step 9999: {'pi': 1.0, 'score': 1.0, 'examples_seen': 320000, 'step': 9999}
+I0918 16:41:45.757583 140704218514368 run.py:384] Saving new checkpoint (same score)...
+I0918 16:41:45.915069 140704218514368 run.py:431] Restoring best model from checkpoint...
+I0918 16:42:13.968605 140704218514368 run.py:443] (test first best) step 10000: {'pi': 0.12158203125, 'score': 0.12158203125, 'examples_seen': 320000, 'step': 9999}
+I0918 16:42:16.814548 140704218514368 run.py:462] (test last best) step 10000: {'pi': 0.123046875, 'score': 0.123046875, 'examples_seen': 320000, 'step': 9999}
