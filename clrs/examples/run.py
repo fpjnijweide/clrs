@@ -83,7 +83,7 @@ flags.DEFINE_enum('hint_mode', 'encoded_decoded_nodiff',
 
 flags.DEFINE_boolean('use_ln', True,
                      'Whether to use layer normalisation in the processor.')
-flags.DEFINE_string('use_memory', "NTM",
+flags.DEFINE_string('use_memory', "all",
                     'Whether to insert memory after message passing.')
 flags.DEFINE_enum(
     'processor_type', 'gatv2',
@@ -521,6 +521,11 @@ def main_wrapper(unused_argv):
     # model="gatv2"
     # memory_size=20
 
+    if FLAGS.use_memory=="all":
+        memories = ["NTM","DeQue"]
+    else:
+        memories = [FLAGS.use_memory]
+
     # FLAGS.memory_size = 100
     # for model in ["gatv2", "mpnn"]:
     if FLAGS.algorithm == "":
@@ -533,64 +538,66 @@ def main_wrapper(unused_argv):
     else:
         algo_list = [FLAGS.algorithm]
 
-    for algo in algo_list:
-        FLAGS.algorithm = algo
+    for memory in memories:
+        FLAGS.use_memory = memory
+        for algo in algo_list:
+            FLAGS.algorithm = algo
 
-        with open("results.txt") as myfile:
-            txt = myfile.read()
-        print("\n\n")
-        print(txt)
-        print("\n\n")
-        if (not (f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt)) and (not (
-                f"{algo}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt)):
+            with open("results.txt") as myfile:
+                txt = myfile.read()
+            print("\n\n")
+            print(txt)
+            print("\n\n")
+            if (not (f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt)) and (not (
+                    f"{algo}_best_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}" in txt)):
 
-            print("Checking if pkl file exists...")
-            pkl_string = f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl"
+                print("Checking if pkl file exists...")
+                pkl_string = f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_best.pkl"
 
-            file_exists = os.path.exists(pkl_string)
-            if file_exists:
-                print("pkl file exists!")
-                log_files = sorted([filename for filename in os.listdir('.') if filename.startswith(f"logs_{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}")])
-                log_filename=log_files[-1]
-                print(f"Reading {log_filename}")
-                with open(log_filename, 'r') as f:
-                    contents = f.readlines()
-                targets = [line_index for (line_index,line) in enumerate(contents) if "Saving new checkpoint..." in line]
-                final_target = targets[-1]
-                line_before_best_target = final_target-1
-                relevant_line = contents[line_before_best_target]
-                print(relevant_line)
+                file_exists = os.path.exists(pkl_string)
+                if file_exists:
+                    print("pkl file exists!")
+                    log_files = sorted([filename for filename in os.listdir('.') if filename.startswith(f"logs_{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}")])
+                    log_filename=log_files[-1]
+                    print(f"Reading {log_filename}")
+                    with open(log_filename, 'r') as f:
+                        contents = f.readlines()
+                    targets = [line_index for (line_index,line) in enumerate(contents) if "Saving new checkpoint..." in line]
+                    final_target = targets[-1]
+                    line_before_best_target = final_target-1
+                    relevant_line = contents[line_before_best_target]
+                    print(relevant_line)
 
-                p = re.compile("step ([0-9]*)")
-                resulting_step = p.findall(relevant_line)[0]
+                    p = re.compile("step ([0-9]*)")
+                    resulting_step = p.findall(relevant_line)[0]
 
-                print(f"Skipping to step {resulting_step}")
-                FLAGS.skip_to_step=int(resulting_step)
+                    print(f"Skipping to step {resulting_step}")
+                    FLAGS.skip_to_step=int(resulting_step)
 
-                targets_same_score = [line_index for (line_index, line) in enumerate(contents) if
-                           "Saving new checkpoint (same score)..." in line]
-                pkl_string_last = f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_last.pkl"
+                    targets_same_score = [line_index for (line_index, line) in enumerate(contents) if
+                               "Saving new checkpoint (same score)..." in line]
+                    pkl_string_last = f"{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}_last.pkl"
 
-                file_exists_last = os.path.exists(pkl_string_last)
-                if len(targets_same_score)>0 and file_exists_last:
-                    last_target = targets_same_score[-1]
-                    line_before_last_target = last_target-1
-                    if line_before_last_target>line_before_best_target:
-                        relevant_line = contents[line_before_last_target]
-                        print(relevant_line)
+                    file_exists_last = os.path.exists(pkl_string_last)
+                    if len(targets_same_score)>0 and file_exists_last:
+                        last_target = targets_same_score[-1]
+                        line_before_last_target = last_target-1
+                        if line_before_last_target>line_before_best_target:
+                            relevant_line = contents[line_before_last_target]
+                            print(relevant_line)
 
-                        p = re.compile("step ([0-9]*)")
-                        resulting_step = p.findall(relevant_line)[0]
+                            p = re.compile("step ([0-9]*)")
+                            resulting_step = p.findall(relevant_line)[0]
 
-                        print(f"Skipping to step {resulting_step} instead, as this had the same val score")
-                        FLAGS.skip_to_step = int(resulting_step)
-                        FLAGS.load_from_last=True
+                            print(f"Skipping to step {resulting_step} instead, as this had the same val score")
+                            FLAGS.skip_to_step = int(resulting_step)
+                            FLAGS.load_from_last=True
 
-            print(
-                f"running with specs: {algo}, {FLAGS.use_memory}, {FLAGS.processor_type}, {FLAGS.memory_size}")
-            logging.get_absl_handler().use_absl_log_file(
-                f"logs_{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}.txt", "./")
-            main()
+                print(
+                    f"running with specs: {algo}, {FLAGS.use_memory}, {FLAGS.processor_type}, {FLAGS.memory_size}")
+                logging.get_absl_handler().use_absl_log_file(
+                    f"logs_{algo}_{FLAGS.processor_type}_{FLAGS.use_memory}_{FLAGS.memory_size}.txt", "./")
+                main()
 
 if __name__ == '__main__':
     app.run(main_wrapper)
