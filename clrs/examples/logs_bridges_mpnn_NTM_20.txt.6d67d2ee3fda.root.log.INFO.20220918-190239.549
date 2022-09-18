@@ -1,0 +1,11 @@
+I0918 19:02:39.917417 139892734265216 run.py:204] Using CLRS30 spec: {'train': {'num_samples': 1000, 'length': 16, 'seed': 1}, 'val': {'num_samples': 32, 'length': 16, 'seed': 2}, 'test': {'num_samples': 32, 'length': 64, 'seed': 3}}
+I0918 19:02:39.918231 139892734265216 run.py:188] Dataset found at /tmp/CLRS30/CLRS30_v1.0.0. Skipping download.
+I0918 19:02:42.983935 139892734265216 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/bridges_train/1.0.0
+I0918 19:02:42.986387 139892734265216 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/bridges_train/1.0.0)
+I0918 19:02:42.986732 139892734265216 logging_logger.py:45] Constructing tf.data.Dataset clrs_dataset for split train, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/bridges_train/1.0.0
+I0918 19:02:43.325319 139892734265216 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/bridges_val/1.0.0
+I0918 19:02:43.326962 139892734265216 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/bridges_val/1.0.0)
+I0918 19:02:43.327310 139892734265216 logging_logger.py:45] Constructing tf.data.Dataset clrs_dataset for split val, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/bridges_val/1.0.0
+I0918 19:02:44.957098 139892734265216 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/bridges_test/1.0.0
+I0918 19:02:44.958786 139892734265216 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/bridges_test/1.0.0)
+I0918 19:02:44.959062 139892734265216 logging_logger.py:45] Constructing tf.data.Dataset clrs_dataset for split test, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/bridges_test/1.0.0

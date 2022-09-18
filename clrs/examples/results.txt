@@ -8,3 +8,32 @@ dfs_gatv2_NTM_20_last.pkl: (test last best) step 10000: {'pi': 0.123046875, 'sco
 activity_selector_pgn_NTM_100_best.pkl: (test first best) step 10000: {'selected': 0.6893039345741272, 'score': 0.6893039345741272, 'examples_seen': 320000, 'step': 9999}
 articulation_points_mpnn_NTM_100_best.pkl: (test first best) step 10000: {'is_cut': 0.534453809261322, 'score': 0.534453809261322, 'examples_seen': 320000, 'step': 9999}
 articulation_points_mpnn_NTM_100_last.pkl: (test last best) step 10000: {'is_cut': 0.5484247207641602, 'score': 0.5484247207641602, 'examples_seen': 320000, 'step': 9999}
+bellman_ford_pgn_NTM_100_best.pkl: (test) step 10000: {'pi': 0.93408203125, 'score': 0.93408203125, 'examples_seen': 320000, 'step': 9999}
+bellman_ford_pgn_NTM_100_last.pkl: (test) step 10000: {'pi': 0.93701171875, 'score': 0.93701171875, 'examples_seen': 320000, 'step': 9999}
+lcs_length_gatv2_NTM_100_best.pkl: (test) step 10000: {'b': 0.560577392578125, 'score': 0.560577392578125, 'examples_seen': 320000, 'step': 9999}
+activity_selector_mpnn_NTM_100_best.pkl: (test) step 10000: {'selected': 0.8826815485954285, 'score': 0.8826815485954285, 'examples_seen': 320000, 'step': 9999}
+bfs_mpnn_NTM_100_best.pkl: (test) step 49: {'pi': 0.99072265625, 'score': 0.99072265625, 'examples_seen': 1600, 'step': 49}
+binary_search_pgn_NTM_100_best.pkl: (test) step 10000: {'return': 0.35888671875, 'score': 0.35888671875, 'examples_seen': 320000, 'step': 9999}
+bfs_mpnn_NTM_100_best.pkl: (test) step 10000: {'pi': 0.99072265625, 'score': 0.99072265625, 'examples_seen': 320000, 'step': 9999}
+bfs_mpnn_NTM_100_last.pkl: (test) step 10000: {'pi': 0.99853515625, 'score': 0.99853515625, 'examples_seen': 320000, 'step': 9999}
+bridges_mpnn_NTM_100_best.pkl: (test) step 1459: {'is_bridge': 0.7666667103767395, 'score': 0.7666667103767395, 'examples_seen': 46720, 'step': 1459}
+activity_selector_pgn_NTM_20_best.pkl: (test) step 10000: {'selected': 0.6507176756858826, 'score': 0.6507176756858826, 'examples_seen': 320000, 'step': 9999}
+activity_selector_mpnn_NTM_20_best.pkl: (test) step 10000: {'selected': 0.8544424176216125, 'score': 0.8544424176216125, 'examples_seen': 320000, 'step': 9999}
+dag_shortest_paths_pgn_NTM_100_best.pkl: (test) step 10000: {'pi': 0.9716796875, 'score': 0.9716796875, 'examples_seen': 320000, 'step': 9999}
+dag_shortest_paths_pgn_NTM_100_last.pkl: (test) step 10000: {'pi': 0.97509765625, 'score': 0.97509765625, 'examples_seen': 320000, 'step': 9999}
+bellman_ford_pgn_NTM_20_best.pkl: (test) step 10000: {'pi': 0.9248046875, 'score': 0.9248046875, 'examples_seen': 320000, 'step': 9999}
+bellman_ford_pgn_NTM_20_last.pkl: (test) step 10000: {'pi': 0.9326171875, 'score': 0.9326171875, 'examples_seen': 320000, 'step': 9999}
+bfs_mpnn_NTM_20_best.pkl: (test) step 10000: {'pi': 0.9814453125, 'score': 0.9814453125, 'examples_seen': 320000, 'step': 9999}
+bfs_mpnn_NTM_20_last.pkl: (test) step 10000: {'pi': 1.0, 'score': 1.0, 'examples_seen': 320000, 'step': 9999}
+dfs_gat_NTM_20_best.pkl: (test) step 10000: {'pi': 0.10595703125, 'score': 0.10595703125, 'examples_seen': 320000, 'step': 9999}
+bridges_mpnn_NTM_100_best.pkl: (test) step 10000: {'is_bridge': 0.7275842428207397, 'score': 0.7275842428207397, 'examples_seen': 320000, 'step': 9999}
+bridges_mpnn_NTM_100_last.pkl: (test) step 10000: {'is_bridge': 0.8156943917274475, 'score': 0.8156943917274475, 'examples_seen': 320000, 'step': 9999}
+bridges_mpnn_NTM_20_best.pkl: (test) step 1169: {'is_bridge': 0.7083764672279358, 'score': 0.7083764672279358, 'examples_seen': 37440, 'step': 1169}
+binary_search_pgn_NTM_20_best.pkl: (test) step 10000: {'return': 0.4013671875, 'score': 0.4013671875, 'examples_seen': 320000, 'step': 9999}
+find_maximum_subarray_kadane_pgn_NTM_100_best.pkl: (test) step 10000: {'end': 0.0751953125, 'start': 0.216796875, 'score': 0.14599609375, 'examples_seen': 320000, 'step': 9999}
+quickselect_gatv2_NTM_100_best.pkl: (test) step 10000: {'median': 0.017578125, 'score': 0.017578125, 'examples_seen': 320000, 'step': 9999}
+dijkstra_mpnn_NTM_100_best.pkl: (test) step 10000: {'pi': 0.92626953125, 'score': 0.92626953125, 'examples_seen': 320000, 'step': 9999}
+dijkstra_mpnn_NTM_100_last.pkl: (test) step 10000: {'pi': 0.92529296875, 'score': 0.92529296875, 'examples_seen': 320000, 'step': 9999}
+dag_shortest_paths_pgn_NTM_20_best.pkl: (test) step 6619: {'pi': 0.97705078125, 'score': 0.97705078125, 'examples_seen': 211840, 'step': 6619}
+task_scheduling_gatv2_NTM_100_best.pkl: (test) step 10000: {'selected': 0.8192161321640015, 'score': 0.8192161321640015, 'examples_seen': 320000, 'step': 9999}
+kmp_matcher_gat_NTM_20_best.pkl: (test) step 10000: {'match': 0.0244140625, 'score': 0.0244140625, 'examples_seen': 320000, 'step': 9999}
