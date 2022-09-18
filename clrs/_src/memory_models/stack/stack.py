@@ -40,13 +40,9 @@ class NeuralStackControllerInterface(NamedTuple):
     push_strengths: jnp.ndarray
     pop_strengths: jnp.ndarray
     write_values: jnp.ndarray
-    outputs: jnp.ndarray
-    state: jnp.ndarray
 
 
 class NeuralStackState(NamedTuple):
-    controller_state: Any
-    read_values: Any
     memory_values: Any
     read_strengths: Any
     write_strengths: Any
@@ -56,8 +52,8 @@ class NeuralStackCell(hk.RNNCore):
     """An RNN cell base class that can implement a stack or queue.
     """
 
-    def __init__(self, num_units, memory_size, embedding_size,
-                 num_read_heads=1, num_write_heads=1, reuse=None):
+    def __init__(self, memory_size, embedding_size,
+                 num_read_heads=1, num_write_heads=1,name=None):
         """Create a new NeuralStackCell.
 
         Args:
@@ -68,33 +64,38 @@ class NeuralStackCell(hk.RNNCore):
           num_write_heads: This should always be 1 for a regular stack.
           reuse: Whether to reuse the weights.
         """
-        super(NeuralStackCell, self).__init__(dtype=jnp.float32, _reuse=reuse)
-        self._num_units = num_units
+        super(NeuralStackCell, self).__init__(name=name)
         self._embedding_size = embedding_size
         self._memory_size = memory_size
         self._num_read_heads = num_read_heads
         self._num_write_heads = num_write_heads
 
-    # @property
-    # def state_size(self):
-    #     """The NeuralStackCell maintains a tuple of state values.
-    # 
-    #     Returns:
-    #       (controller_state.shape,
-    #        read_values.shape,
-    #        memory_values.shape,
-    #        read_strengths.shape,
-    #        write_strengths.shape)
-    #     """
-    #     return (jnp.TensorShape([self._num_units]),
-    #             jnp.TensorShape([self._num_read_heads, self._embedding_size]),
-    #             jnp.TensorShape([self._memory_size, self._embedding_size]),
-    #             jnp.TensorShape([1, self._memory_size, 1]),
-    #             jnp.TensorShape([self._num_write_heads, self._memory_size, 1]))
 
-    # @property
-    # def output_size(self):
-    #     return jnp.TensorShape([1, self._embedding_size])
+        self.read_nodes_amount = self._num_read_heads
+        self.write_nodes_amount = 2*self._num_write_heads
+        self.layers = [hk.Linear(output_size=2)] * self._num_write_heads
+
+    @property
+    def state_size(self):
+        """The NeuralStackCell maintains a tuple of state values.
+
+        Returns:
+          (
+           read_values.shape,
+           memory_values.shape,
+           read_strengths.shape,
+           write_strengths.shape)
+        """
+        return (
+                (self._num_read_heads, self._embedding_size),
+                (self._memory_size, self._embedding_size),
+                (1, self._memory_size, 1),
+                (self._num_write_heads, self._memory_size, 1)
+        )
+
+    @property
+    def output_size(self):
+        return (1, self._embedding_size)
 
     def initialize_write_strengths(self, batch_size):
         """Initialize write strengths to write to the first memory address.
@@ -123,14 +124,16 @@ class NeuralStackCell(hk.RNNCore):
         Returns:
           A new NeuralStackState tuple.
         """
-        parent_state = NeuralStackState(*super(NeuralStackCell, self).initial_state(
-            batch_size))
+        # read_values.shape,
+        # memory_values.shape,
+        # read_strengths.shape,
+        # write_strengths.shape)
         return NeuralStackState(
-            controller_state=parent_state.controller_state,
-            read_values=parent_state.read_values,
-            memory_values=parent_state.memory_values,
-            read_strengths=parent_state.read_strengths,
+            memory_values=jnp.zeros([batch_size,*self.state_size[1]]),
+            read_strengths=jnp.zeros([batch_size,*self.state_size[2]]),
             write_strengths=self.initialize_write_strengths(batch_size))
+
+
 
     def get_read_mask(self, read_head_index):
         """Creates a mask which allows us to attenuate subsequent read strengths.
@@ -311,33 +314,49 @@ class NeuralStackCell(hk.RNNCore):
     #         in zip(projected_outputs, self.get_controller_shape(batch_size))]
     #     return NeuralStackControllerInterface(*next_state)
 
-    def convert_inputs(self, rnn_output, state):
+    def prepare_memory_input(self, concatenated_ret,n):
         # TODO simply get push strengths, pop strengths from index
-        push_strengths = jax.nn.sigmoid(jnp.add(jnp.matmul(
-            rnn_output, self._push_proj), self._push_bias))
+        # TODO get proper return val here like NTM
 
-        pop_strengths = jax.nn.sigmoid(jnp.add(jnp.matmul(
-            rnn_output, self._pop_proj), self._pop_bias))
+        real_ret, _, write_ret = jnp.split(concatenated_ret, [n, n + self.read_nodes_amount], axis=1)
+        list_of_nodes_for_each_write_head = jnp.split(write_ret, self._num_write_heads, axis=1)
 
-        write_values = jnp.tanh(jnp.add(jnp.matmul(
-            rnn_output, self._value_proj), self._value_bias))
+        write_values = []
+        pop_strengths = []
+        push_strengths = []
+        for write_head_index, write_nodes_for_head in enumerate(list_of_nodes_for_each_write_head):
+            v_t,pre_dense_layer = jnp.split(write_nodes_for_head, 2, axis=1)
+            post_dense_layer = self.layers[write_head_index](pre_dense_layer)
+            d_t,u_t = jnp.split(post_dense_layer, 2, axis=2)
+            write_values.append(jnp.tanh(v_t.squeeze()))
+            pop_strengths.append(jax.nn.sigmoid(d_t))
+            push_strengths.append(jax.nn.sigmoid(u_t))
 
-        outputs = jnp.tanh(jnp.add(jnp.matmul(
-            rnn_output, self._output_proj), self._output_bias))
+        write_values = jnp.stack(write_values,axis=1)
+        pop_strengths = jnp.stack(pop_strengths,axis=1)
+        push_strengths = jnp.stack(push_strengths,axis=1)
+
+        #         # push_strengths,
+        #         [batch_size, self._num_write_heads, 1, 1],
+        #         # pop_strengths
+        #         [batch_size, self._num_write_heads, 1, 1],
+        #         # write_values
+        #         [batch_size, self._num_write_heads, self._embedding_size],
+
 
         # Reshape all the outputs according to the shapes specified by
         # get_controller_shape()
         projected_outputs = [push_strengths,
                              pop_strengths,
-                             write_values,
-                             outputs,
-                             state]
+                             write_values
+                             ]
+        memory_input = NeuralStackControllerInterface(*projected_outputs)
         # next_state = [
         #     jnp.reshape(output, shape=output_shape) for output, output_shape
         #     in zip(projected_outputs, self.get_controller_shape(batch_size))]
-        return NeuralStackControllerInterface(*projected_outputs)
+        return memory_input, real_ret
 
-    def __call__(self, inputs, prev_state):
+    def __call__(self, controller_output: NeuralStackControllerInterface, prev_state: NeuralStackState):
         """Evaluates one timestep of the current neural stack cell.
 
         See section 3.4 of Grefenstette et al., 2015.
@@ -350,14 +369,13 @@ class NeuralStackCell(hk.RNNCore):
         Returns:
           A tuple of the output of the stack as well as the new NeuralStackState.
         """
-        batch_size = jnp.shape(inputs)[0]
+        # batch_size = jnp.shape(inputs)[0]
 
         # Call the controller and get controller interface values.
         # with jnp.control_dependencies([prev_state.read_strengths]):
         #     controller_output = self.call_controller(
         #         inputs, prev_state.read_values, prev_state.controller_state,
         #         batch_size)
-        controller_output = self.convert_inputs(inputs, prev_state)
 
         # Always write input values to memory regardless of push strength.
         # See Equation-1 in Grefenstette et al., 2015.
@@ -391,7 +409,7 @@ class NeuralStackCell(hk.RNNCore):
         # of read weights.
         new_read_strengths += jnp.sum(
             controller_output.push_strengths * prev_state.write_strengths,
-            axis=1, keep_dims=True)
+            axis=1, keepdims=True)
 
         # Calculate the "top" value of the stack by looking at read strengths.
         # See Equation-3 in Grefenstette et al., 2015.
@@ -421,91 +439,90 @@ class NeuralStackCell(hk.RNNCore):
             for h, write_strength in enumerate(write_strengths_by_head)
         ], axis=1)
 
-        return (controller_output.outputs, NeuralStackState(
-            controller_state=controller_output.state,
-            read_values=new_read_values,
+        # TODO define new_read_node_fts
+        return (new_read_values, NeuralStackState(
             memory_values=new_memory_values,
             read_strengths=new_read_strengths,
             write_strengths=new_write_strengths))
 
 
-class NeuralStackModel(hk.Module):
-    """An encoder-decoder T2TModel that uses NeuralStackCells.
-    """
-
-    def __init__(self):
-        super().__init__()
-        self._hparams = neural_stack()
-
-    def cell(self, hidden_size):
-        """Build an RNN cell.
-
-        This is exposed as its own function so that it can be overridden to provide
-        different types of RNN cells.
-
-        Args:
-          hidden_size: The hidden size of the cell.
-
-        Returns:
-          A new RNNCell with the given hidden size.
-        """
-        return NeuralStackCell(hidden_size,
-                               self._hparams.memory_size,
-                               self._hparams.embedding_size)
-
-    # def _rnn(self, inputs, name, initial_state=None, sequence_length=None):
-    #     """A helper method to build jax.nn.dynamic_rnn.
-    #
-    #     Args:
-    #       inputs: The inputs to the RNN. A tensor of shape
-    #               [batch_size, max_seq_length, embedding_size]
-    #       name: A namespace for the RNN.
-    #       initial_state: An optional initial state for the RNN.
-    #       sequence_length: An optional sequence length for the RNN.
-    #
-    #     Returns:
-    #       A jax.nn.dynamic_rnn operator.
-    #     """
-    #     layers = [self.cell(layer_size)
-    #               for layer_size in self._hparams.controller_layer_sizes]
-    #     with jnp.variable_scope(name):
-    #         return jax.nn.dynamic_rnn(
-    #             contrib.rnn().MultiRNNCell(layers),
-    #             inputs,
-    #             initial_state=initial_state,
-    #             sequence_length=sequence_length,
-    #             dtype=jnp.float32,
-    #             time_major=False)
-
-    # def body(self, features):
-    #     """Build the main body of the model.
-    #
-    #     Args:
-    #       features: A dict of "inputs" and "targets" which have already been passed
-    #         through an embedding layer. Inputs should have shape
-    #         [batch_size, max_seq_length, 1, embedding_size]. Targets should have
-    #         shape [batch_size, max_seq_length, 1, 1]
-    #
-    #     Returns:
-    #       The logits which get passed to the top of the model for inference.
-    #       A tensor of shape [batch_size, seq_length, 1, embedding_size]
-    #     """
-    #     inputs = features.get("inputs")
-    #     targets = features["targets"]
-    #
-    #     if inputs is not None:
-    #         inputs = common_layers.flatten4d3d(inputs)
-    #         _, final_encoder_state = self._rnn(jnp.reverse(inputs, axis=[1]),
-    #                                            "encoder")
-    #     else:
-    #         final_encoder_state = None
-    #
-    #     shifted_targets = common_layers.shift_right(targets)
-    #     decoder_outputs, _ = self._rnn(
-    #         common_layers.flatten4d3d(shifted_targets),
-    #         "decoder",
-    #         initial_state=final_encoder_state)
-    #     return decoder_outputs
+# class NeuralStackModel(hk.Module):
+#     """An encoder-decoder T2TModel that uses NeuralStackCells.
+#     """
+#
+#     def __init__(self):
+#         super().__init__()
+#         self._hparams = neural_stack()
+#
+#     def cell(self, hidden_size):
+#         """Build an RNN cell.
+#
+#         This is exposed as its own function so that it can be overridden to provide
+#         different types of RNN cells.
+#
+#         Args:
+#           hidden_size: The hidden size of the cell.
+#
+#         Returns:
+#           A new RNNCell with the given hidden size.
+#         """
+#         return NeuralStackCell(hidden_size,
+#                                self._hparams.memory_size,
+#                                self._hparams.embedding_size)
+#
+#     # def _rnn(self, inputs, name, initial_state=None, sequence_length=None):
+#     #     """A helper method to build jax.nn.dynamic_rnn.
+#     #
+#     #     Args:
+#     #       inputs: The inputs to the RNN. A tensor of shape
+#     #               [batch_size, max_seq_length, embedding_size]
+#     #       name: A namespace for the RNN.
+#     #       initial_state: An optional initial state for the RNN.
+#     #       sequence_length: An optional sequence length for the RNN.
+#     #
+#     #     Returns:
+#     #       A jax.nn.dynamic_rnn operator.
+#     #     """
+#     #     layers = [self.cell(layer_size)
+#     #               for layer_size in self._hparams.controller_layer_sizes]
+#     #     with jnp.variable_scope(name):
+#     #         return jax.nn.dynamic_rnn(
+#     #             contrib.rnn().MultiRNNCell(layers),
+#     #             inputs,
+#     #             initial_state=initial_state,
+#     #             sequence_length=sequence_length,
+#     #             dtype=jnp.float32,
+#     #             time_major=False)
+#
+#     # def body(self, features):
+#     #     """Build the main body of the model.
+#     #
+#     #     Args:
+#     #       features: A dict of "inputs" and "targets" which have already been passed
+#     #         through an embedding layer. Inputs should have shape
+#     #         [batch_size, max_seq_length, 1, embedding_size]. Targets should have
+#     #         shape [batch_size, max_seq_length, 1, 1]
+#     #
+#     #     Returns:
+#     #       The logits which get passed to the top of the model for inference.
+#     #       A tensor of shape [batch_size, seq_length, 1, embedding_size]
+#     #     """
+#     #     inputs = features.get("inputs")
+#     #     targets = features["targets"]
+#     #
+#     #     if inputs is not None:
+#     #         inputs = common_layers.flatten4d3d(inputs)
+#     #         _, final_encoder_state = self._rnn(jnp.reverse(inputs, axis=[1]),
+#     #                                            "encoder")
+#     #     else:
+#     #         final_encoder_state = None
+#     #
+#     #     shifted_targets = common_layers.shift_right(targets)
+#     #     decoder_outputs, _ = self._rnn(
+#     #         common_layers.flatten4d3d(shifted_targets),
+#     #         "decoder",
+#     #         initial_state=final_encoder_state)
+#     #     return decoder_outputs
 
 
 # class NeuralQueueCell(NeuralStackCell):
@@ -560,20 +577,20 @@ def mask_pos_gt(source_length, target_length):
                                      new_dtype=jnp.float32), axis=0)
 
 
-class NeuralDequeCell(NeuralStackCell):
+class NeuralDeQueCell(NeuralStackCell):
     """An subclass of the NeuralStackCell which reads/writes in both directions.
 
     See section 3.3 of Grefenstette et al., 2015.
     """
 
-    def __init__(self, num_units, memory_size, embedding_size, reuse=None):
+    def __init__(self, memory_size, embedding_size, name: Optional[str] = None):
         # Override constructor to set 2 read/write heads.
-        super(NeuralDequeCell, self).__init__(num_units,
+        super(NeuralDeQueCell, self).__init__(
                                               memory_size,
                                               embedding_size,
                                               num_read_heads=2,
                                               num_write_heads=2,
-                                              reuse=reuse)
+                                              name=name)
 
     def get_read_mask(self, read_head_index):
         if read_head_index == 0:
@@ -626,26 +643,26 @@ class NeuralDequeCell(NeuralStackCell):
             ], axis=1), axis=3)
 
 
-class NeuralDequeModel(NeuralStackModel):
-    """Subclass of NeuralStackModel which implements a double-ended queue.
-    """
-
-    def __init__(self):
-        super().__init__()
-        self._hparams = neural_deque()
-
-    def cell(self, hidden_size):
-        """Build a NeuralDequeCell instead of a NeuralStackCell.
-
-        Args:
-          hidden_size: The hidden size of the cell.
-
-        Returns:
-          A new NeuralDequeCell with the given hidden size.
-        """
-        return NeuralDequeCell(hidden_size,
-                               self._hparams.memory_size,
-                               self._hparams.embedding_size)
+# class NeuralDequeModel(NeuralStackModel):
+#     """Subclass of NeuralStackModel which implements a double-ended queue.
+#     """
+#
+#     def __init__(self):
+#         super().__init__()
+#         self._hparams = neural_deque()
+#
+#     def cell(self, hidden_size):
+#         """Build a NeuralDequeCell instead of a NeuralStackCell.
+#
+#         Args:
+#           hidden_size: The hidden size of the cell.
+#
+#         Returns:
+#           A new NeuralDequeCell with the given hidden size.
+#         """
+#         return NeuralDeQueCell(hidden_size,
+#                                self._hparams.memory_size,
+#                                self._hparams.embedding_size)
 
 
 # class NeuralQueueModel(NeuralStackModel):
