@@ -32,7 +32,7 @@ import tensorflow as tf
 
 from clrs._src import processors
 
-flags.DEFINE_string('algorithm', 'lcs_length', 'Which algorithm to run.')
+flags.DEFINE_string('algorithm', '', 'Which algorithm to run.')
 flags.DEFINE_integer('seed', 42, 'Random seed to set')
 
 flags.DEFINE_integer('batch_size', 32, 'Batch size used for training.')
@@ -523,12 +523,15 @@ def main_wrapper(unused_argv):
 
     # FLAGS.memory_size = 100
     # for model in ["gatv2", "mpnn"]:
-    if FLAGS.processor_type == "gatv2" or FLAGS.processor_type == "gat":
-        algo_list = GAT_BEST
-    elif FLAGS.processor_type == "mpnn":
-        algo_list = MPNN_BEST
+    if FLAGS.algorithm == "":
+        if FLAGS.processor_type == "gatv2" or FLAGS.processor_type == "gat":
+            algo_list = GAT_BEST
+        elif FLAGS.processor_type == "mpnn":
+            algo_list = MPNN_BEST
+        else:
+            algo_list = PGN_best
     else:
-        algo_list = PGN_best
+        algo_list = [FLAGS.algorithm]
 
     for algo in algo_list:
         FLAGS.algorithm = algo

@@ -37,3 +37,12 @@ dijkstra_mpnn_NTM_100_last.pkl: (test) step 10000: {'pi': 0.92529296875, 'score'
 dag_shortest_paths_pgn_NTM_20_best.pkl: (test) step 6619: {'pi': 0.97705078125, 'score': 0.97705078125, 'examples_seen': 211840, 'step': 6619}
 task_scheduling_gatv2_NTM_100_best.pkl: (test) step 10000: {'selected': 0.8192161321640015, 'score': 0.8192161321640015, 'examples_seen': 320000, 'step': 9999}
 kmp_matcher_gat_NTM_20_best.pkl: (test) step 10000: {'match': 0.0244140625, 'score': 0.0244140625, 'examples_seen': 320000, 'step': 9999}
+dag_shortest_paths_pgn_NTM_20_best.pkl: (test) step 10000: {'pi': 0.97998046875, 'score': 0.97998046875, 'examples_seen': 320000, 'step': 9999}
+dag_shortest_paths_pgn_NTM_20_last.pkl: (test) step 10000: {'pi': 0.9619140625, 'score': 0.9619140625, 'examples_seen': 320000, 'step': 9999}
+floyd_warshall_pgn_NTM_100_best.pkl: (test) step 10000: {'Pi': 0.288116455078125, 'score': 0.288116455078125, 'examples_seen': 320000, 'step': 9999}
+bridges_mpnn_NTM_20_best.pkl: (test) step 10000: {'is_bridge': 0.7197266221046448, 'score': 0.7197266221046448, 'examples_seen': 320000, 'step': 9999}
+bridges_mpnn_NTM_20_last.pkl: (test) step 10000: {'is_bridge': 0.8724138736724854, 'score': 0.8724138736724854, 'examples_seen': 320000, 'step': 9999}
+kmp_matcher_gatv2_NTM_20_best.pkl: (test) step 10000: {'match': 0.03564453125, 'score': 0.03564453125, 'examples_seen': 320000, 'step': 9999}
+kmp_matcher_gatv2_NTM_20_last.pkl: (test) step 10000: {'match': 0.02783203125, 'score': 0.02783203125, 'examples_seen': 320000, 'step': 9999}
+lcs_length_gat_NTM_20_best.pkl: (test) step 10000: {'b': 0.502227783203125, 'score': 0.502227783203125, 'examples_seen': 320000, 'step': 9999}
+graham_scan_mpnn_NTM_100_best.pkl: (test) step 10000: {'in_hull': 0.9060913920402527, 'score': 0.9060913920402527, 'examples_seen': 320000, 'step': 9999}
