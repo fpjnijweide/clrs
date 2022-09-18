@@ -1,0 +1,157 @@
+I0918 22:17:26.772341 139862104778624 run.py:204] Using CLRS30 spec: {'train': {'num_samples': 1000, 'length': 16, 'seed': 1}, 'val': {'num_samples': 32, 'length': 16, 'seed': 2}, 'test': {'num_samples': 32, 'length': 64, 'seed': 3}}
+I0918 22:17:26.773230 139862104778624 run.py:188] Dataset found at /tmp/CLRS30/CLRS30_v1.0.0. Skipping download.
+I0918 22:17:27.490518 139862104778624 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/naive_string_matcher_train/1.0.0
+I0918 22:17:27.492376 139862104778624 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/naive_string_matcher_train/1.0.0)
+I0918 22:17:27.492752 139862104778624 logging_logger.py:45] Constructing tf.data.Dataset clrs_dataset for split train, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/naive_string_matcher_train/1.0.0
+I0918 22:17:29.075302 139862104778624 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/naive_string_matcher_val/1.0.0
+I0918 22:17:29.077120 139862104778624 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/naive_string_matcher_val/1.0.0)
+I0918 22:17:29.077462 139862104778624 logging_logger.py:45] Constructing tf.data.Dataset clrs_dataset for split val, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/naive_string_matcher_val/1.0.0
+I0918 22:17:35.115090 139862104778624 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/naive_string_matcher_test/1.0.0
+I0918 22:17:35.118041 139862104778624 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/naive_string_matcher_test/1.0.0)
+I0918 22:17:35.118393 139862104778624 logging_logger.py:45] Constructing tf.data.Dataset clrs_dataset for split test, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/naive_string_matcher_test/1.0.0
+I0918 22:18:30.628471 139862104778624 run.py:312] Compiled feedback step in 55.293312 s.
+I0918 22:18:39.036739 139862104778624 run.py:343] (train) step 0: {'match': 0.09375, 'score': 0.09375, 'loss': 14.46224594116211, 'examples_seen': 32, 'step': 0}
+I0918 22:18:49.549951 139862104778624 run.py:357] (val) step 0: {'match': 0.09765625, 'score': 0.09765625, 'examples_seen': 32, 'step': 0}
+I0918 22:18:49.550353 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:18:51.679987 139862104778624 run.py:343] (train) step 9: {'match': 0.125, 'score': 0.125, 'loss': 7.900842666625977, 'examples_seen': 320, 'step': 9}
+I0918 22:18:53.098206 139862104778624 run.py:357] (val) step 9: {'match': 0.2783203125, 'score': 0.2783203125, 'examples_seen': 320, 'step': 9}
+I0918 22:18:53.098601 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:18:55.444306 139862104778624 run.py:343] (train) step 19: {'match': 0.34375, 'score': 0.34375, 'loss': 6.223964214324951, 'examples_seen': 640, 'step': 19}
+I0918 22:18:56.865286 139862104778624 run.py:357] (val) step 19: {'match': 0.41796875, 'score': 0.41796875, 'examples_seen': 640, 'step': 19}
+I0918 22:18:56.865700 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:18:59.220759 139862104778624 run.py:343] (train) step 29: {'match': 0.40625, 'score': 0.40625, 'loss': 5.763399124145508, 'examples_seen': 960, 'step': 29}
+I0918 22:19:00.641812 139862104778624 run.py:357] (val) step 29: {'match': 0.38720703125, 'score': 0.38720703125, 'examples_seen': 960, 'step': 29}
+I0918 22:19:05.021634 139862104778624 run.py:343] (train) step 39: {'match': 0.34375, 'score': 0.34375, 'loss': 4.920646667480469, 'examples_seen': 1280, 'step': 39}
+I0918 22:19:06.441667 139862104778624 run.py:357] (val) step 39: {'match': 0.42431640625, 'score': 0.42431640625, 'examples_seen': 1280, 'step': 39}
+I0918 22:19:06.442094 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:19:08.748962 139862104778624 run.py:343] (train) step 49: {'match': 0.5625, 'score': 0.5625, 'loss': 4.541476249694824, 'examples_seen': 1600, 'step': 49}
+I0918 22:19:10.169543 139862104778624 run.py:357] (val) step 49: {'match': 0.45654296875, 'score': 0.45654296875, 'examples_seen': 1600, 'step': 49}
+I0918 22:19:10.170036 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:19:12.501339 139862104778624 run.py:343] (train) step 59: {'match': 0.53125, 'score': 0.53125, 'loss': 3.891528844833374, 'examples_seen': 1920, 'step': 59}
+I0918 22:19:13.922184 139862104778624 run.py:357] (val) step 59: {'match': 0.4462890625, 'score': 0.4462890625, 'examples_seen': 1920, 'step': 59}
+I0918 22:19:16.217337 139862104778624 run.py:343] (train) step 69: {'match': 0.34375, 'score': 0.34375, 'loss': 4.438323497772217, 'examples_seen': 2240, 'step': 69}
+I0918 22:19:17.637963 139862104778624 run.py:357] (val) step 69: {'match': 0.376953125, 'score': 0.376953125, 'examples_seen': 2240, 'step': 69}
+I0918 22:19:19.946558 139862104778624 run.py:343] (train) step 79: {'match': 0.5625, 'score': 0.5625, 'loss': 3.8087852001190186, 'examples_seen': 2560, 'step': 79}
+I0918 22:19:21.365270 139862104778624 run.py:357] (val) step 79: {'match': 0.408203125, 'score': 0.408203125, 'examples_seen': 2560, 'step': 79}
+I0918 22:19:23.989247 139862104778624 run.py:343] (train) step 89: {'match': 0.5, 'score': 0.5, 'loss': 3.6539435386657715, 'examples_seen': 2880, 'step': 89}
+I0918 22:19:25.411064 139862104778624 run.py:357] (val) step 89: {'match': 0.42822265625, 'score': 0.42822265625, 'examples_seen': 2880, 'step': 89}
+I0918 22:19:27.688183 139862104778624 run.py:343] (train) step 99: {'match': 0.5625, 'score': 0.5625, 'loss': 3.606691837310791, 'examples_seen': 3200, 'step': 99}
+I0918 22:19:29.112061 139862104778624 run.py:357] (val) step 99: {'match': 0.44287109375, 'score': 0.44287109375, 'examples_seen': 3200, 'step': 99}
+I0918 22:19:31.358013 139862104778624 run.py:343] (train) step 109: {'match': 0.46875, 'score': 0.46875, 'loss': 3.168226480484009, 'examples_seen': 3520, 'step': 109}
+I0918 22:19:32.772622 139862104778624 run.py:357] (val) step 109: {'match': 0.4638671875, 'score': 0.4638671875, 'examples_seen': 3520, 'step': 109}
+I0918 22:19:32.773028 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:19:35.110823 139862104778624 run.py:343] (train) step 119: {'match': 0.46875, 'score': 0.46875, 'loss': 3.4300756454467773, 'examples_seen': 3840, 'step': 119}
+I0918 22:19:36.531248 139862104778624 run.py:357] (val) step 119: {'match': 0.478515625, 'score': 0.478515625, 'examples_seen': 3840, 'step': 119}
+I0918 22:19:36.531630 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:19:39.207801 139862104778624 run.py:343] (train) step 129: {'match': 0.4375, 'score': 0.4375, 'loss': 3.470222234725952, 'examples_seen': 4160, 'step': 129}
+I0918 22:19:40.627304 139862104778624 run.py:357] (val) step 129: {'match': 0.419921875, 'score': 0.419921875, 'examples_seen': 4160, 'step': 129}
+I0918 22:19:42.906391 139862104778624 run.py:343] (train) step 139: {'match': 0.34375, 'score': 0.34375, 'loss': 3.2550158500671387, 'examples_seen': 4480, 'step': 139}
+I0918 22:19:44.330392 139862104778624 run.py:357] (val) step 139: {'match': 0.40673828125, 'score': 0.40673828125, 'examples_seen': 4480, 'step': 139}
+I0918 22:19:46.612384 139862104778624 run.py:343] (train) step 149: {'match': 0.5, 'score': 0.5, 'loss': 3.0349674224853516, 'examples_seen': 4800, 'step': 149}
+I0918 22:19:48.030593 139862104778624 run.py:357] (val) step 149: {'match': 0.44482421875, 'score': 0.44482421875, 'examples_seen': 4800, 'step': 149}
+I0918 22:19:50.279980 139862104778624 run.py:343] (train) step 159: {'match': 0.53125, 'score': 0.53125, 'loss': 2.437758207321167, 'examples_seen': 5120, 'step': 159}
+I0918 22:19:51.702336 139862104778624 run.py:357] (val) step 159: {'match': 0.48828125, 'score': 0.48828125, 'examples_seen': 5120, 'step': 159}
+I0918 22:19:51.702734 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:19:54.003267 139862104778624 run.py:343] (train) step 169: {'match': 0.375, 'score': 0.375, 'loss': 2.941999912261963, 'examples_seen': 5440, 'step': 169}
+I0918 22:19:55.425209 139862104778624 run.py:357] (val) step 169: {'match': 0.31591796875, 'score': 0.31591796875, 'examples_seen': 5440, 'step': 169}
+I0918 22:19:58.095779 139862104778624 run.py:343] (train) step 179: {'match': 0.34375, 'score': 0.34375, 'loss': 2.8159523010253906, 'examples_seen': 5760, 'step': 179}
+I0918 22:19:59.515643 139862104778624 run.py:357] (val) step 179: {'match': 0.40380859375, 'score': 0.40380859375, 'examples_seen': 5760, 'step': 179}
+I0918 22:20:01.817696 139862104778624 run.py:343] (train) step 189: {'match': 0.625, 'score': 0.625, 'loss': 2.361128330230713, 'examples_seen': 6080, 'step': 189}
+I0918 22:20:03.239357 139862104778624 run.py:357] (val) step 189: {'match': 0.52197265625, 'score': 0.52197265625, 'examples_seen': 6080, 'step': 189}
+I0918 22:20:03.239798 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:20:05.577339 139862104778624 run.py:343] (train) step 199: {'match': 0.75, 'score': 0.75, 'loss': 2.788465976715088, 'examples_seen': 6400, 'step': 199}
+I0918 22:20:06.996503 139862104778624 run.py:357] (val) step 199: {'match': 0.533203125, 'score': 0.533203125, 'examples_seen': 6400, 'step': 199}
+I0918 22:20:06.996980 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:20:09.343554 139862104778624 run.py:343] (train) step 209: {'match': 0.53125, 'score': 0.53125, 'loss': 2.5725855827331543, 'examples_seen': 6720, 'step': 209}
+I0918 22:20:10.764181 139862104778624 run.py:357] (val) step 209: {'match': 0.509765625, 'score': 0.509765625, 'examples_seen': 6720, 'step': 209}
+I0918 22:20:13.408478 139862104778624 run.py:343] (train) step 219: {'match': 0.59375, 'score': 0.59375, 'loss': 2.660278558731079, 'examples_seen': 7040, 'step': 219}
+I0918 22:20:14.828092 139862104778624 run.py:357] (val) step 219: {'match': 0.61181640625, 'score': 0.61181640625, 'examples_seen': 7040, 'step': 219}
+I0918 22:20:14.828497 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:20:17.111495 139862104778624 run.py:343] (train) step 229: {'match': 0.75, 'score': 0.75, 'loss': 2.1884775161743164, 'examples_seen': 7360, 'step': 229}
+I0918 22:20:18.531863 139862104778624 run.py:357] (val) step 229: {'match': 0.6611328125, 'score': 0.6611328125, 'examples_seen': 7360, 'step': 229}
+I0918 22:20:18.532282 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:20:20.835808 139862104778624 run.py:343] (train) step 239: {'match': 0.6875, 'score': 0.6875, 'loss': 1.9072399139404297, 'examples_seen': 7680, 'step': 239}
+I0918 22:20:22.257371 139862104778624 run.py:357] (val) step 239: {'match': 0.587890625, 'score': 0.587890625, 'examples_seen': 7680, 'step': 239}
+I0918 22:20:24.543812 139862104778624 run.py:343] (train) step 249: {'match': 0.90625, 'score': 0.90625, 'loss': 1.9359688758850098, 'examples_seen': 8000, 'step': 249}
+I0918 22:20:25.965887 139862104778624 run.py:357] (val) step 249: {'match': 0.7373046875, 'score': 0.7373046875, 'examples_seen': 8000, 'step': 249}
+I0918 22:20:25.966291 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:20:28.278166 139862104778624 run.py:343] (train) step 259: {'match': 0.875, 'score': 0.875, 'loss': 1.8442407846450806, 'examples_seen': 8320, 'step': 259}
+I0918 22:20:29.705130 139862104778624 run.py:357] (val) step 259: {'match': 0.7275390625, 'score': 0.7275390625, 'examples_seen': 8320, 'step': 259}
+I0918 22:20:32.355207 139862104778624 run.py:343] (train) step 269: {'match': 0.71875, 'score': 0.71875, 'loss': 1.6977967023849487, 'examples_seen': 8640, 'step': 269}
+I0918 22:20:33.780466 139862104778624 run.py:357] (val) step 269: {'match': 0.78076171875, 'score': 0.78076171875, 'examples_seen': 8640, 'step': 269}
+I0918 22:20:33.780918 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:20:36.132558 139862104778624 run.py:343] (train) step 279: {'match': 0.75, 'score': 0.75, 'loss': 1.6736093759536743, 'examples_seen': 8960, 'step': 279}
+I0918 22:20:37.553511 139862104778624 run.py:357] (val) step 279: {'match': 0.7470703125, 'score': 0.7470703125, 'examples_seen': 8960, 'step': 279}
+I0918 22:20:39.853732 139862104778624 run.py:343] (train) step 289: {'match': 0.8125, 'score': 0.8125, 'loss': 1.6879332065582275, 'examples_seen': 9280, 'step': 289}
+I0918 22:20:41.276077 139862104778624 run.py:357] (val) step 289: {'match': 0.84619140625, 'score': 0.84619140625, 'examples_seen': 9280, 'step': 289}
+I0918 22:20:41.276541 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:20:43.607757 139862104778624 run.py:343] (train) step 299: {'match': 0.875, 'score': 0.875, 'loss': 1.186422348022461, 'examples_seen': 9600, 'step': 299}
+I0918 22:20:45.036304 139862104778624 run.py:357] (val) step 299: {'match': 0.83203125, 'score': 0.83203125, 'examples_seen': 9600, 'step': 299}
+I0918 22:20:47.702189 139862104778624 run.py:343] (train) step 309: {'match': 0.875, 'score': 0.875, 'loss': 1.1149049997329712, 'examples_seen': 9920, 'step': 309}
+I0918 22:20:49.126236 139862104778624 run.py:357] (val) step 309: {'match': 0.9208984375, 'score': 0.9208984375, 'examples_seen': 9920, 'step': 309}
+I0918 22:20:49.126639 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:20:51.472649 139862104778624 run.py:343] (train) step 319: {'match': 0.875, 'score': 0.875, 'loss': 1.5833773612976074, 'examples_seen': 10240, 'step': 319}
+I0918 22:20:52.892445 139862104778624 run.py:357] (val) step 319: {'match': 0.9052734375, 'score': 0.9052734375, 'examples_seen': 10240, 'step': 319}
+I0918 22:20:55.252642 139862104778624 run.py:343] (train) step 329: {'match': 0.90625, 'score': 0.90625, 'loss': 1.000173568725586, 'examples_seen': 10560, 'step': 329}
+I0918 22:20:56.672221 139862104778624 run.py:357] (val) step 329: {'match': 0.93212890625, 'score': 0.93212890625, 'examples_seen': 10560, 'step': 329}
+I0918 22:20:56.672693 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:20:58.976578 139862104778624 run.py:343] (train) step 339: {'match': 0.96875, 'score': 0.96875, 'loss': 0.7618632316589355, 'examples_seen': 10880, 'step': 339}
+I0918 22:21:00.398125 139862104778624 run.py:357] (val) step 339: {'match': 0.94677734375, 'score': 0.94677734375, 'examples_seen': 10880, 'step': 339}
+I0918 22:21:00.398522 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:21:02.686708 139862104778624 run.py:343] (train) step 349: {'match': 0.96875, 'score': 0.96875, 'loss': 0.7866606712341309, 'examples_seen': 11200, 'step': 349}
+I0918 22:21:04.108139 139862104778624 run.py:357] (val) step 349: {'match': 0.97900390625, 'score': 0.97900390625, 'examples_seen': 11200, 'step': 349}
+I0918 22:21:04.108537 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:21:06.773177 139862104778624 run.py:343] (train) step 359: {'match': 1.0, 'score': 1.0, 'loss': 0.38584789633750916, 'examples_seen': 11520, 'step': 359}
+I0918 22:21:08.194025 139862104778624 run.py:357] (val) step 359: {'match': 0.9228515625, 'score': 0.9228515625, 'examples_seen': 11520, 'step': 359}
+I0918 22:21:10.457446 139862104778624 run.py:343] (train) step 369: {'match': 1.0, 'score': 1.0, 'loss': 0.5576747059822083, 'examples_seen': 11840, 'step': 369}
+I0918 22:21:11.876751 139862104778624 run.py:357] (val) step 369: {'match': 0.97998046875, 'score': 0.97998046875, 'examples_seen': 11840, 'step': 369}
+I0918 22:21:11.877181 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:21:14.184734 139862104778624 run.py:343] (train) step 379: {'match': 1.0, 'score': 1.0, 'loss': 0.5930336117744446, 'examples_seen': 12160, 'step': 379}
+I0918 22:21:15.605794 139862104778624 run.py:357] (val) step 379: {'match': 0.98876953125, 'score': 0.98876953125, 'examples_seen': 12160, 'step': 379}
+I0918 22:21:15.606213 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:21:17.956931 139862104778624 run.py:343] (train) step 389: {'match': 1.0, 'score': 1.0, 'loss': 0.537732720375061, 'examples_seen': 12480, 'step': 389}
+I0918 22:21:19.379194 139862104778624 run.py:357] (val) step 389: {'match': 0.98876953125, 'score': 0.98876953125, 'examples_seen': 12480, 'step': 389}
+I0918 22:21:19.379592 139862104778624 run.py:384] Saving new checkpoint (same score)...
+I0918 22:21:22.059409 139862104778624 run.py:343] (train) step 399: {'match': 0.96875, 'score': 0.96875, 'loss': 0.49762868881225586, 'examples_seen': 12800, 'step': 399}
+I0918 22:21:23.480515 139862104778624 run.py:357] (val) step 399: {'match': 0.99169921875, 'score': 0.99169921875, 'examples_seen': 12800, 'step': 399}
+I0918 22:21:23.481014 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:21:25.826170 139862104778624 run.py:343] (train) step 409: {'match': 1.0, 'score': 1.0, 'loss': 0.25682157278060913, 'examples_seen': 13120, 'step': 409}
+I0918 22:21:27.241213 139862104778624 run.py:357] (val) step 409: {'match': 0.986328125, 'score': 0.986328125, 'examples_seen': 13120, 'step': 409}
+I0918 22:21:29.519321 139862104778624 run.py:343] (train) step 419: {'match': 0.84375, 'score': 0.84375, 'loss': 0.4683217406272888, 'examples_seen': 13440, 'step': 419}
+I0918 22:21:30.936672 139862104778624 run.py:357] (val) step 419: {'match': 0.958984375, 'score': 0.958984375, 'examples_seen': 13440, 'step': 419}
+I0918 22:21:33.263224 139862104778624 run.py:343] (train) step 429: {'match': 0.96875, 'score': 0.96875, 'loss': 0.21659034490585327, 'examples_seen': 13760, 'step': 429}
+I0918 22:21:34.685101 139862104778624 run.py:357] (val) step 429: {'match': 0.986328125, 'score': 0.986328125, 'examples_seen': 13760, 'step': 429}
+I0918 22:21:36.996901 139862104778624 run.py:343] (train) step 439: {'match': 1.0, 'score': 1.0, 'loss': 0.23023784160614014, 'examples_seen': 14080, 'step': 439}
+I0918 22:21:38.416456 139862104778624 run.py:357] (val) step 439: {'match': 0.99267578125, 'score': 0.99267578125, 'examples_seen': 14080, 'step': 439}
+I0918 22:21:38.416853 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:21:41.055754 139862104778624 run.py:343] (train) step 449: {'match': 1.0, 'score': 1.0, 'loss': 0.15542370080947876, 'examples_seen': 14400, 'step': 449}
+I0918 22:21:42.478382 139862104778624 run.py:357] (val) step 449: {'match': 0.9873046875, 'score': 0.9873046875, 'examples_seen': 14400, 'step': 449}
+I0918 22:21:44.748877 139862104778624 run.py:343] (train) step 459: {'match': 1.0, 'score': 1.0, 'loss': 0.13123176991939545, 'examples_seen': 14720, 'step': 459}
+I0918 22:21:46.171766 139862104778624 run.py:357] (val) step 459: {'match': 0.9892578125, 'score': 0.9892578125, 'examples_seen': 14720, 'step': 459}
+I0918 22:21:48.439843 139862104778624 run.py:343] (train) step 469: {'match': 1.0, 'score': 1.0, 'loss': 0.11646148562431335, 'examples_seen': 15040, 'step': 469}
+I0918 22:21:49.861117 139862104778624 run.py:357] (val) step 469: {'match': 0.9833984375, 'score': 0.9833984375, 'examples_seen': 15040, 'step': 469}
+I0918 22:21:52.155595 139862104778624 run.py:343] (train) step 479: {'match': 1.0, 'score': 1.0, 'loss': 0.05725681036710739, 'examples_seen': 15360, 'step': 479}
+I0918 22:21:53.578020 139862104778624 run.py:357] (val) step 479: {'match': 0.98681640625, 'score': 0.98681640625, 'examples_seen': 15360, 'step': 479}
+I0918 22:21:56.220226 139862104778624 run.py:343] (train) step 489: {'match': 1.0, 'score': 1.0, 'loss': 0.0686924010515213, 'examples_seen': 15680, 'step': 489}
+I0918 22:21:57.641569 139862104778624 run.py:357] (val) step 489: {'match': 0.9892578125, 'score': 0.9892578125, 'examples_seen': 15680, 'step': 489}
+I0918 22:21:59.906727 139862104778624 run.py:343] (train) step 499: {'match': 1.0, 'score': 1.0, 'loss': 0.11148576438426971, 'examples_seen': 16000, 'step': 499}
+I0918 22:22:01.328917 139862104778624 run.py:357] (val) step 499: {'match': 0.99560546875, 'score': 0.99560546875, 'examples_seen': 16000, 'step': 499}
+I0918 22:22:01.329321 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:22:03.649583 139862104778624 run.py:343] (train) step 509: {'match': 1.0, 'score': 1.0, 'loss': 0.050498057156801224, 'examples_seen': 16320, 'step': 509}
+I0918 22:22:05.068762 139862104778624 run.py:357] (val) step 509: {'match': 0.9990234375, 'score': 0.9990234375, 'examples_seen': 16320, 'step': 509}
+I0918 22:22:05.069182 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:22:07.400868 139862104778624 run.py:343] (train) step 519: {'match': 1.0, 'score': 1.0, 'loss': 0.11325301229953766, 'examples_seen': 16640, 'step': 519}
+I0918 22:22:08.822136 139862104778624 run.py:357] (val) step 519: {'match': 0.98876953125, 'score': 0.98876953125, 'examples_seen': 16640, 'step': 519}
+I0918 22:22:11.084635 139862104778624 run.py:343] (train) step 529: {'match': 1.0, 'score': 1.0, 'loss': 0.08255167305469513, 'examples_seen': 16960, 'step': 529}
+I0918 22:22:12.503158 139862104778624 run.py:357] (val) step 529: {'match': 0.9931640625, 'score': 0.9931640625, 'examples_seen': 16960, 'step': 529}
+I0918 22:22:15.190574 139862104778624 run.py:343] (train) step 539: {'match': 1.0, 'score': 1.0, 'loss': 0.04308394342660904, 'examples_seen': 17280, 'step': 539}
+I0918 22:22:16.613062 139862104778624 run.py:357] (val) step 539: {'match': 0.99755859375, 'score': 0.99755859375, 'examples_seen': 17280, 'step': 539}
+I0918 22:22:18.898586 139862104778624 run.py:343] (train) step 549: {'match': 1.0, 'score': 1.0, 'loss': 0.023386048153042793, 'examples_seen': 17600, 'step': 549}
+I0918 22:22:20.322206 139862104778624 run.py:357] (val) step 549: {'match': 0.99951171875, 'score': 0.99951171875, 'examples_seen': 17600, 'step': 549}
+I0918 22:22:20.322622 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:22:22.679513 139862104778624 run.py:343] (train) step 559: {'match': 1.0, 'score': 1.0, 'loss': 0.023298028856515884, 'examples_seen': 17920, 'step': 559}
+I0918 22:22:24.098881 139862104778624 run.py:357] (val) step 559: {'match': 0.9990234375, 'score': 0.9990234375, 'examples_seen': 17920, 'step': 559}
+I0918 22:22:26.416964 139862104778624 run.py:343] (train) step 569: {'match': 1.0, 'score': 1.0, 'loss': 0.01577141135931015, 'examples_seen': 18240, 'step': 569}
+I0918 22:22:27.838272 139862104778624 run.py:357] (val) step 569: {'match': 1.0, 'score': 1.0, 'examples_seen': 18240, 'step': 569}
+I0918 22:22:27.838708 139862104778624 run.py:364] Saving new checkpoint...
+I0918 22:23:14.398457 139862104778624 run.py:378] (test first best) step 569: {'match': 0.02392578125, 'score': 0.02392578125, 'examples_seen': 18240, 'step': 569}

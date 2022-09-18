@@ -1,0 +1,157 @@
+I0918 23:34:58.774677 140663434737536 run.py:204] Using CLRS30 spec: {'train': {'num_samples': 1000, 'length': 16, 'seed': 1}, 'val': {'num_samples': 32, 'length': 16, 'seed': 2}, 'test': {'num_samples': 32, 'length': 64, 'seed': 3}}
+I0918 23:34:58.775455 140663434737536 run.py:188] Dataset found at /tmp/CLRS30/CLRS30_v1.0.0. Skipping download.
+I0918 23:35:00.357108 140663434737536 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/quickselect_train/1.0.0
+I0918 23:35:00.359034 140663434737536 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/quickselect_train/1.0.0)
+I0918 23:35:00.359392 140663434737536 logging_logger.py:45] Constructing tf.data.Dataset clrs_dataset for split train, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/quickselect_train/1.0.0
+I0918 23:35:03.723156 140663434737536 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/quickselect_val/1.0.0
+I0918 23:35:03.725059 140663434737536 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/quickselect_val/1.0.0)
+I0918 23:35:03.725417 140663434737536 logging_logger.py:45] Constructing tf.data.Dataset clrs_dataset for split val, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/quickselect_val/1.0.0
+I0918 23:35:23.356785 140663434737536 dataset_info.py:482] Load dataset info from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/quickselect_test/1.0.0
+I0918 23:35:23.358891 140663434737536 dataset_builder.py:366] Reusing dataset clrs_dataset (/tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/quickselect_test/1.0.0)
+I0918 23:35:23.359263 140663434737536 logging_logger.py:45] Constructing tf.data.Dataset clrs_dataset for split test, from /tmp/CLRS30/CLRS30_v1.0.0/clrs_dataset/quickselect_test/1.0.0
+I0918 23:36:25.325087 140663434737536 run.py:312] Compiled feedback step in 61.651312 s.
+I0918 23:36:38.115633 140663434737536 run.py:343] (train) step 0: {'median': 0.0625, 'score': 0.0625, 'loss': 23.53753662109375, 'examples_seen': 32, 'step': 0}
+I0918 23:36:56.667421 140663434737536 run.py:357] (val) step 0: {'median': 0.0625, 'score': 0.0625, 'examples_seen': 32, 'step': 0}
+I0918 23:36:56.667845 140663434737536 run.py:364] Saving new checkpoint...
+I0918 23:37:01.471115 140663434737536 run.py:343] (train) step 9: {'median': 0.09375, 'score': 0.09375, 'loss': 11.108576774597168, 'examples_seen': 320, 'step': 9}
+I0918 23:37:06.034101 140663434737536 run.py:357] (val) step 9: {'median': 0.0625, 'score': 0.0625, 'examples_seen': 320, 'step': 9}
+I0918 23:37:06.034543 140663434737536 run.py:384] Saving new checkpoint (same score)...
+I0918 23:37:11.285933 140663434737536 run.py:343] (train) step 19: {'median': 0.15625, 'score': 0.15625, 'loss': 9.97807502746582, 'examples_seen': 640, 'step': 19}
+I0918 23:37:15.838688 140663434737536 run.py:357] (val) step 19: {'median': 0.0625, 'score': 0.0625, 'examples_seen': 640, 'step': 19}
+I0918 23:37:15.839103 140663434737536 run.py:384] Saving new checkpoint (same score)...
+I0918 23:37:21.143052 140663434737536 run.py:343] (train) step 29: {'median': 0.03125, 'score': 0.03125, 'loss': 9.691398620605469, 'examples_seen': 960, 'step': 29}
+I0918 23:37:25.703482 140663434737536 run.py:357] (val) step 29: {'median': 0.0625, 'score': 0.0625, 'examples_seen': 960, 'step': 29}
+I0918 23:37:25.703871 140663434737536 run.py:384] Saving new checkpoint (same score)...
+I0918 23:37:31.415380 140663434737536 run.py:343] (train) step 39: {'median': 0.03125, 'score': 0.03125, 'loss': 9.016295433044434, 'examples_seen': 1280, 'step': 39}
+I0918 23:37:35.964520 140663434737536 run.py:357] (val) step 39: {'median': 0.0625, 'score': 0.0625, 'examples_seen': 1280, 'step': 39}
+I0918 23:37:35.964906 140663434737536 run.py:384] Saving new checkpoint (same score)...
+I0918 23:37:41.235277 140663434737536 run.py:343] (train) step 49: {'median': 0.0625, 'score': 0.0625, 'loss': 8.768136978149414, 'examples_seen': 1600, 'step': 49}
+I0918 23:37:45.809209 140663434737536 run.py:357] (val) step 49: {'median': 0.0625, 'score': 0.0625, 'examples_seen': 1600, 'step': 49}
+I0918 23:37:45.809696 140663434737536 run.py:384] Saving new checkpoint (same score)...
+I0918 23:37:51.066602 140663434737536 run.py:343] (train) step 59: {'median': 0.0625, 'score': 0.0625, 'loss': 7.850260257720947, 'examples_seen': 1920, 'step': 59}
+I0918 23:37:55.613874 140663434737536 run.py:357] (val) step 59: {'median': 0.0625, 'score': 0.0625, 'examples_seen': 1920, 'step': 59}
+I0918 23:37:55.614324 140663434737536 run.py:384] Saving new checkpoint (same score)...
+I0918 23:38:00.887664 140663434737536 run.py:343] (train) step 69: {'median': 0.09375, 'score': 0.09375, 'loss': 7.168057441711426, 'examples_seen': 2240, 'step': 69}
+I0918 23:38:05.447121 140663434737536 run.py:357] (val) step 69: {'median': 0.0625, 'score': 0.0625, 'examples_seen': 2240, 'step': 69}
+I0918 23:38:05.447615 140663434737536 run.py:384] Saving new checkpoint (same score)...
+I0918 23:38:12.845733 140663434737536 run.py:343] (train) step 79: {'median': 0.03125, 'score': 0.03125, 'loss': 6.720180511474609, 'examples_seen': 2560, 'step': 79}
+I0918 23:38:17.388013 140663434737536 run.py:357] (val) step 79: {'median': 0.06298828125, 'score': 0.06298828125, 'examples_seen': 2560, 'step': 79}
+I0918 23:38:17.388388 140663434737536 run.py:364] Saving new checkpoint...
+I0918 23:38:23.056926 140663434737536 run.py:343] (train) step 89: {'median': 0.0625, 'score': 0.0625, 'loss': 5.855685234069824, 'examples_seen': 2880, 'step': 89}
+I0918 23:38:27.608556 140663434737536 run.py:357] (val) step 89: {'median': 0.06640625, 'score': 0.06640625, 'examples_seen': 2880, 'step': 89}
+I0918 23:38:27.608961 140663434737536 run.py:364] Saving new checkpoint...
+I0918 23:38:32.821176 140663434737536 run.py:343] (train) step 99: {'median': 0.03125, 'score': 0.03125, 'loss': 5.091608047485352, 'examples_seen': 3200, 'step': 99}
+I0918 23:38:37.378720 140663434737536 run.py:357] (val) step 99: {'median': 0.072265625, 'score': 0.072265625, 'examples_seen': 3200, 'step': 99}
+I0918 23:38:37.379111 140663434737536 run.py:364] Saving new checkpoint...
+I0918 23:38:42.623374 140663434737536 run.py:343] (train) step 109: {'median': 0.15625, 'score': 0.15625, 'loss': 4.864547252655029, 'examples_seen': 3520, 'step': 109}
+I0918 23:38:47.165451 140663434737536 run.py:357] (val) step 109: {'median': 0.10595703125, 'score': 0.10595703125, 'examples_seen': 3520, 'step': 109}
+I0918 23:38:47.165834 140663434737536 run.py:364] Saving new checkpoint...
+I0918 23:38:52.422440 140663434737536 run.py:343] (train) step 119: {'median': 0.09375, 'score': 0.09375, 'loss': 4.759566307067871, 'examples_seen': 3840, 'step': 119}
+I0918 23:38:56.964455 140663434737536 run.py:357] (val) step 119: {'median': 0.10595703125, 'score': 0.10595703125, 'examples_seen': 3840, 'step': 119}
+I0918 23:38:56.964837 140663434737536 run.py:384] Saving new checkpoint (same score)...
+I0918 23:39:02.616895 140663434737536 run.py:343] (train) step 129: {'median': 0.09375, 'score': 0.09375, 'loss': 4.349484443664551, 'examples_seen': 4160, 'step': 129}
+I0918 23:39:07.179462 140663434737536 run.py:357] (val) step 129: {'median': 0.07958984375, 'score': 0.07958984375, 'examples_seen': 4160, 'step': 129}
+I0918 23:39:12.324448 140663434737536 run.py:343] (train) step 139: {'median': 0.09375, 'score': 0.09375, 'loss': 3.874443292617798, 'examples_seen': 4480, 'step': 139}
+I0918 23:39:16.868858 140663434737536 run.py:357] (val) step 139: {'median': 0.09912109375, 'score': 0.09912109375, 'examples_seen': 4480, 'step': 139}
+I0918 23:39:21.986883 140663434737536 run.py:343] (train) step 149: {'median': 0.25, 'score': 0.25, 'loss': 3.530797243118286, 'examples_seen': 4800, 'step': 149}
+I0918 23:39:26.537743 140663434737536 run.py:357] (val) step 149: {'median': 0.12744140625, 'score': 0.12744140625, 'examples_seen': 4800, 'step': 149}
+I0918 23:39:26.538119 140663434737536 run.py:364] Saving new checkpoint...
+I0918 23:39:31.773854 140663434737536 run.py:343] (train) step 159: {'median': 0.0625, 'score': 0.0625, 'loss': 3.4081308841705322, 'examples_seen': 5120, 'step': 159}
+I0918 23:39:36.318670 140663434737536 run.py:357] (val) step 159: {'median': 0.10986328125, 'score': 0.10986328125, 'examples_seen': 5120, 'step': 159}
+I0918 23:39:41.458490 140663434737536 run.py:343] (train) step 169: {'median': 0.0625, 'score': 0.0625, 'loss': 4.03178596496582, 'examples_seen': 5440, 'step': 169}
+I0918 23:39:46.000464 140663434737536 run.py:357] (val) step 169: {'median': 0.10595703125, 'score': 0.10595703125, 'examples_seen': 5440, 'step': 169}
+I0918 23:39:51.527478 140663434737536 run.py:343] (train) step 179: {'median': 0.15625, 'score': 0.15625, 'loss': 3.0332887172698975, 'examples_seen': 5760, 'step': 179}
+I0918 23:39:56.087012 140663434737536 run.py:357] (val) step 179: {'median': 0.11767578125, 'score': 0.11767578125, 'examples_seen': 5760, 'step': 179}
+I0918 23:40:01.298794 140663434737536 run.py:343] (train) step 189: {'median': 0.125, 'score': 0.125, 'loss': 3.0651423931121826, 'examples_seen': 6080, 'step': 189}
+I0918 23:40:05.860877 140663434737536 run.py:357] (val) step 189: {'median': 0.125, 'score': 0.125, 'examples_seen': 6080, 'step': 189}
+I0918 23:40:11.040285 140663434737536 run.py:343] (train) step 199: {'median': 0.09375, 'score': 0.09375, 'loss': 3.4780161380767822, 'examples_seen': 6400, 'step': 199}
+I0918 23:40:15.595971 140663434737536 run.py:357] (val) step 199: {'median': 0.134765625, 'score': 0.134765625, 'examples_seen': 6400, 'step': 199}
+I0918 23:40:15.596364 140663434737536 run.py:364] Saving new checkpoint...
+I0918 23:40:20.836644 140663434737536 run.py:343] (train) step 209: {'median': 0.03125, 'score': 0.03125, 'loss': 3.153446674346924, 'examples_seen': 6720, 'step': 209}
+I0918 23:40:25.398873 140663434737536 run.py:357] (val) step 209: {'median': 0.15380859375, 'score': 0.15380859375, 'examples_seen': 6720, 'step': 209}
+I0918 23:40:25.399365 140663434737536 run.py:364] Saving new checkpoint...
+I0918 23:40:30.612567 140663434737536 run.py:343] (train) step 219: {'median': 0.15625, 'score': 0.15625, 'loss': 2.7255845069885254, 'examples_seen': 7040, 'step': 219}
+I0918 23:40:35.152843 140663434737536 run.py:357] (val) step 219: {'median': 0.1396484375, 'score': 0.1396484375, 'examples_seen': 7040, 'step': 219}
+I0918 23:40:40.706381 140663434737536 run.py:343] (train) step 229: {'median': 0.0625, 'score': 0.0625, 'loss': 3.1985580921173096, 'examples_seen': 7360, 'step': 229}
+I0918 23:40:45.250289 140663434737536 run.py:357] (val) step 229: {'median': 0.15869140625, 'score': 0.15869140625, 'examples_seen': 7360, 'step': 229}
+I0918 23:40:45.250702 140663434737536 run.py:364] Saving new checkpoint...
+I0918 23:40:50.475124 140663434737536 run.py:343] (train) step 239: {'median': 0.125, 'score': 0.125, 'loss': 2.7375576496124268, 'examples_seen': 7680, 'step': 239}
+I0918 23:40:55.033818 140663434737536 run.py:357] (val) step 239: {'median': 0.1416015625, 'score': 0.1416015625, 'examples_seen': 7680, 'step': 239}
+I0918 23:41:00.191024 140663434737536 run.py:343] (train) step 249: {'median': 0.09375, 'score': 0.09375, 'loss': 2.8215115070343018, 'examples_seen': 8000, 'step': 249}
+I0918 23:41:04.740685 140663434737536 run.py:357] (val) step 249: {'median': 0.14697265625, 'score': 0.14697265625, 'examples_seen': 8000, 'step': 249}
+I0918 23:41:09.851359 140663434737536 run.py:343] (train) step 259: {'median': 0.1875, 'score': 0.1875, 'loss': 2.600187301635742, 'examples_seen': 8320, 'step': 259}
+I0918 23:41:14.393698 140663434737536 run.py:357] (val) step 259: {'median': 0.1259765625, 'score': 0.1259765625, 'examples_seen': 8320, 'step': 259}
+I0918 23:41:19.580496 140663434737536 run.py:343] (train) step 269: {'median': 0.25, 'score': 0.25, 'loss': 2.290219783782959, 'examples_seen': 8640, 'step': 269}
+I0918 23:41:24.125428 140663434737536 run.py:357] (val) step 269: {'median': 0.17236328125, 'score': 0.17236328125, 'examples_seen': 8640, 'step': 269}
+I0918 23:41:24.125803 140663434737536 run.py:364] Saving new checkpoint...
+I0918 23:41:29.733154 140663434737536 run.py:343] (train) step 279: {'median': 0.125, 'score': 0.125, 'loss': 2.230518102645874, 'examples_seen': 8960, 'step': 279}
+I0918 23:41:34.277628 140663434737536 run.py:357] (val) step 279: {'median': 0.13720703125, 'score': 0.13720703125, 'examples_seen': 8960, 'step': 279}
+I0918 23:41:39.432049 140663434737536 run.py:343] (train) step 289: {'median': 0.09375, 'score': 0.09375, 'loss': 2.426910877227783, 'examples_seen': 9280, 'step': 289}
+I0918 23:41:43.983944 140663434737536 run.py:357] (val) step 289: {'median': 0.138671875, 'score': 0.138671875, 'examples_seen': 9280, 'step': 289}
+I0918 23:41:49.168171 140663434737536 run.py:343] (train) step 299: {'median': 0.1875, 'score': 0.1875, 'loss': 2.3400213718414307, 'examples_seen': 9600, 'step': 299}
+I0918 23:41:53.709812 140663434737536 run.py:357] (val) step 299: {'median': 0.14013671875, 'score': 0.14013671875, 'examples_seen': 9600, 'step': 299}
+I0918 23:41:58.847760 140663434737536 run.py:343] (train) step 309: {'median': 0.21875, 'score': 0.21875, 'loss': 2.1459507942199707, 'examples_seen': 9920, 'step': 309}
+I0918 23:42:03.386195 140663434737536 run.py:357] (val) step 309: {'median': 0.15673828125, 'score': 0.15673828125, 'examples_seen': 9920, 'step': 309}
+I0918 23:42:08.546626 140663434737536 run.py:343] (train) step 319: {'median': 0.125, 'score': 0.125, 'loss': 2.3885326385498047, 'examples_seen': 10240, 'step': 319}
+I0918 23:42:13.106642 140663434737536 run.py:357] (val) step 319: {'median': 0.1201171875, 'score': 0.1201171875, 'examples_seen': 10240, 'step': 319}
+I0918 23:42:18.677033 140663434737536 run.py:343] (train) step 329: {'median': 0.125, 'score': 0.125, 'loss': 2.3932669162750244, 'examples_seen': 10560, 'step': 329}
+I0918 23:42:23.220479 140663434737536 run.py:357] (val) step 329: {'median': 0.16552734375, 'score': 0.16552734375, 'examples_seen': 10560, 'step': 329}
+I0918 23:42:28.381332 140663434737536 run.py:343] (train) step 339: {'median': 0.15625, 'score': 0.15625, 'loss': 2.0201330184936523, 'examples_seen': 10880, 'step': 339}
+I0918 23:42:32.924062 140663434737536 run.py:357] (val) step 339: {'median': 0.1474609375, 'score': 0.1474609375, 'examples_seen': 10880, 'step': 339}
+I0918 23:42:38.096239 140663434737536 run.py:343] (train) step 349: {'median': 0.0625, 'score': 0.0625, 'loss': 2.1686105728149414, 'examples_seen': 11200, 'step': 349}
+I0918 23:42:42.658325 140663434737536 run.py:357] (val) step 349: {'median': 0.15771484375, 'score': 0.15771484375, 'examples_seen': 11200, 'step': 349}
+I0918 23:42:47.811489 140663434737536 run.py:343] (train) step 359: {'median': 0.1875, 'score': 0.1875, 'loss': 1.9978350400924683, 'examples_seen': 11520, 'step': 359}
+I0918 23:42:52.352352 140663434737536 run.py:357] (val) step 359: {'median': 0.17724609375, 'score': 0.17724609375, 'examples_seen': 11520, 'step': 359}
+I0918 23:42:52.352767 140663434737536 run.py:364] Saving new checkpoint...
+I0918 23:42:57.581678 140663434737536 run.py:343] (train) step 369: {'median': 0.25, 'score': 0.25, 'loss': 1.8158884048461914, 'examples_seen': 11840, 'step': 369}
+I0918 23:43:02.139686 140663434737536 run.py:357] (val) step 369: {'median': 0.16357421875, 'score': 0.16357421875, 'examples_seen': 11840, 'step': 369}
+I0918 23:43:07.765258 140663434737536 run.py:343] (train) step 379: {'median': 0.15625, 'score': 0.15625, 'loss': 2.148287057876587, 'examples_seen': 12160, 'step': 379}
+I0918 23:43:12.311660 140663434737536 run.py:357] (val) step 379: {'median': 0.1650390625, 'score': 0.1650390625, 'examples_seen': 12160, 'step': 379}
+I0918 23:43:17.469829 140663434737536 run.py:343] (train) step 389: {'median': 0.3125, 'score': 0.3125, 'loss': 1.8327215909957886, 'examples_seen': 12480, 'step': 389}
+I0918 23:43:22.012802 140663434737536 run.py:357] (val) step 389: {'median': 0.1826171875, 'score': 0.1826171875, 'examples_seen': 12480, 'step': 389}
+I0918 23:43:22.013211 140663434737536 run.py:364] Saving new checkpoint...
+I0918 23:43:27.196557 140663434737536 run.py:343] (train) step 399: {'median': 0.25, 'score': 0.25, 'loss': 1.8576804399490356, 'examples_seen': 12800, 'step': 399}
+I0918 23:43:31.760473 140663434737536 run.py:357] (val) step 399: {'median': 0.17431640625, 'score': 0.17431640625, 'examples_seen': 12800, 'step': 399}
+I0918 23:43:36.980070 140663434737536 run.py:343] (train) step 409: {'median': 0.1875, 'score': 0.1875, 'loss': 1.8848798274993896, 'examples_seen': 13120, 'step': 409}
+I0918 23:43:41.526479 140663434737536 run.py:357] (val) step 409: {'median': 0.19921875, 'score': 0.19921875, 'examples_seen': 13120, 'step': 409}
+I0918 23:43:41.526865 140663434737536 run.py:364] Saving new checkpoint...
+I0918 23:43:46.744083 140663434737536 run.py:343] (train) step 419: {'median': 0.1875, 'score': 0.1875, 'loss': 1.7641515731811523, 'examples_seen': 13440, 'step': 419}
+I0918 23:43:51.287035 140663434737536 run.py:357] (val) step 419: {'median': 0.19140625, 'score': 0.19140625, 'examples_seen': 13440, 'step': 419}
+I0918 23:43:56.913075 140663434737536 run.py:343] (train) step 429: {'median': 0.25, 'score': 0.25, 'loss': 1.5243217945098877, 'examples_seen': 13760, 'step': 429}
+I0918 23:44:01.465916 140663434737536 run.py:357] (val) step 429: {'median': 0.1728515625, 'score': 0.1728515625, 'examples_seen': 13760, 'step': 429}
+I0918 23:44:06.639478 140663434737536 run.py:343] (train) step 439: {'median': 0.1875, 'score': 0.1875, 'loss': 1.937287449836731, 'examples_seen': 14080, 'step': 439}
+I0918 23:44:11.188472 140663434737536 run.py:357] (val) step 439: {'median': 0.18896484375, 'score': 0.18896484375, 'examples_seen': 14080, 'step': 439}
+I0918 23:44:16.333715 140663434737536 run.py:343] (train) step 449: {'median': 0.125, 'score': 0.125, 'loss': 2.1906893253326416, 'examples_seen': 14400, 'step': 449}
+I0918 23:44:20.878748 140663434737536 run.py:357] (val) step 449: {'median': 0.17626953125, 'score': 0.17626953125, 'examples_seen': 14400, 'step': 449}
+I0918 23:44:26.086508 140663434737536 run.py:343] (train) step 459: {'median': 0.15625, 'score': 0.15625, 'loss': 1.8446898460388184, 'examples_seen': 14720, 'step': 459}
+I0918 23:44:30.639520 140663434737536 run.py:357] (val) step 459: {'median': 0.18359375, 'score': 0.18359375, 'examples_seen': 14720, 'step': 459}
+I0918 23:44:35.838006 140663434737536 run.py:343] (train) step 469: {'median': 0.1875, 'score': 0.1875, 'loss': 1.9990702867507935, 'examples_seen': 15040, 'step': 469}
+I0918 23:44:40.379733 140663434737536 run.py:357] (val) step 469: {'median': 0.189453125, 'score': 0.189453125, 'examples_seen': 15040, 'step': 469}
+I0918 23:44:45.931825 140663434737536 run.py:343] (train) step 479: {'median': 0.03125, 'score': 0.03125, 'loss': 2.190808057785034, 'examples_seen': 15360, 'step': 479}
+I0918 23:44:50.492018 140663434737536 run.py:357] (val) step 479: {'median': 0.20068359375, 'score': 0.20068359375, 'examples_seen': 15360, 'step': 479}
+I0918 23:44:50.492453 140663434737536 run.py:364] Saving new checkpoint...
+I0918 23:44:55.716763 140663434737536 run.py:343] (train) step 489: {'median': 0.25, 'score': 0.25, 'loss': 1.5022239685058594, 'examples_seen': 15680, 'step': 489}
+I0918 23:45:00.262105 140663434737536 run.py:357] (val) step 489: {'median': 0.21044921875, 'score': 0.21044921875, 'examples_seen': 15680, 'step': 489}
+I0918 23:45:00.262540 140663434737536 run.py:364] Saving new checkpoint...
+I0918 23:45:05.509361 140663434737536 run.py:343] (train) step 499: {'median': 0.15625, 'score': 0.15625, 'loss': 1.8297340869903564, 'examples_seen': 16000, 'step': 499}
+I0918 23:45:10.054213 140663434737536 run.py:357] (val) step 499: {'median': 0.1884765625, 'score': 0.1884765625, 'examples_seen': 16000, 'step': 499}
+I0918 23:45:15.233603 140663434737536 run.py:343] (train) step 509: {'median': 0.125, 'score': 0.125, 'loss': 2.0139732360839844, 'examples_seen': 16320, 'step': 509}
+I0918 23:45:19.793767 140663434737536 run.py:357] (val) step 509: {'median': 0.15673828125, 'score': 0.15673828125, 'examples_seen': 16320, 'step': 509}
+I0918 23:45:24.927007 140663434737536 run.py:343] (train) step 519: {'median': 0.3125, 'score': 0.3125, 'loss': 1.8098088502883911, 'examples_seen': 16640, 'step': 519}
+I0918 23:45:29.472901 140663434737536 run.py:357] (val) step 519: {'median': 0.2158203125, 'score': 0.2158203125, 'examples_seen': 16640, 'step': 519}
+I0918 23:45:29.473297 140663434737536 run.py:364] Saving new checkpoint...
+I0918 23:45:35.053703 140663434737536 run.py:343] (train) step 529: {'median': 0.0625, 'score': 0.0625, 'loss': 1.4868155717849731, 'examples_seen': 16960, 'step': 529}
+I0918 23:45:39.592092 140663434737536 run.py:357] (val) step 529: {'median': 0.22119140625, 'score': 0.22119140625, 'examples_seen': 16960, 'step': 529}
+I0918 23:45:39.592496 140663434737536 run.py:364] Saving new checkpoint...
+I0918 23:45:44.822725 140663434737536 run.py:343] (train) step 539: {'median': 0.21875, 'score': 0.21875, 'loss': 1.6355736255645752, 'examples_seen': 17280, 'step': 539}
+I0918 23:45:49.388551 140663434737536 run.py:357] (val) step 539: {'median': 0.197265625, 'score': 0.197265625, 'examples_seen': 17280, 'step': 539}
+I0918 23:45:54.524510 140663434737536 run.py:343] (train) step 549: {'median': 0.09375, 'score': 0.09375, 'loss': 1.3755697011947632, 'examples_seen': 17600, 'step': 549}
+I0918 23:45:59.070242 140663434737536 run.py:357] (val) step 549: {'median': 0.17822265625, 'score': 0.17822265625, 'examples_seen': 17600, 'step': 549}
+I0918 23:46:04.250924 140663434737536 run.py:343] (train) step 559: {'median': 0.125, 'score': 0.125, 'loss': 1.3785669803619385, 'examples_seen': 17920, 'step': 559}
+I0918 23:46:08.801218 140663434737536 run.py:357] (val) step 559: {'median': 0.1748046875, 'score': 0.1748046875, 'examples_seen': 17920, 'step': 559}
+I0918 23:46:13.989148 140663434737536 run.py:343] (train) step 569: {'median': 0.125, 'score': 0.125, 'loss': 1.590440273284912, 'examples_seen': 18240, 'step': 569}
+I0918 23:46:18.533652 140663434737536 run.py:357] (val) step 569: {'median': 0.1640625, 'score': 0.1640625, 'examples_seen': 18240, 'step': 569}
+I0918 23:46:24.104818 140663434737536 run.py:343] (train) step 579: {'median': 0.09375, 'score': 0.09375, 'loss': 1.5723390579223633, 'examples_seen': 18560, 'step': 579}
+I0918 23:46:28.651017 140663434737536 run.py:357] (val) step 579: {'median': 0.1806640625, 'score': 0.1806640625, 'examples_seen': 18560, 'step': 579}
+I0918 23:46:33.793916 140663434737536 run.py:343] (train) step 589: {'median': 0.21875, 'score': 0.21875, 'loss': 1.8072758913040161, 'examples_seen': 18880, 'step': 589}
+I0918 23:46:38.360877 140663434737536 run.py:357] (val) step 589: {'median': 0.19482421875, 'score': 0.19482421875, 'examples_seen': 18880, 'step': 589}
