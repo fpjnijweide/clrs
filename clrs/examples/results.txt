@@ -71,3 +71,5 @@ naive_string_matcher_mpnn_NTM_20_best.pkl: (test) step 529: {'match': 0.03173828
 optimal_bst_pgn_NTM_20_best.pkl: (test) step 10000: {'root': 0.6564866900444031, 'score': 0.6564866900444031, 'examples_seen': 320000, 'step': 9999}
 naive_string_matcher_mpnn_NTM_100_best.pkl: (test) step 569: {'match': 0.02392578125, 'score': 0.02392578125, 'examples_seen': 18240, 'step': 569}
 optimal_bst_pgn_NTM_100_best.pkl: (test) step 10000: {'root': 0.6161686182022095, 'score': 0.6161686182022095, 'examples_seen': 320000, 'step': 9999}
+naive_string_matcher_mpnn_NTM_20_best.pkl: (test) step 10000: {'match': 0.0244140625, 'score': 0.0244140625, 'examples_seen': 320000, 'step': 9999}
+naive_string_matcher_mpnn_NTM_20_last.pkl: (test) step 10000: {'match': 0.00390625, 'score': 0.00390625, 'examples_seen': 320000, 'step': 9999}
