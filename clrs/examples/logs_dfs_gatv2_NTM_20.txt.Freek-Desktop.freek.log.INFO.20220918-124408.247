@@ -1704,6 +1704,4 @@ I0918 15:31:31.002484 140048428946368 run.py:354] Saving new checkpoint (same sc
 I0918 15:31:44.196433 140048428946368 run.py:329] (train) step 7649: {'pi': 1.0, 'score': 1.0, 'loss': 0.003941343165934086, 'examples_seen': 244800, 'step': 7649}
 I0918 15:31:44.382223 140048428946368 run.py:341] (val) step 7649: {'pi': 1.0, 'score': 1.0, 'examples_seen': 244800, 'step': 7649}
 I0918 15:31:44.407967 140048428946368 run.py:354] Saving new checkpoint (same score)...
-I0918 15:31:57.090684 140048428946368 run.py:329] (train) step 7659: {'pi': 1.0, 'score': 1.0, 'loss': 0.0023352177813649178, 'examples_seen': 245120, 'step': 7659}
-I0918 15:31:57.294285 140048428946368 run.py:341] (val) step 7659: {'pi': 1.0, 'score': 1.0, 'examples_seen': 245120, 'step': 7659}
-I0918 15:31:57.316267 140048428946368 run.py:354] Saving new checkpoint (same score)...
+

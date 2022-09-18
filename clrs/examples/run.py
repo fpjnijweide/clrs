@@ -563,7 +563,7 @@ def main_wrapper():
                         last_target = targets_same_score[-1]
                         line_before_last_target = last_target-1
                         if line_before_last_target>line_before_best_target:
-                            relevant_line = contents[line_before_best_target]
+                            relevant_line = contents[line_before_last_target]
                             print(relevant_line)
 
                             p = re.compile("step ([0-9]*)")

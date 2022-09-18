@@ -36,7 +36,7 @@ import haiku as hk
 import jax
 import jax.numpy as jnp
 import optax
-
+import sys
 
 _Array = chex.Array
 _DataPoint = probing.DataPoint
@@ -313,8 +313,15 @@ class BaselineModel(model.Model):
     # os.makedirs(self.checkpoint_path, exist_ok=True)
     to_save = {'params': self.params, 'opt_state': self.opt_state}
     path = file_name
-    with open(path, 'wb') as f:
-      pickle.dump(to_save, f)
+    try:
+        with open(path, 'wb') as f:
+            pickle.dump(to_save, f)
+    except KeyboardInterrupt:
+        print('Interrupted pickle save, continuing and exiting.')
+        with open(path, 'wb') as f:
+            pickle.dump(to_save, f)
+        sys.exit(-1)
+
 
 
 class BaselineModelChunked(BaselineModel):
