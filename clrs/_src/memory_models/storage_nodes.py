@@ -119,7 +119,7 @@ class StorageNodes(hk.RNNCore):
     #     return w
 
     def prepare_memory_input(self, concatenated_ret, n):
-        real_ret, _, write_ret = jnp.split(concatenated_ret, [n, n + self.read_head_num], axis=1)
+        real_ret, _, write_ret = jnp.split(concatenated_ret, [n, n + self.read_nodes_amount], axis=1)
         w_nodes, a_e_nodes = jnp.split(write_ret, [self.w_nodes_amount], axis=1)
         list_of_params_for_each_w = jnp.split(w_nodes, self.write_head_num+self.read_head_num, axis=1)
         list_of_params_for_each_write = jnp.split(a_e_nodes, self.write_head_num, axis=1)

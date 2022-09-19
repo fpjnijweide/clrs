@@ -93,7 +93,7 @@ def weighted_softmax(activations, strengths, strengths_op):
     return nn.softmax(sharp_activations)
 
 
-class CosineWeights(hk.Module):
+class CosineWeights():
     """Cosine-weighted attention.
 
     Calculates the cosine similarity between a query and each word in memory, then
@@ -113,7 +113,7 @@ class CosineWeights(hk.Module):
           strength_op: operation to apply to strengths (default is nn.softplus).
           name: module name (default 'cosine_weights')
         """
-        super(CosineWeights, self).__init__(name=name)
+        # super(CosineWeights, self).__init__(name=name)
         self._num_heads = num_heads
         self._word_size = word_size
         self._strength_op = strength_op
@@ -130,12 +130,12 @@ class CosineWeights(hk.Module):
           Weights tensor of shape `[batch_size, num_heads, memory_size]`.
         """
         # Calculates the inner product between the query vector and words in memory.
-        dot = jnp.matmul(keys, memory, adjoint_b=True)
+        dot = jnp.matmul(keys, jnp.transpose(jnp.conj(memory),axes=[0,2,1]))
 
         # Outer product to compute denominator (euclidean norm of query and memory).
         memory_norms = _vector_norms(memory)
         key_norms = _vector_norms(keys)
-        norm = jnp.matmul(key_norms, memory_norms, adjoint_b=True)
+        norm = jnp.matmul(key_norms, jnp.transpose(jnp.conj(memory_norms),axes=[0,2,1]))
 
         # Calculates cosine similarity between the query vector and words in memory.
         similarity = dot / (norm + _EPSILON)
@@ -143,7 +143,7 @@ class CosineWeights(hk.Module):
         return weighted_softmax(similarity, strengths, self._strength_op)
 
 
-class TemporalLinkage(hk.RNNCore):
+class TemporalLinkage():
     """Keeps track of write order for forward and backward addressing.
 
     This is a pseudo-RNNCore module, whose state is a pair `(link,
@@ -164,7 +164,7 @@ class TemporalLinkage(hk.RNNCore):
           num_writes: The number of write heads.
           name: Name of the module.
         """
-        super(TemporalLinkage, self).__init__(name=name)
+        # super(TemporalLinkage, self).__init__(name=name)
         self._memory_size = memory_size
         self._num_writes = num_writes
 
@@ -213,9 +213,13 @@ class TemporalLinkage(hk.RNNCore):
         # sort of "outer product" to get this.
         expanded_read_weights = jnp.stack([prev_read_weights] * self._num_writes,
                                           1)
-        result = jnp.matmul(expanded_read_weights, link, adjoint_b=forward)
+        if forward:
+            new_link = jnp.transpose(jnp.conj(link),axes=[0,1,3,2])
+        else:
+            new_link = link
+        result = jnp.matmul(expanded_read_weights, new_link)
         # Swap dimensions 1, 2 so order is [batch, reads, writes, memory]:
-        return jnp.transpose(result, perm=[0, 2, 1, 3])
+        return jnp.transpose(result, axes=[0, 2, 1, 3])
 
     def _link(self, prev_link, prev_precedence_weights, write_weights):
         """Calculates the new link graphs.
@@ -248,8 +252,14 @@ class TemporalLinkage(hk.RNNCore):
         link = link * 1
         # Return the link with the diagonal set to zero, to remove self-looping
         # edges.
-        link[jnp.diag_indices_from[link]] = jnp.zeros([batch_size, self._num_writes, self._memory_size],
-                                                      dtype=link.dtype)
+        diag_indices = jnp.diag_indices_from(link[0][0])
+        # diag_indices = jnp.expand_dims(diag_indices,0)
+        # diag_indices = jnp.repeat()
+        link = link.at[:,:,diag_indices[0],diag_indices[1]].set(0)
+
+        # link[jnp.diag_indices_from[link]] = jnp.zeros([batch_size, self._num_writes, self._memory_size],
+        #                                               dtype=link.dtype)
+
         # return fill_diagonal(
         #     link,
         #     jnp.zeros(
@@ -282,13 +292,14 @@ class TemporalLinkage(hk.RNNCore):
     def state_size(self):
         """Returns a `TemporalLinkageState` tuple of the state tensors' shapes."""
         return TemporalLinkageState(
-            link=jnp.TensorShape(
-                [self._num_writes, self._memory_size, self._memory_size]),
-            precedence_weights=jnp.TensorShape([self._num_writes,
-                                                self._memory_size]), )
+            link=(self._num_writes, self._memory_size, self._memory_size),
+            precedence_weights=(self._num_writes,self._memory_size), )
+
+    def initial_state(self,batch_size):
+        return TemporalLinkageState(link=jnp.zeros([batch_size,*self.state_size.link]),precedence_weights=jnp.zeros([batch_size,*self.state_size.precedence_weights]))
 
 
-class Freeness(hk.Module):
+class Freeness():
     """Memory usage that is increased by writing and decreased by reading.
 
     This module is a pseudo-RNNCore whose state is a tensor with values in
@@ -312,7 +323,7 @@ class Freeness(hk.Module):
           memory_size: Number of memory slots.
           name: Name of the module.
         """
-        super(Freeness, self).__init__(name=name)
+        # super(Freeness, self).__init__(name=name)
         self._memory_size = memory_size
 
     def __call__(self, write_weights, free_gate, read_weights, prev_usage):
@@ -388,7 +399,7 @@ class Freeness(hk.Module):
           New usage, a tensor of shape `[batch_size, memory_size]`.
         """
         # Calculate the aggregated effect of all write heads
-        write_weights = 1 - util.reduce_prod(1 - write_weights, 1)
+        write_weights = 1 - jnp.prod(1 - write_weights, 1)
         return prev_usage + (1 - prev_usage) * write_weights
 
     def _usage_after_read(self, prev_usage, free_gate, read_weights):
@@ -406,7 +417,7 @@ class Freeness(hk.Module):
         """
         free_gate = jnp.expand_dims(free_gate, -1)
         free_read_weights = free_gate * read_weights
-        phi = util.reduce_prod(1 - free_read_weights, 1, name='phi')
+        phi = jnp.prod(1 - free_read_weights, 1)
         return prev_usage * phi
 
     def _allocation(self, usage):
@@ -431,7 +442,9 @@ class Freeness(hk.Module):
         sorted_nonusage, indices = jax.lax.top_k(
             nonusage, k=self._memory_size)
         sorted_usage = 1 - sorted_nonusage
-        prod_sorted_usage = jnp.cumprod(sorted_usage, axis=1, exclusive=True)
+        sorted_usage_new=jnp.zeros_like(sorted_usage)
+        sorted_usage_new = sorted_usage_new.at[:,1:].set(sorted_usage[:,:-1])
+        prod_sorted_usage = jnp.cumprod(sorted_usage_new, axis=1)
         sorted_allocation = sorted_nonusage * prod_sorted_usage
         inverse_indices = util.batch_invert_permutation(indices)
 

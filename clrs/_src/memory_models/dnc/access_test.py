@@ -62,7 +62,7 @@ class MemoryAccessTest(parameterized.TestCase):
   #     train_op.run()
 
   def testValidReadMode(self):
-    inputs = self.module._read_inputs(
+    inputs = self.module.prepare_memory_input(
         jax.random.normal([BATCH_SIZE, INPUT_SIZE]))
     # init = jnp.global_variables_initializer()
 

@@ -29,55 +29,56 @@ def invert_permutation(p):
     # https://stackoverflow.com/a/25535723
     # needed a quick workaround because the tf invert_permutation function is MASSIVE and hard to convert to jax
     s = jnp.empty(p.size, p.dtype)
-    s[p] = jnp.arange(p.size)
+    s = s.at[p].set(jnp.arange(p.size))
     return s
 
 
 def batch_invert_permutation(permutations):
     """Returns batched `jnp.invert_permutation` for every row in `permutations`."""
-    perm = jax.lax.convert_element_type(permutations, jnp.float32)
-    dim = int(perm.get_shape()[-1])
-    size = jax.lax.convert_element_type(jnp.shape(perm)[0], jnp.float32)
-    delta = jax.lax.convert_element_type(jnp.shape(perm)[-1], jnp.float32)
-    rg = jnp.arange(0, size * delta, delta, dtype=jnp.float32)
-    rg = jnp.expand_dims(rg, 1)
-    rg = jnp.tile(rg, [1, dim])
-    perm = jnp.add(perm, rg)
-    flat = jnp.reshape(perm, [-1])
-    perm = invert_permutation(jax.lax.convert_element_type(flat, jnp.int32))
-    perm = jnp.reshape(perm, [-1, dim])
-    return jnp.subtract(perm, jax.lax.convert_element_type(rg, jnp.int32))
+    return jnp.apply_along_axis(invert_permutation,-1,permutations)
+    # perm = jax.lax.convert_element_type(permutations, jnp.float32)
+    # dim = int(perm.shape[-1])
+    # size = jax.lax.convert_element_type(jnp.shape(perm)[0], jnp.float32)
+    # delta = jax.lax.convert_element_type(jnp.shape(perm)[-1], jnp.float32)
+    # rg = jnp.arange(0, size * delta, delta, dtype=jnp.float32)
+    # rg = jnp.expand_dims(rg, 1)
+    # rg = jnp.tile(rg, [1, dim])
+    # perm = jnp.add(perm, rg)
+    # flat = jnp.reshape(perm, [-1])
+    # perm = invert_permutation(jax.lax.convert_element_type(flat, jnp.int32))
+    # perm = jnp.reshape(perm, [-1, dim])
+    # return jnp.subtract(perm, jax.lax.convert_element_type(rg, jnp.int32))
 
 
 def batch_gather(values, indices):
     """Returns batched `jnp.gather` for every row in the ijnput."""
-    idx = jnp.expand_dims(indices, -1)
-    size = jnp.shape(indices)[0]
-    rg = jnp.arange(size, dtype=jnp.int32)
-    rg = jnp.expand_dims(rg, -1)
-    rg = jnp.tile(rg, [1, int(indices.get_shape()[-1])])
-    rg = jnp.expand_dims(rg, -1)
-    gidx = jnp.concatenate([rg, idx], -1)
-    return values[gidx]
+    return jnp.take_along_axis(values, indices, axis=-1)
+    # jnp.apply_along_axis(, -1, values)
+    # idx = jnp.expand_dims(indices, -1)
+    # size = jnp.shape(indices)[0]
+    # rg = jnp.arange(size, dtype=jnp.int32)
+    # rg = jnp.expand_dims(rg, -1)
+    # rg = jnp.tile(rg, [1, int(indices.shape[-1])])
+    # rg = jnp.expand_dims(rg, -1)
+    # gidx = jnp.concatenate([rg, idx], -1)
+    # return values[gidx]
     # return jnp.gather_nd(values, gidx)
 
 
 def one_hot(length, index):
     """Return an nd array of given `length` filled with 0s and a 1 at `index`."""
-    result = jnp.zeros(length)
-    result[index] = 1
-    return result
+    return jax.nn.one_hot(index,length)
 
 
-def reduce_prod(x, axis, name=None):
-    """Efficient reduce product over axis.
-
-    Uses jnp.cumprod and jnp.gather_nd as a workaround to the poor performance of calculating jnp.reduce_prod's gradient on CPU.
-    """
-    cp = jnp.cumprod(x, axis, reverse=True)
-    size = jnp.shape(cp)[0]
-    idx1 = jnp.arange(jax.lax.convert_element_type(size, jnp.float32), dtype=jnp.float32)
-    idx2 = jnp.zeros([size], jnp.float32)
-    indices = jnp.stack([idx1, idx2], 1)
-    return cp[jax.lax.convert_element_type(indices, jnp.int32)]
-    # return jnp.gather_nd(cp, jax.lax.convert_element_type(indices, jnp.int32))
+# def reduce_prod(x, axis, name=None):
+#     """Efficient reduce product over axis.
+#
+#     Uses jnp.cumprod and jnp.gather_nd as a workaround to the poor performance of calculating jnp.reduce_prod's gradient on CPU.
+#     """
+#     cp = jnp.cumprod(jnp.flip(x,axis=axis), axis)
+#     size = jnp.shape(cp)[0]
+#     idx1 = jnp.arange(jax.lax.convert_element_type(size, jnp.float32), dtype=jnp.float32)
+#     idx2 = jnp.zeros([size], jnp.float32)
+#     indices = jnp.stack([idx1, idx2], 1)
+#     return cp[jax.lax.convert_element_type(indices, jnp.int32)]
+#     # return jnp.gather_nd(cp, jax.lax.convert_element_type(indices, jnp.int32))

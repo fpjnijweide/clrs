@@ -307,7 +307,7 @@ class Net(hk.Module):
                     memory_state)
             elif self.use_memory == "NTM":
                 memory_state = memory_init(hiddens)
-            elif self.use_memory == "DeQue" or self.use_memory == "StorageNodes" or self.memory=="DNC":
+            elif self.use_memory == "DeQue" or self.use_memory == "StorageNodes" or self.use_memory=="DNC":
                 memory_state = memory_init(batch_size)
             else:
                 memory_state = None
