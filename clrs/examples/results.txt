@@ -124,3 +124,12 @@ lcs_length_gatv2_NTM_20_best.pkl: (test) step 10000: {'b': 0.542449951171875, 's
 topological_sort_pgn_DeQue_100_best.pkl: (test) step 10000: {'topo': 0.25732421875, 'topo_head': 0.78125, 'score': 0.519287109375, 'examples_seen': 320000, 'step': 9999}
 topological_sort_pgn_DeQue_100_last.pkl: (test) step 10000: {'topo': 0.2705078125, 'topo_head': 0.90625, 'score': 0.58837890625, 'examples_seen': 320000, 'step': 9999}
 task_scheduling_pgn_DeQue_20_best.pkl: (test) step 10000: {'selected': 0.8594325184822083, 'score': 0.8594325184822083, 'examples_seen': 320000, 'step': 9999}
+task_scheduling_pgn_DeQue_100_best.pkl: (test) step 10000: {'selected': 0.8369389176368713, 'score': 0.8369389176368713, 'examples_seen': 320000, 'step': 9999}
+task_scheduling_pgn_DeQue_100_last.pkl: (test) step 10000: {'selected': 0.8321028351783752, 'score': 0.8321028351783752, 'examples_seen': 320000, 'step': 9999}
+strongly_connected_components_pgn_NTM_20_best.pkl: (test) step 10000: {'scc_id': 0.2109375, 'score': 0.2109375, 'examples_seen': 320000, 'step': 9999}
+strongly_connected_components_pgn_NTM_20_last.pkl: (test) step 10000: {'scc_id': 0.1787109375, 'score': 0.1787109375, 'examples_seen': 320000, 'step': 9999}
+strongly_connected_components_mpnn_DeQue_100_best.pkl: (test) step 8499: {'scc_id': 0.2060546875, 'score': 0.2060546875, 'examples_seen': 272000, 'step': 8499}
+strongly_connected_components_mpnn_DeQue_100_best.pkl: (test) step 10000: {'scc_id': 0.24365234375, 'score': 0.24365234375, 'examples_seen': 320000, 'step': 9999}
+strongly_connected_components_mpnn_DeQue_100_last.pkl: (test) step 10000: {'scc_id': 0.201171875, 'score': 0.201171875, 'examples_seen': 320000, 'step': 9999}
+task_scheduling_pgn_NTM_20_best.pkl: (test) step 10000: {'selected': 0.8457744121551514, 'score': 0.8457744121551514, 'examples_seen': 320000, 'step': 9999}
+topological_sort_pgn_NTM_20_best.pkl: (test) step 439: {'topo': 0.2529296875, 'topo_head': 0.875, 'score': 0.56396484375, 'examples_seen': 14080, 'step': 439}
