@@ -147,7 +147,7 @@ def main():
         processor_factory = processors.get_processor_factory('gatv2', use_ln=True, nb_heads=1)
         common_args = dict(processor_factory=processor_factory, hidden_dim=8,
                            learning_rate=0.01, decode_diffs=True,
-                           decode_hints=True, encode_hints=True,use_memory="DeQue")
+                           decode_hints=True, encode_hints=True,use_memory="DNC")
 
 
 

@@ -27,7 +27,7 @@ from typing import NamedTuple
 import jax.numpy as jnp
 import haiku as hk
 
-from clrs._src.memory_models.dnc.access import DNCMemoryAccess
+from clrs._src.memory_models.dnc.access import DNCAccessModule
 
 class DNCState(NamedTuple):
     access_output: jnp.array
@@ -35,7 +35,7 @@ class DNCState(NamedTuple):
 
 
 
-class DNC(hk.RNNCore):
+class DNCNetwork(hk.RNNCore):
   """DNC core module.
 
   Contains controller and memory access module.
@@ -61,11 +61,11 @@ class DNC(hk.RNNCore):
       TypeError: if direct_input_size is not None for any access module other
         than KeyValueMemory.
     """
-    super(DNC, self).__init__(name=name)
+    super(DNCNetwork, self).__init__(name=name)
 
     with self._enter_variable_scope():
       # self._controller = snt.LSTM(**controller_config)
-      self._access = DNCMemoryAccess(**access_config)
+      self._access = DNCAccessModule(**access_config)
 
     self._access_output_size = jnp.prod(self._access.output_size.as_list())
     self._output_size = output_size
