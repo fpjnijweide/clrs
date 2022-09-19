@@ -133,3 +133,28 @@ strongly_connected_components_mpnn_DeQue_100_best.pkl: (test) step 10000: {'scc_
 strongly_connected_components_mpnn_DeQue_100_last.pkl: (test) step 10000: {'scc_id': 0.201171875, 'score': 0.201171875, 'examples_seen': 320000, 'step': 9999}
 task_scheduling_pgn_NTM_20_best.pkl: (test) step 10000: {'selected': 0.8457744121551514, 'score': 0.8457744121551514, 'examples_seen': 320000, 'step': 9999}
 topological_sort_pgn_NTM_20_best.pkl: (test) step 439: {'topo': 0.2529296875, 'topo_head': 0.875, 'score': 0.56396484375, 'examples_seen': 14080, 'step': 439}
+strongly_connected_components_pgn_DeQue_20_best.pkl: (test) step 5509: {'scc_id': 0.16552734375, 'score': 0.16552734375, 'examples_seen': 176320, 'step': 5509}
+strongly_connected_components_mpnn_NTM_20_best.pkl: (test) step 10000: {'scc_id': 0.24853515625, 'score': 0.24853515625, 'examples_seen': 320000, 'step': 9999}
+strongly_connected_components_mpnn_NTM_20_last.pkl: (test) step 10000: {'scc_id': 0.2626953125, 'score': 0.2626953125, 'examples_seen': 320000, 'step': 9999}
+articulation_points_mpnn_DeQue_20_best.pkl: (test) step 1409: {'is_cut': 0.5187550187110901, 'score': 0.5187550187110901, 'examples_seen': 45120, 'step': 1409}
+strongly_connected_components_pgn_NTM_100_best.pkl: (test) step 10000: {'scc_id': 0.2353515625, 'score': 0.2353515625, 'examples_seen': 320000, 'step': 9999}
+strongly_connected_components_pgn_NTM_100_last.pkl: (test) step 10000: {'scc_id': 0.17431640625, 'score': 0.17431640625, 'examples_seen': 320000, 'step': 9999}
+topological_sort_pgn_NTM_20_best.pkl: (test) step 10000: {'topo': 0.25, 'topo_head': 0.9375, 'score': 0.59375, 'examples_seen': 320000, 'step': 9999}
+topological_sort_pgn_NTM_20_last.pkl: (test) step 10000: {'topo': 0.25244140625, 'topo_head': 0.59375, 'score': 0.423095703125, 'examples_seen': 320000, 'step': 9999}
+dfs_gat_NTM_100_best.pkl: (test) step 10000: {'pi': 0.1025390625, 'score': 0.1025390625, 'examples_seen': 320000, 'step': 9999}
+activity_selector_pgn_DeQue_20_best.pkl: (test) step 10000: {'selected': 0.6656716465950012, 'score': 0.6656716465950012, 'examples_seen': 320000, 'step': 9999}
+strongly_connected_components_pgn_DeQue_20_best.pkl: (test) step 10000: {'scc_id': 0.13037109375, 'score': 0.13037109375, 'examples_seen': 320000, 'step': 9999}
+strongly_connected_components_pgn_DeQue_20_last.pkl: (test) step 10000: {'scc_id': 0.0947265625, 'score': 0.0947265625, 'examples_seen': 320000, 'step': 9999}
+task_scheduling_pgn_NTM_100_best.pkl: (test) step 10000: {'selected': 0.8572375178337097, 'score': 0.8572375178337097, 'examples_seen': 320000, 'step': 9999}
+bellman_ford_pgn_DeQue_20_best.pkl: (test) step 10000: {'pi': 0.91552734375, 'score': 0.91552734375, 'examples_seen': 320000, 'step': 9999}
+bellman_ford_pgn_DeQue_20_last.pkl: (test) step 10000: {'pi': 0.90869140625, 'score': 0.90869140625, 'examples_seen': 320000, 'step': 9999}
+strongly_connected_components_pgn_DeQue_100_best.pkl: (test) step 10000: {'scc_id': 0.2333984375, 'score': 0.2333984375, 'examples_seen': 320000, 'step': 9999}
+topological_sort_pgn_NTM_100_best.pkl: (test) step 409: {'topo': 0.22412109375, 'topo_head': 0.8125, 'score': 0.518310546875, 'examples_seen': 13120, 'step': 409}
+binary_search_pgn_DeQue_20_best.pkl: (test) step 10000: {'return': 0.50341796875, 'score': 0.50341796875, 'examples_seen': 320000, 'step': 9999}
+articulation_points_mpnn_DeQue_20_best.pkl: (test) step 10000: {'is_cut': 0.5169425010681152, 'score': 0.5169425010681152, 'examples_seen': 320000, 'step': 9999}
+articulation_points_mpnn_DeQue_20_last.pkl: (test) step 10000: {'is_cut': 0.5448029041290283, 'score': 0.5448029041290283, 'examples_seen': 320000, 'step': 9999}
+dag_shortest_paths_pgn_DeQue_20_best.pkl: (test) step 2439: {'pi': 0.96728515625, 'score': 0.96728515625, 'examples_seen': 78080, 'step': 2439}
+kmp_matcher_gat_NTM_100_best.pkl: (test) step 10000: {'match': 0.02001953125, 'score': 0.02001953125, 'examples_seen': 320000, 'step': 9999}
+kmp_matcher_gat_NTM_100_last.pkl: (test) step 10000: {'match': 0.02783203125, 'score': 0.02783203125, 'examples_seen': 320000, 'step': 9999}
+activity_selector_mpnn_DeQue_20_best.pkl: (test) step 10000: {'selected': 0.8299817442893982, 'score': 0.8299817442893982, 'examples_seen': 320000, 'step': 9999}
+bfs_mpnn_DeQue_20_best.pkl: (test) step 59: {'pi': 1.0, 'score': 1.0, 'examples_seen': 1920, 'step': 59}
