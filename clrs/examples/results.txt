@@ -213,3 +213,13 @@ matrix_chain_order_pgn_DeQue_100_last.pkl: (test) step 10000: {'s': 0.8119125366
 segments_intersect_mpnn_DeQue_20_best.pkl: (test) step 10000: {'intersect': 0.9356556534767151, 'score': 0.9356556534767151, 'examples_seen': 320000, 'step': 9999}
 strongly_connected_components_mpnn_DeQue_20_best.pkl: (test) step 10000: {'scc_id': 0.2138671875, 'score': 0.2138671875, 'examples_seen': 320000, 'step': 9999}
 strongly_connected_components_mpnn_DeQue_20_last.pkl: (test) step 10000: {'scc_id': 0.15673828125, 'score': 0.15673828125, 'examples_seen': 320000, 'step': 9999}
+kmp_matcher_gat_DeQue_100_best.pkl: (test) step 10000: {'match': 0.021484375, 'score': 0.021484375, 'examples_seen': 320000, 'step': 9999}
+quickselect_gat_DeQue_20_best.pkl: (test) step 10000: {'median': 0.02490234375, 'score': 0.02490234375, 'examples_seen': 320000, 'step': 9999}
+lcs_length_gat_DeQue_100_best.pkl: (test) step 10000: {'b': 0.49639892578125, 'score': 0.49639892578125, 'examples_seen': 320000, 'step': 9999}
+task_scheduling_gat_DeQue_20_best.pkl: (test) step 10000: {'selected': 0.8239414095878601, 'score': 0.8239414095878601, 'examples_seen': 320000, 'step': 9999}
+quickselect_gat_DeQue_100_best.pkl: (test) step 10000: {'median': 0.0234375, 'score': 0.0234375, 'examples_seen': 320000, 'step': 9999}
+jarvis_march_gatv2_DeQue_20_best.pkl: (test) step 10000: {'in_hull': 0.4364123046398163, 'score': 0.4364123046398163, 'examples_seen': 320000, 'step': 9999}
+task_scheduling_gat_DeQue_100_best.pkl: (test) step 10000: {'selected': 0.8223350644111633, 'score': 0.8223350644111633, 'examples_seen': 320000, 'step': 9999}
+jarvis_march_gatv2_DeQue_100_best.pkl: (test) step 10000: {'in_hull': 0.43812233209609985, 'score': 0.43812233209609985, 'examples_seen': 320000, 'step': 9999}
+jarvis_march_gatv2_NTM_20_best.pkl: (test) step 10000: {'in_hull': 0.5286550521850586, 'score': 0.5286550521850586, 'examples_seen': 320000, 'step': 9999}
+jarvis_march_gatv2_NTM_100_best.pkl: (test) step 10000: {'in_hull': 0.4880174398422241, 'score': 0.4880174398422241, 'examples_seen': 320000, 'step': 9999}
