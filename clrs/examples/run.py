@@ -543,6 +543,9 @@ def main_wrapper(unused_argv):
         for algo in algo_list:
             FLAGS.algorithm = algo
 
+            FLAGS.skip_to_step = 0
+            FLAGS.load_from_last = False
+
             with open("results.txt") as myfile:
                 txt = myfile.read()
             print("\n\n")

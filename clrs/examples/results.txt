@@ -116,3 +116,8 @@ topological_sort_pgn_DeQue_20_best.pkl: (test) step 439: {'topo': 0.265625, 'top
 naive_string_matcher_mpnn_DeQue_100_best.pkl: (test) step 10000: {'match': 0.037109375, 'score': 0.037109375, 'examples_seen': 320000, 'step': 9999}
 naive_string_matcher_mpnn_DeQue_100_last.pkl: (test) step 10000: {'match': 0.001953125, 'score': 0.001953125, 'examples_seen': 320000, 'step': 9999}
 topological_sort_pgn_DeQue_100_best.pkl: (test) step 439: {'topo': 0.265625, 'topo_head': 0.8125, 'score': 0.5390625, 'examples_seen': 14080, 'step': 439}
+segments_intersect_mpnn_DeQue_100_best.pkl: (test) step 10000: {'intersect': 0.9177489280700684, 'score': 0.9177489280700684, 'examples_seen': 320000, 'step': 9999}
+strongly_connected_components_pgn_NTM_20_best.pkl: (test) step 2739: {'scc_id': 0.2900390625, 'score': 0.2900390625, 'examples_seen': 87680, 'step': 2739}
+strongly_connected_components_pgn_NTM_100_best.pkl: (test) step 2199: {'scc_id': 0.25439453125, 'score': 0.25439453125, 'examples_seen': 70400, 'step': 2199}
+strongly_connected_components_mpnn_NTM_20_best.pkl: (test) step 2689: {'scc_id': 0.24951171875, 'score': 0.24951171875, 'examples_seen': 86080, 'step': 2689}
+lcs_length_gatv2_NTM_20_best.pkl: (test) step 10000: {'b': 0.542449951171875, 'score': 0.542449951171875, 'examples_seen': 320000, 'step': 9999}
