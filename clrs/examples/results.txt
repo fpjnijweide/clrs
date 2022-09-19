@@ -177,3 +177,15 @@ quickselect_pgn_DeQue_20_best.pkl: (test) step 10000: {'median': 0.02392578125, 
 dag_shortest_paths_pgn_DeQue_100_best.pkl: (test) step 2729: {'pi': 0.96923828125, 'score': 0.96923828125, 'examples_seen': 87360, 'step': 2729}
 matrix_chain_order_pgn_DeQue_20_best.pkl: (test) step 10000: {'s': 0.809783935546875, 'score': 0.809783935546875, 'examples_seen': 320000, 'step': 9999}
 matrix_chain_order_pgn_DeQue_20_last.pkl: (test) step 10000: {'s': 0.825469970703125, 'score': 0.825469970703125, 'examples_seen': 320000, 'step': 9999}
+quickselect_pgn_DeQue_100_best.pkl: (test) step 10000: {'median': 0.025390625, 'score': 0.025390625, 'examples_seen': 320000, 'step': 9999}
+dijkstra_mpnn_DeQue_20_best.pkl: (test) step 9509: {'pi': 0.919921875, 'score': 0.919921875, 'examples_seen': 304320, 'step': 9509}
+dijkstra_mpnn_DeQue_20_best.pkl: (test) step 10000: {'pi': 0.9169921875, 'score': 0.9169921875, 'examples_seen': 320000, 'step': 9999}
+minimum_pgn_DeQue_20_best.pkl: (test) step 10000: {'min': 0.83740234375, 'score': 0.83740234375, 'examples_seen': 320000, 'step': 9999}
+mst_prim_pgn_DeQue_20_best.pkl: (test) step 10000: {'pi': 0.57373046875, 'score': 0.57373046875, 'examples_seen': 320000, 'step': 9999}
+mst_prim_pgn_DeQue_20_last.pkl: (test) step 10000: {'pi': 0.646484375, 'score': 0.646484375, 'examples_seen': 320000, 'step': 9999}
+dag_shortest_paths_pgn_DeQue_100_best.pkl: (test) step 10000: {'pi': 0.96337890625, 'score': 0.96337890625, 'examples_seen': 320000, 'step': 9999}
+dag_shortest_paths_pgn_DeQue_100_last.pkl: (test) step 10000: {'pi': 0.96484375, 'score': 0.96484375, 'examples_seen': 320000, 'step': 9999}
+graham_scan_mpnn_DeQue_20_best.pkl: (test) step 10000: {'in_hull': 0.9326805472373962, 'score': 0.9326805472373962, 'examples_seen': 320000, 'step': 9999}
+optimal_bst_pgn_DeQue_20_best.pkl: (test) step 10000: {'root': 0.6292899250984192, 'score': 0.6292899250984192, 'examples_seen': 320000, 'step': 9999}
+find_maximum_subarray_kadane_pgn_DeQue_100_best.pkl: (test) step 10000: {'end': 0.130859375, 'start': 0.234375, 'score': 0.1826171875, 'examples_seen': 320000, 'step': 9999}
+find_maximum_subarray_kadane_pgn_DeQue_100_last.pkl: (test) step 10000: {'end': 0.1005859375, 'start': 0.2353515625, 'score': 0.16796875, 'examples_seen': 320000, 'step': 9999}
