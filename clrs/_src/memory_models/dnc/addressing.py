@@ -88,8 +88,7 @@ def weighted_softmax(activations, strengths, strengths_op):
     """
     transformed_strengths = jnp.expand_dims(strengths_op(strengths), -1)
     sharp_activations = activations * transformed_strengths
-    softmax = hk.BatchApply(f=nn.softmax)
-    return softmax(sharp_activations)
+    return nn.softmax(sharp_activations)
 
 
 class CosineWeights(hk.Module):

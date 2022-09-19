@@ -189,3 +189,7 @@ graham_scan_mpnn_DeQue_20_best.pkl: (test) step 10000: {'in_hull': 0.93268054723
 optimal_bst_pgn_DeQue_20_best.pkl: (test) step 10000: {'root': 0.6292899250984192, 'score': 0.6292899250984192, 'examples_seen': 320000, 'step': 9999}
 find_maximum_subarray_kadane_pgn_DeQue_100_best.pkl: (test) step 10000: {'end': 0.130859375, 'start': 0.234375, 'score': 0.1826171875, 'examples_seen': 320000, 'step': 9999}
 find_maximum_subarray_kadane_pgn_DeQue_100_last.pkl: (test) step 10000: {'end': 0.1005859375, 'start': 0.2353515625, 'score': 0.16796875, 'examples_seen': 320000, 'step': 9999}
+optimal_bst_pgn_DeQue_100_best.pkl: (test) step 10000: {'root': 0.6292899250984192, 'score': 0.6292899250984192, 'examples_seen': 320000, 'step': 9999}
+mst_kruskal_mpnn_DeQue_20_best.pkl: (test) step 10000: {'in_mst': 0.7029341459274292, 'score': 0.7029341459274292, 'examples_seen': 320000, 'step': 9999}
+mst_kruskal_mpnn_DeQue_20_last.pkl: (test) step 10000: {'in_mst': 0.7176137566566467, 'score': 0.7176137566566467, 'examples_seen': 320000, 'step': 9999}
+dfs_gat_DeQue_20_best.pkl: (test) step 10000: {'pi': 0.07421875, 'score': 0.07421875, 'examples_seen': 320000, 'step': 9999}

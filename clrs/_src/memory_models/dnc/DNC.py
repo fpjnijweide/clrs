@@ -65,7 +65,7 @@ def _erase_and_write(memory, address, reset_weights, values):
     return memory
 
 
-class MemoryAccess(hk.RNNCore):
+class DNC(hk.RNNCore):
     """Access module of the Differentiable Neural Computer.
 
     This memory module supports multiple read and write heads. It makes use of:
@@ -84,8 +84,8 @@ class MemoryAccess(hk.RNNCore):
     """
 
     def __init__(self,
-                 memory_size=128,
-                 word_size=20,
+                 memory_size,
+                 word_size,
                  num_reads=1,
                  num_writes=1,
                  name='memory_access'):
@@ -98,7 +98,7 @@ class MemoryAccess(hk.RNNCore):
           num_writes: The number of write heads (fixed at 1 in the paper).
           name: The name of the module.
         """
-        super(MemoryAccess, self).__init__(name=name)
+        super(DNC, self).__init__(name=name)
         self._memory_size = memory_size
         self._word_size = word_size
         self._num_reads = num_reads
@@ -112,7 +112,39 @@ class MemoryAccess(hk.RNNCore):
         self._linkage = addressing.TemporalLinkage(memory_size, num_writes)
         self._freeness = addressing.Freeness(memory_size)
 
-    def _build(self, inputs, prev_state):
+    def initial_state(self, node_fts):
+        batch_size, n, h = node_fts.shape
+
+        read_vector_list = []
+        for i in range(self.read_head_num):
+            new_read_vector = jnp.tanh(hk.get_parameter(f"NTM_read_vector_{i}", shape=[self.memory_vector_dim, ],
+                                                        init=hk.initializers.VarianceScaling(1.0, "fan_avg",
+                                                                                             "uniform")))
+            read_vector_list.append(new_read_vector)
+
+        w_var_list = []
+        for i in range(self.read_head_num + self.write_head_num):
+            new_w_var = nn.softmax(hk.get_parameter(f"NTM_w_{i}", shape=[self.memory_size, ],
+                                                    init=hk.initializers.VarianceScaling(1.0, "fan_avg", "uniform")))
+            w_var_list.append(new_w_var)
+
+        if self.init_mode == 'learned':
+            M = jnp.tanh(hk.get_parameter("NTM_M", shape=[self.memory_size, self.memory_vector_dim],
+                                          init=hk.initializers.VarianceScaling(1.0, "fan_avg", "uniform")))
+        elif self.init_mode == 'random':
+            M = jnp.tanh(
+                hk.initializers.RandomNormal(stddev=0.5)([self.memory_size, self.memory_vector_dim], dtype=jnp.float32))
+        elif self.init_mode == 'constant':
+            M = jnp.full([self.memory_size, self.memory_vector_dim], 1e-6)
+        else:
+            raise RuntimeError("invalid init mode")
+
+        state = NTMState(M, w_var_list, read_vector_list)
+        if batch_size is not None:
+            state = add_batch(state, batch_size)
+        return state
+
+    def __call__(self, inputs, prev_state: AccessState):
         """Connects the MemoryAccess module into the graph.
 
         Args:
@@ -194,7 +226,7 @@ class MemoryAccess(hk.RNNCore):
         # \pi_t^j - Mixing between "backwards" and "forwards" positions (for
         # each write head), and content-based lookup, for each read head.
         num_read_modes = 1 + 2 * self._num_writes
-        read_mode = hk.BatchApply(nn.softmax)(
+        read_mode = nn.softmax(
             _linear(self._num_reads, num_read_modes, name='read_mode'))
 
         # Parameters for the (read / write) "weights by content matching" modules.
