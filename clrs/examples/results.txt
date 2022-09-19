@@ -158,3 +158,22 @@ kmp_matcher_gat_NTM_100_best.pkl: (test) step 10000: {'match': 0.02001953125, 's
 kmp_matcher_gat_NTM_100_last.pkl: (test) step 10000: {'match': 0.02783203125, 'score': 0.02783203125, 'examples_seen': 320000, 'step': 9999}
 activity_selector_mpnn_DeQue_20_best.pkl: (test) step 10000: {'selected': 0.8299817442893982, 'score': 0.8299817442893982, 'examples_seen': 320000, 'step': 9999}
 bfs_mpnn_DeQue_20_best.pkl: (test) step 59: {'pi': 1.0, 'score': 1.0, 'examples_seen': 1920, 'step': 59}
+bfs_mpnn_DeQue_20_last.pkl: (test) step 10000: {'pi': 0.9970703125, 'score': 0.9970703125, 'examples_seen': 320000, 'step': 9999}
+dag_shortest_paths_pgn_DeQue_20_best.pkl: (test) step 10000: {'pi': 0.96728515625, 'score': 0.96728515625, 'examples_seen': 320000, 'step': 9999}
+dag_shortest_paths_pgn_DeQue_20_last.pkl: (test) step 10000: {'pi': 0.98388671875, 'score': 0.98388671875, 'examples_seen': 320000, 'step': 9999}
+lcs_length_gat_NTM_100_best.pkl: (test) step 10000: {'b': 0.49383544921875, 'score': 0.49383544921875, 'examples_seen': 320000, 'step': 9999}
+bridges_mpnn_DeQue_20_best.pkl: (test) step 1199: {'is_bridge': 0.7273796200752258, 'score': 0.7273796200752258, 'examples_seen': 38400, 'step': 1199}
+topological_sort_pgn_NTM_100_best.pkl: (test) step 10000: {'topo': 0.2275390625, 'topo_head': 0.84375, 'score': 0.53564453125, 'examples_seen': 320000, 'step': 9999}
+topological_sort_pgn_NTM_100_last.pkl: (test) step 10000: {'topo': 0.1884765625, 'topo_head': 0.9375, 'score': 0.56298828125, 'examples_seen': 320000, 'step': 9999}
+find_maximum_subarray_kadane_pgn_DeQue_20_best.pkl: (test) step 10000: {'end': 0.125, 'start': 0.22265625, 'score': 0.173828125, 'examples_seen': 320000, 'step': 9999}
+activity_selector_pgn_DeQue_100_best.pkl: (test) step 10000: {'selected': 0.6424580812454224, 'score': 0.6424580812454224, 'examples_seen': 320000, 'step': 9999}
+activity_selector_pgn_DeQue_100_last.pkl: (test) step 10000: {'selected': 0.6377245187759399, 'score': 0.6377245187759399, 'examples_seen': 320000, 'step': 9999}
+bellman_ford_pgn_DeQue_100_best.pkl: (test) step 10000: {'pi': 0.90625, 'score': 0.90625, 'examples_seen': 320000, 'step': 9999}
+floyd_warshall_pgn_DeQue_20_best.pkl: (test) step 10000: {'Pi': 0.29404449462890625, 'score': 0.29404449462890625, 'examples_seen': 320000, 'step': 9999}
+binary_search_pgn_DeQue_100_best.pkl: (test) step 10000: {'return': 0.44677734375, 'score': 0.44677734375, 'examples_seen': 320000, 'step': 9999}
+bridges_mpnn_DeQue_20_best.pkl: (test) step 10000: {'is_bridge': 0.6945899128913879, 'score': 0.6945899128913879, 'examples_seen': 320000, 'step': 9999}
+bridges_mpnn_DeQue_20_last.pkl: (test) step 10000: {'is_bridge': 0.7610942721366882, 'score': 0.7610942721366882, 'examples_seen': 320000, 'step': 9999}
+quickselect_pgn_DeQue_20_best.pkl: (test) step 10000: {'median': 0.02392578125, 'score': 0.02392578125, 'examples_seen': 320000, 'step': 9999}
+dag_shortest_paths_pgn_DeQue_100_best.pkl: (test) step 2729: {'pi': 0.96923828125, 'score': 0.96923828125, 'examples_seen': 87360, 'step': 2729}
+matrix_chain_order_pgn_DeQue_20_best.pkl: (test) step 10000: {'s': 0.809783935546875, 'score': 0.809783935546875, 'examples_seen': 320000, 'step': 9999}
+matrix_chain_order_pgn_DeQue_20_last.pkl: (test) step 10000: {'s': 0.825469970703125, 'score': 0.825469970703125, 'examples_seen': 320000, 'step': 9999}
