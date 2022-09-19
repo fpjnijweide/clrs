@@ -267,6 +267,13 @@ class Net(hk.Module):
                 self.read_node_fts_layer = hk.initializers.RandomNormal(stddev=0.5)
                 self.write_edge_fts_layer = hk.initializers.RandomNormal()
                 self.read_edge_fts_layer = hk.initializers.RandomNormal()
+            elif self.use_memory == "StorageNodes":
+                self.memory = StorageNodes(name='processor_StorageNodes',memory_size=self.memory_size,embedding_size=self.hidden_dim)
+                self.read_node_fts = None
+                self.write_node_fts_layer = hk.initializers.RandomNormal(stddev=0.5)
+                self.read_node_fts_layer = hk.initializers.RandomNormal(stddev=0.5)
+                self.write_edge_fts_layer = hk.initializers.RandomNormal()
+                self.read_edge_fts_layer = hk.initializers.RandomNormal()
             else:
                 raise NotImplementedError(f"Memory type {self.use_memory} does not exist")
             memory_init = self.memory.initial_state
@@ -291,7 +298,7 @@ class Net(hk.Module):
                     memory_state)
             elif self.use_memory == "NTM":
                 memory_state = memory_init(hiddens)
-            elif self.use_memory == "DeQue":
+            elif self.use_memory == "DeQue" or self.use_memory == "StorageNodes":
                 memory_state = memory_init(batch_size)
             else:
                 memory_state = None
@@ -458,6 +465,21 @@ class Net(hk.Module):
                                         batch_size=batch_size,
                                         nb_nodes=nb_nodes)
             memory_input, nxt_hidden = self.memory.prepare_memory_input(nxt_hidden,nb_nodes)
+        elif self.use_memory == "StorageNodes":
+            adj_mat_new, hidden_new, new_edge_fts, node_fts_new = extend_features(adj_mat, edge_fts, hidden,
+                                                                                  node_fts,
+                                                                                  self.memory.read_nodes_amount,
+                                                                                  self.memory.write_nodes_amount,
+                                                                                  self.write_node_fts_layer,
+                                                                                  self.write_edge_fts_layer,
+                                                                                  self.read_node_fts,
+                                                                                  self.read_edge_fts_layer,
+                                                                                  self.read_node_fts_layer)
+
+            nxt_hidden = self.processor(node_fts_new, new_edge_fts, graph_fts, adj_mat_new, hidden_new,
+                                        batch_size=batch_size,
+                                        nb_nodes=nb_nodes)
+            memory_input, nxt_hidden = self.memory.prepare_memory_input(nxt_hidden,nb_nodes)
         else:
             nxt_hidden = self.processor(
                 node_fts,
@@ -478,6 +500,8 @@ class Net(hk.Module):
         elif self.use_memory == "NTM":
             self.read_node_fts, nxt_memory_state = self.memory(memory_input, memory_state)
         elif self.use_memory == "DeQue":
+            self.read_node_fts, nxt_memory_state = self.memory(memory_input, memory_state)
+        elif self.use_memory == "StorageNodes":
             self.read_node_fts, nxt_memory_state = self.memory(memory_input, memory_state)
         else:
             nxt_memory_state = None

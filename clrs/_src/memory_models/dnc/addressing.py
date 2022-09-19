@@ -19,6 +19,7 @@ from __future__ import division
 from __future__ import print_function
 
 import collections
+from typing import NamedTuple
 
 import haiku as hk
 # Ensure values are greater than epsilon to avoid numerical instability.
@@ -33,10 +34,11 @@ from clrs._src.memory_models.dnc import util
 
 _EPSILON = 1e-6
 
-TemporalLinkageState = collections.namedtuple('TemporalLinkageState',
-                                              ('link', 'precedence_weights'))
+class TemporalLinkageState(NamedTuple):
+    link: jnp.array
+    precedence_weights: jnp.array
 
-
+#
 # def fill_diagonal_own_implementation(matrix,arr):
 #     arr_as_matrix = jnp.diag(arr)
 #     matrix_diag_as_arr = jnp.diagonal(matrix)
@@ -44,7 +46,7 @@ TemporalLinkageState = collections.namedtuple('TemporalLinkageState',
 #     matrix_diag_0 = matrix - (matrix_only_diag)
 #     final_mat = matrix_diag_0 + arr_as_matrix
 #     return final_mat
-
+#
 # def fill_diagonal(a: jnp.ndarray, val: jnp.ndarray, wrap=False):
 #     # Direct copy from the numpy source at https://github.com/numpy/numpy/blob/v1.23.0/numpy/lib/index_tricks.py#L779-L910
 #     # I take no credit for this code, except for adding "jnp." in a few locations
@@ -276,14 +278,14 @@ class TemporalLinkage(hk.RNNCore):
         write_sum = jnp.sum(write_weights, 2, keepdims=True)
         return (1 - write_sum) * prev_precedence_weights + write_weights
 
-    # @property
-    # def state_size(self):
-    #     """Returns a `TemporalLinkageState` tuple of the state tensors' shapes."""
-    #     return TemporalLinkageState(
-    #         link=jnp.TensorShape(
-    #             [self._num_writes, self._memory_size, self._memory_size]),
-    #         precedence_weights=jnp.TensorShape([self._num_writes,
-    #                                             self._memory_size]), )
+    @property
+    def state_size(self):
+        """Returns a `TemporalLinkageState` tuple of the state tensors' shapes."""
+        return TemporalLinkageState(
+            link=jnp.TensorShape(
+                [self._num_writes, self._memory_size, self._memory_size]),
+            precedence_weights=jnp.TensorShape([self._num_writes,
+                                                self._memory_size]), )
 
 
 class Freeness(hk.Module):
@@ -437,7 +439,7 @@ class Freeness(hk.Module):
         # corresponds to the original indexing of `usage`.
         return util.batch_gather(sorted_allocation, inverse_indices)
 
-    # @property
-    # def state_size(self):
-    #     """Returns the shape of the state tensor."""
-    #     return jnp.TensorShape([self._memory_size])
+    @property
+    def state_size(self):
+        """Returns the shape of the state tensor."""
+        return (self._memory_size)

@@ -54,8 +54,8 @@ def _make_iterable_sampler(
         yield sampler.next(batch_size)
 
 
-class BaselinesTest(parameterized.TestCase):
-
+# class BaselinesTest(parameterized.TestCase):
+#
     # def test_full_vs_chunked(self):
     #   """Test that chunking does not affect gradients."""
     #
@@ -123,57 +123,57 @@ class BaselinesTest(parameterized.TestCase):
     #   jax.tree_map(functools.partial(np.testing.assert_allclose, rtol=1e-4),
     #                new_full_params, new_chunked_params)
 
-    def test_multi_vs_single(self):
-        """Test that multi = single when we only train one of the algorithms."""
+def main():
+    """Test that multi = single when we only train one of the algorithms."""
 
-        batch_size = 4
-        length = 16
-        algos = ['insertion_sort', 'activity_selector', 'bfs']
-        spec = [specs.SPECS[algo] for algo in algos]
-        rng_key = jax.random.PRNGKey(42)
+    batch_size = 4
+    length = 16
+    algos = ['insertion_sort', 'activity_selector', 'bfs']
+    spec = [specs.SPECS[algo] for algo in algos]
+    rng_key = jax.random.PRNGKey(42)
 
-        full_ds = [_make_iterable_sampler(algo, batch_size, length)
-                   for algo in algos]
-        full_batches = [next(ds) for ds in full_ds]
-        full_batches_2 = [next(ds) for ds in full_ds]
+    full_ds = [_make_iterable_sampler(algo, batch_size, length)
+               for algo in algos]
+    full_batches = [next(ds) for ds in full_ds]
+    full_batches_2 = [next(ds) for ds in full_ds]
 
-        with chex.fake_jit():  # jitting makes test longer
+    with chex.fake_jit():  # jitting makes test longer
 
-            # processor_factory = processors.get_processor_factory('gatv2_ntm', use_ln=True, nb_heads=1)
-            # common_args = dict(processor_factory=processor_factory, hidden_dim=8,
-            #                    learning_rate=0.01, decode_diffs=True,
-            #                    decode_hints=True, encode_hints=True)
+        # processor_factory = processors.get_processor_factory('gatv2_ntm', use_ln=True, nb_heads=1)
+        # common_args = dict(processor_factory=processor_factory, hidden_dim=8,
+        #                    learning_rate=0.01, decode_diffs=True,
+        #                    decode_hints=True, encode_hints=True)
 
-            processor_factory = processors.get_processor_factory('gatv2', use_ln=True, nb_heads=1)
-            common_args = dict(processor_factory=processor_factory, hidden_dim=8,
-                               learning_rate=0.01, decode_diffs=True,
-                               decode_hints=True, encode_hints=True,use_memory="DeQue")
+        processor_factory = processors.get_processor_factory('gatv2', use_ln=True, nb_heads=1)
+        common_args = dict(processor_factory=processor_factory, hidden_dim=8,
+                           learning_rate=0.01, decode_diffs=True,
+                           decode_hints=True, encode_hints=True,use_memory="DeQue")
 
 
 
-            b_single = baselines.BaselineModel(
-                spec[0], dummy_trajectory=full_batches[0], **common_args)
-            # b_multi = baselines.BaselineModel(
-            #     spec, dummy_trajectory=full_batches, **common_args)
-            b_single.init(full_batches[0].features, seed=0)
-            # b_multi.init([f.features for f in full_batches], seed=0)
+        b_single = baselines.BaselineModel(
+            spec[0], dummy_trajectory=full_batches[0], **common_args)
+        # b_multi = baselines.BaselineModel(
+        #     spec, dummy_trajectory=full_batches, **common_args)
+        b_single.init(full_batches[0].features, seed=0)
+        # b_multi.init([f.features for f in full_batches], seed=0)
 
-            b_single.save_model("test123.pkl")
+        b_single.save_model("test123.pkl")
 
-            single_params = []
-            single_losses = []
-            # multi_params = []
-            # multi_losses = []
+        single_params = []
+        single_losses = []
+        # multi_params = []
+        # multi_losses = []
 
-            single_params.append(copy.deepcopy(b_single.params))
-            single_losses.append(b_single.feedback(rng_key, full_batches[0]))
-            single_params.append(copy.deepcopy(b_single.params))
-            single_losses.append(b_single.feedback(rng_key, full_batches_2[0]))
-            single_params.append(copy.deepcopy(b_single.params))
+        single_params.append(copy.deepcopy(b_single.params))
+        single_losses.append(b_single.feedback(rng_key, full_batches[0]))
+        single_params.append(copy.deepcopy(b_single.params))
+        single_losses.append(b_single.feedback(rng_key, full_batches_2[0]))
+        single_params.append(copy.deepcopy(b_single.params))
 
-        assert single_losses[1] < single_losses[0]
+    assert single_losses[1] < single_losses[0]
 
 
 
 if __name__ == '__main__':
-    absltest.main()
+    main()
