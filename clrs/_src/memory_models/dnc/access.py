@@ -56,16 +56,17 @@ def _erase_and_write(memory, address, reset_weights, values):
     expand_address = jnp.expand_dims(address, 3)
     reset_weights = jnp.expand_dims(reset_weights, 2)
     weighted_resets = expand_address * reset_weights
-    reset_gate = util.reduce_prod(1 - weighted_resets, 1)
+    reset_gate = jnp.prod(1 - weighted_resets, 1)
     memory *= reset_gate
 
-    add_matrix = jnp.matmul(address, values, adjoint_a=True)
+    new_addr = jnp.transpose(jnp.conj(address),axes=[0,2,1])
+    add_matrix = jnp.matmul(new_addr, values)
     memory += add_matrix
 
     return memory
 
 
-class DNC(hk.RNNCore):
+class DNCAccessModule(hk.RNNCore):
     """Access module of the Differentiable Neural Computer.
 
     This memory module supports multiple read and write heads. It makes use of:
@@ -98,7 +99,7 @@ class DNC(hk.RNNCore):
           num_writes: The number of write heads (fixed at 1 in the paper).
           name: The name of the module.
         """
-        super(DNC, self).__init__(name=name)
+        super(DNCAccessModule, self).__init__(name=name)
         self._memory_size = memory_size
         self._word_size = word_size
         self._num_reads = num_reads
@@ -112,37 +113,20 @@ class DNC(hk.RNNCore):
         self._linkage = addressing.TemporalLinkage(memory_size, num_writes)
         self._freeness = addressing.Freeness(memory_size)
 
-    def initial_state(self, node_fts):
-        batch_size, n, h = node_fts.shape
+        self.read_nodes_amount = self._num_reads
+        self.write_nodes_amount = 4*self._num_writes + 2*self._num_reads
 
-        read_vector_list = []
-        for i in range(self.read_head_num):
-            new_read_vector = jnp.tanh(hk.get_parameter(f"NTM_read_vector_{i}", shape=[self.memory_vector_dim, ],
-                                                        init=hk.initializers.VarianceScaling(1.0, "fan_avg",
-                                                                                             "uniform")))
-            read_vector_list.append(new_read_vector)
+        self.write_ints_dense_layers = [hk.Linear(output_size=3)] * self._num_writes
+        self.read_ints_dense_layers = [hk.Linear(output_size=2 + (1 + 2 * self._num_writes))] * self._num_reads
 
-        w_var_list = []
-        for i in range(self.read_head_num + self.write_head_num):
-            new_w_var = nn.softmax(hk.get_parameter(f"NTM_w_{i}", shape=[self.memory_size, ],
-                                                    init=hk.initializers.VarianceScaling(1.0, "fan_avg", "uniform")))
-            w_var_list.append(new_w_var)
 
-        if self.init_mode == 'learned':
-            M = jnp.tanh(hk.get_parameter("NTM_M", shape=[self.memory_size, self.memory_vector_dim],
-                                          init=hk.initializers.VarianceScaling(1.0, "fan_avg", "uniform")))
-        elif self.init_mode == 'random':
-            M = jnp.tanh(
-                hk.initializers.RandomNormal(stddev=0.5)([self.memory_size, self.memory_vector_dim], dtype=jnp.float32))
-        elif self.init_mode == 'constant':
-            M = jnp.full([self.memory_size, self.memory_vector_dim], 1e-6)
-        else:
-            raise RuntimeError("invalid init mode")
 
-        state = NTMState(M, w_var_list, read_vector_list)
-        if batch_size is not None:
-            state = add_batch(state, batch_size)
-        return state
+    def initial_state(self, batch_size):
+        return AccessState(memory=jnp.zeros([batch_size,*self.state_size.memory]),
+                           read_weights=jnp.ones([batch_size,*self.state_size.read_weights])*1e-6,
+                           write_weights=jnp.ones([batch_size,*self.state_size.write_weights])*1e-6,
+                           linkage=self._linkage.initial_state(batch_size),
+                           usage=jnp.ones([batch_size,self.state_size.usage])*1e-6)
 
     def __call__(self, inputs, prev_state: AccessState):
         """Connects the MemoryAccess module into the graph.
@@ -157,8 +141,6 @@ class DNC(hk.RNNCore):
           `[batch_size, num_reads, word_size]`, and `next_state` is the new
           `AccessState` named tuple at the current time t.
         """
-        inputs = self._read_inputs(inputs)
-
         # Update usage using inputs['free_gate'] and previous read & write weights.
         usage = self._freeness(
             write_weights=prev_state.write_weights,
@@ -191,51 +173,129 @@ class DNC(hk.RNNCore):
             linkage=linkage_state,
             usage=usage))
 
-    def _read_inputs(self, inputs):
+    def prepare_memory_input(self, concatenated_ret, n):
         """Applies transformations to `inputs` to get control for this module."""
+        #
+        # def _linear(first_dim, second_dim, name, activation=None):
+        #     """Returns a linear transformation of `inputs`, followed by a reshape."""
+        #     linear = hk.Linear(first_dim * second_dim, name=name)(inputs)
+        #     if activation is not None:
+        #         linear = activation(linear, name=name + '_activation')
+        #     return jnp.reshape(linear, [-1, first_dim, second_dim])
 
-        def _linear(first_dim, second_dim, name, activation=None):
-            """Returns a linear transformation of `inputs`, followed by a reshape."""
-            linear = hk.Linear(first_dim * second_dim, name=name)(inputs)
-            if activation is not None:
-                linear = activation(linear, name=name + '_activation')
-            return jnp.reshape(linear, [-1, first_dim, second_dim])
+        # TODO maybe squeeze. check dimensions
 
-        # v_t^i - The vectors to write to memory, for each write head `i`.
-        write_vectors = _linear(self._num_writes, self._word_size, 'write_vectors')
 
-        # e_t^i - Amount to erase the memory by before writing, for each write head.
-        erase_vectors = _linear(self._num_writes, self._word_size, 'erase_vectors',
-                                nn.sigmoid)
+        # 1 read node, for each read node
 
-        # f_t^j - Amount that the memory at the locations read from at the previous
-        # time step can be declared unused, for each read head `j`.
-        free_gate = nn.sigmoid(
-            hk.Linear(self._num_reads, name='free_gate')(inputs))
+        # write nodes
+        #
+        # read_keys 1 read
+        # free_gate int read
+        # read_strengths int read
+        # read_mode 1 CUSTOM read
+        # 2 write nodes per read head
 
-        # g_t^{a, i} - Interpolation between writing to unallocated memory and
-        # content-based lookup, for each write head `i`. Note: `a` is simply used to
-        # identify this gate with allocation vs writing (as defined below).
-        allocation_gate = nn.sigmoid(
-            hk.Linear(self._num_writes, name='allocation_gate')(inputs))
+        # allocation_gate int write
+        # write_gate int write
+        # write_strengths int write
+        # write_keys 1 write
+        # write_vectors, erase_vectors = 2* write
+        # 4 write nodes per write head
 
-        # g_t^{w, i} - Overall gating of write amount for each write head.
-        write_gate = nn.sigmoid(
-            hk.Linear(self._num_writes, name='write_gate')(inputs))
+        real_ret, _, write_ret = jnp.split(concatenated_ret, [n, n + self.read_nodes_amount], axis=1)
+        total_nodes_for_read_heads,total_nodes_for_write_heads = jnp.split(write_ret, [self._num_reads*2], axis=1)
 
-        # \pi_t^j - Mixing between "backwards" and "forwards" positions (for
-        # each write head), and content-based lookup, for each read head.
-        num_read_modes = 1 + 2 * self._num_writes
-        read_mode = nn.softmax(
-            _linear(self._num_reads, num_read_modes, name='read_mode'))
+        list_of_nodes_for_each_read_head = jnp.split(total_nodes_for_read_heads, self._num_reads, axis=1)
+        list_of_nodes_for_each_write_head = jnp.split(total_nodes_for_write_heads, self._num_writes, axis=1)
 
-        # Parameters for the (read / write) "weights by content matching" modules.
-        write_keys = _linear(self._num_writes, self._word_size, 'write_keys')
-        write_strengths = hk.Linear(self._num_writes, name='write_strengths')(
-            inputs)
+        erase_vectors = []
+        write_vectors = []
+        write_keys=[]
+        allocation_gates = []
+        write_gates = []
+        write_strengths = []
+        for write_head_index, write_nodes_for_head in enumerate(list_of_nodes_for_each_write_head):
+            write_ints_pre_dense,write_key,write_vector,erase_vector = jnp.split(write_nodes_for_head, 4, axis=1)
+            erase_vector= nn.sigmoid(erase_vector)
+            post_dense_layer = self.write_ints_dense_layers[write_head_index](write_ints_pre_dense)
+            allocation_gate,write_gate,write_strength = jnp.split(post_dense_layer, 3, axis=2)
+            allocation_gate = nn.sigmoid(allocation_gate)
+            write_gate = nn.sigmoid(write_gate)
 
-        read_keys = _linear(self._num_reads, self._word_size, 'read_keys')
-        read_strengths = hk.Linear(self._num_reads, name='read_strengths')(inputs)
+            erase_vectors.append(erase_vector.squeeze())
+            write_vectors.append(write_vector.squeeze())
+            write_keys.append(write_key.squeeze())
+            allocation_gates.append(allocation_gate.squeeze())
+            write_gates.append(write_gate.squeeze())
+            write_strengths.append(write_strength.squeeze())
+
+        erase_vectors = jnp.stack(erase_vectors,axis=1)
+        write_vectors = jnp.stack(write_vectors,axis=1)
+        write_keys = jnp.stack(write_keys,axis=1)
+        allocation_gates = jnp.stack(allocation_gates,axis=1)
+        write_gates = jnp.stack(write_gates,axis=1)
+        write_strengths = jnp.stack(write_strengths,axis=1)
+
+
+
+
+        read_keys = []
+        free_gates = []
+        read_strengths = []
+        read_modes = []
+        for read_head_index, read_nodes_for_head in enumerate(list_of_nodes_for_each_read_head):
+            read_key, read_ints_pre_dense = jnp.split(read_nodes_for_head, 2, axis=1)
+            read_ints_post_dense = self.read_ints_dense_layers[read_head_index](read_ints_pre_dense)
+            free_gate,read_strength,read_mode = jnp.split(read_ints_post_dense, [1,2], axis=2)
+            # read_mode = self.read_mode_dense_layers[read_head_index](read_mode_pre_dense)
+            free_gate = nn.sigmoid(free_gate)
+            read_mode = nn.softmax(read_mode)
+
+            read_keys.append(read_key.squeeze())
+            free_gates.append(free_gate.squeeze())
+            read_strengths.append(read_strength.squeeze())
+            read_modes.append(read_mode.squeeze())
+
+        read_keys = jnp.stack(read_keys,axis=1)
+        free_gates = jnp.stack(free_gates,axis=1)
+        read_strengths = jnp.stack(read_strengths,axis=1)
+        read_modes = jnp.stack(read_modes,axis=1)
+        # # v_t^i - The vectors to write to memory, for each write head `i`.
+        # write_vectors = _linear(self._num_writes, self._word_size, 'write_vectors')
+        #
+        # # e_t^i - Amount to erase the memory by before writing, for each write head.
+        # erase_vectors = _linear(self._num_writes, self._word_size, 'erase_vectors',
+        #                         nn.sigmoid)
+        #
+        # # f_t^j - Amount that the memory at the locations read from at the previous
+        # # time step can be declared unused, for each read head `j`.
+        # free_gate = nn.sigmoid(
+        #     hk.Linear(self._num_reads, name='free_gate')(inputs))
+        #
+        # # g_t^{a, i} - Interpolation between writing to unallocated memory and
+        # # content-based lookup, for each write head `i`. Note: `a` is simply used to
+        # # identify this gate with allocation vs writing (as defined below).
+        # allocation_gate = nn.sigmoid(
+        #     hk.Linear(self._num_writes, name='allocation_gate')(inputs))
+        #
+        # # g_t^{w, i} - Overall gating of write amount for each write head.
+        # write_gate = nn.sigmoid(
+        #     hk.Linear(self._num_writes, name='write_gate')(inputs))
+        #
+        # # \pi_t^j - Mixing between "backwards" and "forwards" positions (for
+        # # each write head), and content-based lookup, for each read head.
+        # num_read_modes = 1 + 2 * self._num_writes
+        # read_mode = nn.softmax(
+        #     _linear(self._num_reads, num_read_modes, name='read_mode'))
+        #
+        # # Parameters for the (read / write) "weights by content matching" modules.
+        # write_keys = _linear(self._num_writes, self._word_size, 'write_keys')
+        # write_strengths = hk.Linear(self._num_writes, name='write_strengths')(
+        #     inputs)
+        #
+        # read_keys = _linear(self._num_reads, self._word_size, 'read_keys')
+        # read_strengths = hk.Linear(self._num_reads, name='read_strengths')(inputs)
 
         result = {
             'read_content_keys': read_keys,
@@ -244,12 +304,12 @@ class DNC(hk.RNNCore):
             'write_content_strengths': write_strengths,
             'write_vectors': write_vectors,
             'erase_vectors': erase_vectors,
-            'free_gate': free_gate,
-            'allocation_gate': allocation_gate,
-            'write_gate': write_gate,
-            'read_mode': read_mode,
+            'free_gate': free_gates,
+            'allocation_gate': allocation_gates,
+            'write_gate': write_gates,
+            'read_mode': read_modes,
         }
-        return result
+        return result,real_ret
 
     def _write_weights(self, inputs, memory, usage):
         """Calculates the memory locations to write to.
@@ -327,23 +387,56 @@ class DNC(hk.RNNCore):
         content_mode = inputs['read_mode'][:, :, 2 * self._num_writes]
 
         read_weights = (
-                jnp.sum(content_mode, 2) * content_weights + jnp.sum(
+                jnp.expand_dims(content_mode,2) * content_weights * content_weights + jnp.sum(
             jnp.expand_dims(forward_mode, 3) * forward_weights, 2) +
                 jnp.sum(jnp.expand_dims(backward_mode, 3) * backward_weights, 2))
 
         return read_weights
 
-    # @property
-    # def state_size(self):
-    #     """Returns a tuple of the shape of the state tensors."""
-    #     return AccessState(
-    #         memory=jnp.TensorShape([self._memory_size, self._word_size]),
-    #         read_weights=jnp.TensorShape([self._num_reads, self._memory_size]),
-    #         write_weights=jnp.TensorShape([self._num_writes, self._memory_size]),
-    #         linkage=self._linkage.state_size,
-    #         usage=self._freeness.state_size)
+    # def prepare_memory_input(self, concatenated_ret, n):
+    #     # TODO reduce for loops?
+    #
+    #     real_ret, _, write_ret = jnp.split(concatenated_ret, [n, n + self.read_head_num], axis=1)
+    #     w_nodes, a_e_nodes = jnp.split(write_ret, [self.w_nodes_amount], axis=1)
+    #     list_of_params_for_each_w = jnp.split(w_nodes, self.write_head_num+self.read_head_num, axis=1)
+    #     list_of_params_for_each_write = jnp.split(a_e_nodes, self.write_head_num, axis=1)
+    #     w_params_for_batch = []
+    #     for i, params in enumerate(list_of_params_for_each_w):
+    #         s_t_pre_dense, beta_g_y_t, k_t = jnp.split(params, 3, axis=1)
+    #         s_t = self.s_t_dense_layer(s_t_pre_dense.squeeze())
+    #         beta_g_y_t_post_dense = self.beta_g_y_t_dense_layer(beta_g_y_t.squeeze())
+    #
+    #         beta_t, g_t, gamma_t = jnp.split(beta_g_y_t_post_dense, 3, axis=1)
+    #         k = jnp.tanh(k_t.squeeze())
+    #         beta = nn.softplus(beta_t)
+    #         g = nn.sigmoid(g_t)
+    #         s = nn.softmax(
+    #             s_t
+    #         )
+    #         gamma = nn.softplus(gamma_t) + 1
+    #         head_parameters = (k, beta, g, s, gamma)
+    #         w_params_for_batch.append(head_parameters)
+    #     e_a_params_for_batch = []
+    #     for i, params in enumerate(list_of_params_for_each_write):
+    #         e_t, a_t = jnp.split(params, 2, axis=1)
+    #         e_t = e_t.squeeze()
+    #         a_t = a_t.squeeze()
+    #         e_a_final = (e_t, a_t)
+    #         e_a_params_for_batch.append(e_a_final)
+    #     final_tuple = (w_params_for_batch, e_a_params_for_batch)
+    #     return final_tuple, real_ret
 
-    # @property
-    # def output_size(self):
-    #     """Returns the output shape."""
-    #     return jnp.TensorShape([self._num_reads, self._word_size])
+    @property
+    def state_size(self):
+        """Returns a tuple of the shape of the state tensors."""
+        return AccessState(
+            memory=(self._memory_size, self._word_size),
+            read_weights=(self._num_reads, self._memory_size),
+            write_weights=(self._num_writes, self._memory_size),
+            linkage=self._linkage.state_size,
+            usage=self._freeness.state_size)
+
+    @property
+    def output_size(self):
+        """Returns the output shape."""
+        return (self._num_reads, self._word_size)

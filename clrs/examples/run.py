@@ -522,7 +522,7 @@ def main_wrapper(unused_argv):
     # memory_size=20
 
     if FLAGS.use_memory=="all":
-        memories = ["NTM","DeQue"]
+        memories = ["NTM","DeQue","DNC"]
     else:
         memories = [FLAGS.use_memory]
 
