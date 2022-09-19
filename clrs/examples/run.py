@@ -480,7 +480,7 @@ def main_wrapper(unused_argv):
         reverse_func = lambda x: x
     GAT_BEST = reverse_func([
         'dfs',
-        # 'jarvis_march',
+        'jarvis_march',
         'kmp_matcher',
         'lcs_length',
         'quickselect',
